@@ -14,8 +14,8 @@ import java.util.Hashtable;
 
 import org.weasis.core.api.gui.Insertable;
 import org.weasis.core.api.gui.Insertable.Type;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
 import org.weasis.core.api.gui.PreferencesPageFactory;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 
 @org.osgi.service.component.annotations.Component(service = PreferencesPageFactory.class, immediate = false)
 public class SeriesDownloadPrefFactory implements PreferencesPageFactory {

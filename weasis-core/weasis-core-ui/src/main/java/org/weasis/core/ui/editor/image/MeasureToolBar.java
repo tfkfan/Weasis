@@ -28,11 +28,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ListDataEvent;
 
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.DropButtonIcon;
-import org.weasis.core.api.gui.util.DropDownButton;
-import org.weasis.core.api.gui.util.GroupRadioMenu;
-import org.weasis.core.api.gui.util.RadioMenuItem;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.service.WProperties;
 import org.weasis.core.ui.Messages;
@@ -57,6 +52,11 @@ import org.weasis.core.ui.model.graphic.imp.line.PerpendicularLineGraphic;
 import org.weasis.core.ui.model.graphic.imp.line.PolylineGraphic;
 import org.weasis.core.ui.model.layer.LayerType;
 import org.weasis.core.ui.pref.ViewSetting;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.DropButtonIcon;
+import org.weasis.core.ui.util.DropDownButton;
+import org.weasis.core.ui.util.GroupRadioMenu;
+import org.weasis.core.ui.util.RadioMenuItem;
 import org.weasis.core.ui.util.WtoolBar;
 
 @SuppressWarnings("serial")

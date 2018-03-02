@@ -16,9 +16,9 @@ import javax.swing.JToggleButton;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.SliderChangeListener;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.ui.Messages;
+import org.weasis.core.ui.util.SliderChangeListener;
+import org.weasis.core.ui.util.ToggleButtonListener;
 import org.weasis.core.ui.util.WtoolBar;
 
 @SuppressWarnings("serial")

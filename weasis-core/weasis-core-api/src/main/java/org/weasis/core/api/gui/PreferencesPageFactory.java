@@ -12,10 +12,10 @@ package org.weasis.core.api.gui;
 
 import java.util.Hashtable;
 
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
+import org.weasis.core.api.gui.util.ItemDialogPage;
 
 public interface PreferencesPageFactory extends InsertableFactory {
 
     @Override
-    AbstractItemDialogPage createInstance(Hashtable<String, Object> properties);
+    ItemDialogPage createInstance(Hashtable<String, Object> properties);
 }

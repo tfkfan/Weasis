@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.api.gui.util.PageProps;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.ui.Messages;
@@ -40,6 +39,7 @@ import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.utils.bean.Measurement;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
 
 public class LabelsPrefView extends AbstractItemDialogPage {
     private static final long serialVersionUID = -1727609322145775651L;

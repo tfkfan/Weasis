@@ -14,8 +14,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.weasis.core.api.gui.util.DecFormater;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.DecFormater;
 
 class ToolPanel extends JPanel {
     private static final long serialVersionUID = 2827148456926205919L;

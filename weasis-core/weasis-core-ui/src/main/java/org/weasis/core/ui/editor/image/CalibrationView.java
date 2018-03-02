@@ -36,9 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.DecFormater;
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.gui.util.MathUtil;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.api.media.data.ImageElement;
@@ -47,6 +44,9 @@ import org.weasis.core.api.util.LocalUtil;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.model.graphic.imp.line.LineGraphic;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.DecFormater;
+import org.weasis.core.ui.util.JMVUtils;
 
 public class CalibrationView extends JPanel {
     private static final long serialVersionUID = -1098044466661041480L;

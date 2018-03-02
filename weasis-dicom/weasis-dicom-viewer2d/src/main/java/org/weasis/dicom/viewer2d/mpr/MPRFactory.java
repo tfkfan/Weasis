@@ -19,12 +19,12 @@ import javax.swing.ImageIcon;
 
 import org.weasis.core.api.explorer.DataExplorerView;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
-import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.ui.docking.UIManager;
 import org.weasis.core.ui.editor.SeriesViewer;
 import org.weasis.core.ui.editor.SeriesViewerFactory;
 import org.weasis.core.ui.editor.ViewerPluginBuilder;
+import org.weasis.core.ui.editor.image.GridBagLayoutModel;
 import org.weasis.dicom.codec.DicomMediaIO;
 import org.weasis.dicom.explorer.DicomExplorer;
 import org.weasis.dicom.explorer.DicomModel;
@@ -59,7 +59,7 @@ public class MPRFactory implements SeriesViewerFactory {
         GridBagLayoutModel model = MPRContainer.VIEWS_2x1_mpr;
         String uid = null;
         if (properties != null) {
-            Object obj = properties.get(org.weasis.core.api.image.GridBagLayoutModel.class.getName());
+            Object obj = properties.get(org.weasis.core.ui.editor.image.GridBagLayoutModel.class.getName());
             if (obj instanceof GridBagLayoutModel) {
                 model = (GridBagLayoutModel) obj;
             }

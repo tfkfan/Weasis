@@ -20,9 +20,9 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 
 import org.weasis.acquire.dockable.components.actions.AbstractAcquireActionPanel;
-import org.weasis.core.api.gui.util.SliderChangeListener;
 import org.weasis.core.api.util.FontTools;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.SliderChangeListener;
 
 public abstract class AbstractSliderComponent extends AbstractComponent {
     private static final long serialVersionUID = -1311547844550893305L;

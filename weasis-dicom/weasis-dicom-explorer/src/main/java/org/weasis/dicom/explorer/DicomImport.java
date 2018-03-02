@@ -25,8 +25,9 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.InsertableUtil;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
-import org.weasis.core.api.gui.util.AbstractWizardDialog;
+import org.weasis.core.api.gui.util.ItemDialogPage;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
+import org.weasis.core.ui.util.AbstractWizardDialog;
 
 public class DicomImport extends AbstractWizardDialog {
     private static final Logger LOGGER = LoggerFactory.getLogger(DicomImport.class);
@@ -81,7 +82,7 @@ public class DicomImport extends AbstractWizardDialog {
                 DicomImportFactory factory = context.getService(service);
                 if (factory != null) {
                     ImportDicom page = factory.createDicomImportPage(null);
-                    if (page instanceof AbstractItemDialogPage) {
+                    if (page instanceof ItemDialogPage) {
                         list.add((AbstractItemDialogPage) page);
                     }
                 }
@@ -91,7 +92,7 @@ public class DicomImport extends AbstractWizardDialog {
         }
 
         InsertableUtil.sortInsertable(list);
-        for (AbstractItemDialogPage page : list) {
+        for (ItemDialogPage page : list) {
             pagesRoot.add(new DefaultMutableTreeNode(page));
         }
         iniTree();

@@ -29,9 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.InsertableUtil;
 import org.weasis.core.api.gui.PreferencesPageFactory;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
-import org.weasis.core.api.gui.util.AbstractWizardDialog;
+import org.weasis.core.api.gui.util.ItemDialogPage;
 import org.weasis.core.ui.Messages;
+import org.weasis.core.ui.util.AbstractWizardDialog;
 
 @SuppressWarnings("serial")
 public class PreferenceDialog extends AbstractWizardDialog {
@@ -58,7 +58,7 @@ public class PreferenceDialog extends AbstractWizardDialog {
         Hashtable<String, Object> properties = new Hashtable<>();
         properties.put("weasis.user.prefs", System.getProperty("weasis.user.prefs", "user")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-        ArrayList<AbstractItemDialogPage> list = new ArrayList<>();
+        ArrayList<ItemDialogPage> list = new ArrayList<>();
         list.add(new GeneralSetting());
         list.add(new LabelsPrefView());
         list.add(new ScreenPrefView());
@@ -69,7 +69,7 @@ public class PreferenceDialog extends AbstractWizardDialog {
                 .getServiceReferences(PreferencesPageFactory.class, null)) {
                 PreferencesPageFactory factory = context.getService(service);
                 if (factory != null) {
-                    AbstractItemDialogPage page = factory.createInstance(properties);
+                    ItemDialogPage page = factory.createInstance(properties);
                     if (page != null) {
                         list.add(page);
                     }
@@ -80,7 +80,7 @@ public class PreferenceDialog extends AbstractWizardDialog {
         }
 
         InsertableUtil.sortInsertable(list);
-        for (AbstractItemDialogPage page : list) {
+        for (ItemDialogPage page : list) {
             pagesRoot.add(new DefaultMutableTreeNode(page));
         }
         iniTree();

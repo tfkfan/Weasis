@@ -25,10 +25,10 @@ import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.weasis.core.api.gui.util.GeomUtil;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.model.utils.bean.AdvancedShape;
 import org.weasis.core.ui.model.utils.bean.Measurement;
+import org.weasis.core.ui.util.GeomUtil;
 import org.weasis.core.ui.util.MouseEventDouble;
 
 @XmlType(name = "cobbAngle")

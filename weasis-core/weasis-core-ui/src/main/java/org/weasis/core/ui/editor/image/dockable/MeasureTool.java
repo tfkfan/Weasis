@@ -43,11 +43,6 @@ import javax.swing.table.TableModel;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.JToogleButtonGroup;
-import org.weasis.core.api.gui.util.TableHeaderRenderer;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.image.util.MeasurableLayer;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.api.media.data.ImageElement;
@@ -73,9 +68,14 @@ import org.weasis.core.ui.model.utils.bean.Measurement;
 import org.weasis.core.ui.pref.PreferenceDialog;
 import org.weasis.core.ui.pref.ViewSetting;
 import org.weasis.core.ui.util.ColorLayerUI;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.JToogleButtonGroup;
 import org.weasis.core.ui.util.SimpleTableModel;
 import org.weasis.core.ui.util.TableColumnAdjuster;
+import org.weasis.core.ui.util.TableHeaderRenderer;
 import org.weasis.core.ui.util.TableNumberRenderer;
+import org.weasis.core.ui.util.ToggleButtonListener;
 
 import bibliothek.gui.dock.common.CLocation;
 

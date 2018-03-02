@@ -22,12 +22,12 @@ import javax.swing.UIManager;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.DropButtonIcon;
-import org.weasis.core.api.gui.util.DropDownButton;
-import org.weasis.core.api.gui.util.GroupPopup;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.ui.editor.image.ImageViewerEventManager;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.DropButtonIcon;
+import org.weasis.core.ui.util.DropDownButton;
+import org.weasis.core.ui.util.GroupPopup;
+import org.weasis.core.ui.util.ToggleButtonListener;
 import org.weasis.core.ui.util.WtoolBar;
 import org.weasis.dicom.codec.DicomImageElement;
 

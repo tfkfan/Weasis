@@ -25,14 +25,14 @@ import javax.swing.JPopupMenu;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.GroupPopup;
-import org.weasis.core.api.gui.util.GroupRadioMenu;
-import org.weasis.core.api.gui.util.RadioMenuItem;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.ui.editor.image.ShowPopup;
 import org.weasis.core.ui.editor.image.ViewButton;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.GroupPopup;
+import org.weasis.core.ui.util.GroupRadioMenu;
+import org.weasis.core.ui.util.RadioMenuItem;
 import org.weasis.core.ui.util.TitleMenuItem;
+import org.weasis.core.ui.util.ToggleButtonListener;
 import org.weasis.dicom.viewer2d.KOComponentFactory.KOViewButton.eState;
 
 /**

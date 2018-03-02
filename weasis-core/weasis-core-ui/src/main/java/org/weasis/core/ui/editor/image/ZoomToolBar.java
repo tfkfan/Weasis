@@ -23,14 +23,14 @@ import javax.swing.SwingUtilities;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.DropButtonIcon;
-import org.weasis.core.api.gui.util.DropDownButton;
-import org.weasis.core.api.gui.util.SliderChangeListener;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.service.AuditLog;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.pref.Monitor;
+import org.weasis.core.ui.util.DropButtonIcon;
+import org.weasis.core.ui.util.DropDownButton;
+import org.weasis.core.ui.util.SliderChangeListener;
+import org.weasis.core.ui.util.ToggleButtonListener;
 import org.weasis.core.ui.util.WtoolBar;
 
 @SuppressWarnings("serial")

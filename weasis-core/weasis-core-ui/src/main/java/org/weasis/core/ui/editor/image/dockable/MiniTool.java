@@ -21,11 +21,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingConstants;
 
-import org.weasis.core.api.gui.util.DropDownButton;
-import org.weasis.core.api.gui.util.JSliderW;
-import org.weasis.core.api.gui.util.SliderChangeListener;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.docking.PluginTool;
+import org.weasis.core.ui.util.DropButtonIcon;
+import org.weasis.core.ui.util.DropDownButton;
+import org.weasis.core.ui.util.JSliderW;
+import org.weasis.core.ui.util.SliderChangeListener;
 import org.weasis.core.ui.util.WtoolBar;
 
 import bibliothek.gui.dock.common.CLocation;
@@ -54,7 +55,7 @@ public abstract class MiniTool extends PluginTool implements ActionListener {
 
         Dimension dim = new Dimension(5, 5);
         add(Box.createRigidArea(dim));
-        final DropDownButton button = new DropDownButton("Mini", currentAction.getActionW().getSmallDropButtonIcon()) { //$NON-NLS-1$
+        final DropDownButton button = new DropDownButton("Mini", new DropButtonIcon(currentAction.getActionW().getSmallIcon())) { //$NON-NLS-1$
 
             @Override
             protected JPopupMenu getPopupMenu() {
@@ -146,7 +147,7 @@ public abstract class MiniTool extends PluginTool implements ActionListener {
 
                 JPopupMenu pop = (JPopupMenu) item.getParent();
                 if (pop.getInvoker() instanceof DropDownButton) {
-                    ((DropDownButton) pop.getInvoker()).setIcon(currentAction.getActionW().getSmallDropButtonIcon());
+                    ((DropDownButton) pop.getInvoker()).setIcon(new DropButtonIcon(currentAction.getActionW().getSmallIcon()));
                 }
             }
         }

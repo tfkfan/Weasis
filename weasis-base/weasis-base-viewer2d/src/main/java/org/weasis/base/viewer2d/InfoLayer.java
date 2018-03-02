@@ -16,7 +16,6 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.DecFormater;
 import org.weasis.core.api.gui.util.Filter;
 import org.weasis.core.api.image.OpManager;
 import org.weasis.core.api.image.WindowOp;
@@ -27,6 +26,7 @@ import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.model.graphic.AbstractGraphicLabel;
 import org.weasis.core.ui.model.layer.AbstractInfoLayer;
 import org.weasis.core.ui.model.layer.LayerAnnotation;
+import org.weasis.core.ui.util.DecFormater;
 
 /**
  * The Class InfoLayer.

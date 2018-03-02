@@ -24,8 +24,6 @@ import javax.swing.Timer;
 
 import org.jdesktop.jxlayer.JXLayer;
 import org.jdesktop.jxlayer.plaf.AbstractLayerUI;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
 
 @SuppressWarnings("serial")
 public class ColorLayerUI extends AbstractLayerUI<JComponent> {

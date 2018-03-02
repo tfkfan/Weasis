@@ -31,9 +31,9 @@ import org.weasis.acquire.explorer.gui.model.renderer.MediaSourceListCellRendere
 import org.weasis.acquire.explorer.media.FileSystemDrive;
 import org.weasis.acquire.explorer.media.MediaSource;
 import org.weasis.core.api.gui.util.GuiExecutor;
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.service.BundlePreferences;
 import org.weasis.core.api.util.FontTools;
+import org.weasis.core.ui.util.JMVUtils;
 
 import net.samuelcampos.usbdrivedectector.USBDeviceDetectorManager;
 import net.samuelcampos.usbdrivedectector.USBStorageDevice;

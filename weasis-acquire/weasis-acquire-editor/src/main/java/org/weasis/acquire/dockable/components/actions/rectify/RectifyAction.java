@@ -26,7 +26,6 @@ import org.weasis.acquire.dockable.components.actions.AcquireActionPanel;
 import org.weasis.acquire.explorer.AcquireImageInfo;
 import org.weasis.acquire.graphics.CropRectangleGraphic;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.GeomUtil;
 import org.weasis.core.api.image.FlipOp;
 import org.weasis.core.api.image.OpManager;
 import org.weasis.core.api.image.RotationOp;
@@ -39,6 +38,7 @@ import org.weasis.core.ui.model.AbstractGraphicModel;
 import org.weasis.core.ui.model.graphic.imp.area.RectangleGraphic;
 import org.weasis.core.ui.model.layer.imp.RenderedImageLayer;
 import org.weasis.core.ui.model.utils.exceptions.InvalidShapeException;
+import org.weasis.core.ui.util.GeomUtil;
 import org.weasis.opencv.data.PlanarImage;
 
 /**

@@ -20,9 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.MouseActionAdapter;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.ui.editor.image.DefaultView2d.BulkDragSequence;
 import org.weasis.core.ui.model.AbstractGraphicModel;
@@ -32,7 +29,10 @@ import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.graphic.imp.area.SelectGraphic;
 import org.weasis.core.ui.model.utils.Draggable;
 import org.weasis.core.ui.model.utils.imp.DefaultDragSequence;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.MouseActionAdapter;
 import org.weasis.core.ui.util.MouseEventDouble;
+import org.weasis.core.ui.util.ToggleButtonListener;
 
 public class GraphicMouseHandler<E extends ImageElement> extends MouseActionAdapter {
     private ViewCanvas<E> vImg;

@@ -39,11 +39,11 @@ import org.weasis.acquire.explorer.AcquireExplorer;
 import org.weasis.acquire.explorer.Messages;
 import org.weasis.acquire.explorer.core.bean.SeriesGroup;
 import org.weasis.acquire.explorer.gui.control.ImportPanel;
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.service.BundlePreferences;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.api.util.ThreadUtil;
+import org.weasis.core.ui.util.JMVUtils;
 
 public class AcquireImportDialog extends JDialog implements PropertyChangeListener {
     private static final long serialVersionUID = -8736946182228791444L;

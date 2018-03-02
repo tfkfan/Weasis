@@ -38,16 +38,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
-import org.weasis.core.api.gui.util.DecFormater;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.util.LocalUtil;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.dockable.MeasureTool;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
+import org.weasis.core.ui.util.DecFormater;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.WinUtil;
 
 public class ScreenPrefView extends AbstractItemDialogPage {
 

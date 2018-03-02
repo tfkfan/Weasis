@@ -20,10 +20,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.media.data.Series;
 import org.weasis.core.api.media.data.TagW;
 import org.weasis.core.api.media.data.Thumbnail;
+import org.weasis.core.ui.util.JMVUtils;
 import org.weasis.dicom.explorer.DicomExplorer.PatientContainerPane;
 import org.weasis.dicom.explorer.DicomExplorer.PatientPane;
 import org.weasis.dicom.explorer.DicomExplorer.SeriesPane;

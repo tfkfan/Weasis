@@ -34,14 +34,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.DecFormater;
 import org.weasis.core.api.gui.util.Filter;
-import org.weasis.core.api.gui.util.JSliderW;
-import org.weasis.core.api.gui.util.SliderChangeListener;
-import org.weasis.core.api.gui.util.SliderCineListener;
 import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.SeriesComparator;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.DecFormater;
+import org.weasis.core.ui.util.JSliderW;
+import org.weasis.core.ui.util.SliderChangeListener;
+import org.weasis.core.ui.util.SliderCineListener;
 import org.weasis.dicom.codec.DicomImageElement;
 import org.weasis.dicom.viewer2d.Messages;
 

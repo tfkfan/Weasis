@@ -24,11 +24,11 @@ import org.weasis.acquire.explorer.gui.dialog.AcquireImportDialog;
 import org.weasis.base.explorer.JIThumbnailCache;
 import org.weasis.base.explorer.list.AbstractThumbnailList;
 import org.weasis.base.explorer.list.IThumbnailModel;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.ui.util.DefaultAction;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.WinUtil;
 
 @SuppressWarnings("serial")
 public class AcquireThumbnailList<E extends MediaElement> extends AbstractThumbnailList<E> {

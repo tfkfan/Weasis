@@ -50,8 +50,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.Image2DViewer;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.DecFormater;
-import org.weasis.core.api.gui.util.GeomUtil;
 import org.weasis.core.api.gui.util.MathUtil;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.ui.editor.image.ViewCanvas;
@@ -65,6 +63,8 @@ import org.weasis.core.ui.model.utils.imp.DefaultGraphicLabel;
 import org.weasis.core.ui.model.utils.imp.DefaultUUID;
 import org.weasis.core.ui.serialize.ColorModelAdapter;
 import org.weasis.core.ui.serialize.PointAdapter;
+import org.weasis.core.ui.util.DecFormater;
+import org.weasis.core.ui.util.GeomUtil;
 import org.weasis.core.ui.util.MouseEventDouble;
 
 @XmlAccessorType(XmlAccessType.NONE)

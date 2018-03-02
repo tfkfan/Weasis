@@ -15,9 +15,9 @@ import javax.swing.JButton;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.SliderCineListener;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.service.WProperties;
+import org.weasis.core.ui.util.SliderCineListener;
 import org.weasis.core.ui.util.WtoolBar;
 
 @SuppressWarnings("serial")

@@ -21,8 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.weasis.core.api.gui.task.CircularProgressBar;
 import org.weasis.core.ui.docking.UIManager;
+import org.weasis.core.ui.util.CircularProgressBar;
 import org.weasis.dicom.explorer.wado.DownloadManager;
 
 public class LoadingTaskPanel extends JPanel {

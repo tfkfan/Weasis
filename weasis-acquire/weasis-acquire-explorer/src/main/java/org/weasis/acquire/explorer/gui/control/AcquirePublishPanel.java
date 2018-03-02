@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
 import org.weasis.acquire.explorer.Messages;
 import org.weasis.acquire.explorer.PublishDicomTask;
 import org.weasis.acquire.explorer.gui.dialog.AcquirePublishDialog;
-import org.weasis.core.api.gui.task.CircularProgressBar;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.util.FontTools;
 import org.weasis.core.api.util.ThreadUtil;
+import org.weasis.core.ui.util.CircularProgressBar;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.WinUtil;
 import org.weasis.dicom.param.DicomNode;
 import org.weasis.dicom.param.DicomState;
 

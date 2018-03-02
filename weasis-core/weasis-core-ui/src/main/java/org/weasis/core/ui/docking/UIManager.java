@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.weasis.core.api.explorer.DataExplorerView;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.ui.editor.SeriesViewer;
 import org.weasis.core.ui.editor.SeriesViewerFactory;
 import org.weasis.core.ui.editor.image.ViewerPlugin;
+import org.weasis.core.ui.util.WinUtil;
 
 import bibliothek.gui.dock.common.CContentArea;
 import bibliothek.gui.dock.common.CControl;

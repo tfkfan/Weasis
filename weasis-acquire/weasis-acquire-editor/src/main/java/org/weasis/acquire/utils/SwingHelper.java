@@ -21,8 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import org.weasis.core.api.gui.util.GuiExecutor;
-import org.weasis.core.api.gui.util.SliderChangeListener;
 import org.weasis.core.api.util.FontTools;
+import org.weasis.core.ui.util.SliderChangeListener;
 
 /**
  *

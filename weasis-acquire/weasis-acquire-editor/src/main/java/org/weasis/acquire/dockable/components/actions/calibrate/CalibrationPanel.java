@@ -19,11 +19,11 @@ import org.weasis.acquire.explorer.AcquireImageInfo;
 import org.weasis.acquire.explorer.AcquireImageValues;
 import org.weasis.acquire.graphics.CalibrationGraphic;
 import org.weasis.base.viewer2d.EventManager;
-import org.weasis.core.api.gui.util.ComboItemListener;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
 import org.weasis.core.ui.editor.image.MouseActions;
 import org.weasis.core.ui.editor.image.ViewerToolBar;
+import org.weasis.core.ui.util.ComboItemListener;
 
 public class CalibrationPanel extends AbstractAcquireActionPanel {
     private static final long serialVersionUID = 3956795043244254606L;

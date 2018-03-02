@@ -36,11 +36,12 @@ import javax.swing.filechooser.FileFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.api.gui.util.AppProperties;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
+import org.weasis.core.api.gui.util.ItemDialogPage;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.WinUtil;
 import org.weasis.dicom.explorer.internal.Activator;
 import org.weasis.dicom.explorer.wado.LoadSeries;
 
@@ -250,7 +251,7 @@ public class DicomDirImport extends AbstractItemDialogPage implements ImportDico
                     dcmImport.setCancelVeto(true); // Invalidate if closing the dialog
                     dcmImport.showPage(Messages.getString("DicomImport.imp_dicom")); //$NON-NLS-1$
                     if (file != null) {
-                        AbstractItemDialogPage page = dcmImport.getCurrentPage();
+                        ItemDialogPage page = dcmImport.getCurrentPage();
                         if (page instanceof LocalImport) {
                             ((LocalImport) page).setImportPath(file.getParent());
                         }

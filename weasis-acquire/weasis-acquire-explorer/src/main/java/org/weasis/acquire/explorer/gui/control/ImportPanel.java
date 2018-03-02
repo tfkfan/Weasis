@@ -26,13 +26,13 @@ import org.weasis.acquire.explorer.core.bean.SeriesGroup;
 import org.weasis.acquire.explorer.gui.central.ImageGroupPane;
 import org.weasis.acquire.explorer.gui.dialog.AcquireImportDialog;
 import org.weasis.acquire.explorer.gui.list.AcquireThumbnailListPane;
-import org.weasis.core.api.gui.task.CircularProgressBar;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.api.util.FontTools;
 import org.weasis.core.api.util.ThreadUtil;
+import org.weasis.core.ui.util.CircularProgressBar;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.WinUtil;
 
 public class ImportPanel extends JPanel {
     private static final long serialVersionUID = -8658686020451614960L;

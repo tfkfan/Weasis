@@ -24,10 +24,10 @@ import org.weasis.core.api.gui.Insertable;
 import org.weasis.core.api.gui.Insertable.Type;
 import org.weasis.core.api.gui.InsertableFactory;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.BasicActionState;
-import org.weasis.core.api.gui.util.ComboItemListener;
 import org.weasis.core.ui.editor.image.MeasureToolBar;
 import org.weasis.core.ui.model.graphic.Graphic;
+import org.weasis.core.ui.util.BasicActionState;
+import org.weasis.core.ui.util.ComboItemListener;
 
 /**
  *

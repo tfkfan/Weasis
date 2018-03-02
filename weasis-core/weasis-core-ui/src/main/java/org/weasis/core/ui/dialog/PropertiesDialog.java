@@ -28,9 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
 
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.ui.Messages;
+import org.weasis.core.ui.util.JMVUtils;
 
 public abstract class PropertiesDialog extends JDialog {
     private static final long serialVersionUID = 8140414207263317080L;

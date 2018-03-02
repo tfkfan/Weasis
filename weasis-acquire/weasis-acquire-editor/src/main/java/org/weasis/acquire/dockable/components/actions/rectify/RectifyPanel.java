@@ -34,8 +34,6 @@ import org.weasis.acquire.explorer.AcquireImageValues;
 import org.weasis.acquire.operations.impl.FlipActionListener;
 import org.weasis.acquire.operations.impl.RectifyOrientationChangeListener;
 import org.weasis.base.viewer2d.EventManager;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.image.CropOp;
 import org.weasis.core.api.image.FlipOp;
 import org.weasis.core.api.image.RotationOp;
@@ -46,6 +44,8 @@ import org.weasis.core.ui.editor.image.MouseActions;
 import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ViewerToolBar;
 import org.weasis.core.ui.model.utils.imp.DefaultViewModel;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.WinUtil;
 import org.weasis.opencv.op.ImageConversion;
 
 public class RectifyPanel extends AbstractAcquireActionPanel {

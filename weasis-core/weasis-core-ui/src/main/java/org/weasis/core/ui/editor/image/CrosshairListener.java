@@ -21,9 +21,9 @@ import java.util.Optional;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.BasicActionState;
-import org.weasis.core.api.gui.util.MouseActionAdapter;
 import org.weasis.core.api.service.AuditLog;
+import org.weasis.core.ui.util.BasicActionState;
+import org.weasis.core.ui.util.MouseActionAdapter;
 
 public abstract class CrosshairListener extends MouseActionAdapter implements ActionState, KeyListener {
 

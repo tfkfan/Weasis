@@ -32,10 +32,6 @@ import org.weasis.core.api.explorer.DataExplorerView;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.FileFormatFilter;
-import org.weasis.core.api.image.GridBagLayoutModel;
-import org.weasis.core.api.image.LayoutConstraints;
 import org.weasis.core.api.media.MimeInspector;
 import org.weasis.core.api.media.data.Codec;
 import org.weasis.core.api.media.data.MediaElement;
@@ -47,9 +43,13 @@ import org.weasis.core.ui.docking.UIManager;
 import org.weasis.core.ui.editor.SeriesViewer;
 import org.weasis.core.ui.editor.SeriesViewerFactory;
 import org.weasis.core.ui.editor.ViewerPluginBuilder;
+import org.weasis.core.ui.editor.image.GridBagLayoutModel;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
+import org.weasis.core.ui.editor.image.LayoutConstraints;
 import org.weasis.core.ui.editor.image.ViewCanvas;
+import org.weasis.core.ui.util.ComboItemListener;
 import org.weasis.core.ui.util.DefaultAction;
+import org.weasis.core.ui.util.FileFormatFilter;
 import org.weasis.dicom.codec.DicomCodec;
 import org.weasis.dicom.codec.DicomMediaIO;
 import org.weasis.dicom.codec.TagD;
@@ -90,7 +90,7 @@ public class View2dFactory implements SeriesViewerFactory {
         GridBagLayoutModel model = ImageViewerPlugin.VIEWS_1x1;
         String uid = null;
         if (properties != null) {
-            Object obj = properties.get(org.weasis.core.api.image.GridBagLayoutModel.class.getName());
+            Object obj = properties.get(org.weasis.core.ui.editor.image.GridBagLayoutModel.class.getName());
             if (obj instanceof GridBagLayoutModel) {
                 model = (GridBagLayoutModel) obj;
             } else {

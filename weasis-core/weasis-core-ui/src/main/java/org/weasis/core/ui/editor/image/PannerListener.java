@@ -19,11 +19,11 @@ import java.awt.geom.Point2D;
 
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.BasicActionState;
-import org.weasis.core.api.gui.util.MouseActionAdapter;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.service.AuditLog;
 import org.weasis.core.ui.model.utils.bean.PanPoint;
+import org.weasis.core.ui.util.BasicActionState;
+import org.weasis.core.ui.util.MouseActionAdapter;
 
 public abstract class PannerListener extends MouseActionAdapter implements ActionState, KeyListener {
 

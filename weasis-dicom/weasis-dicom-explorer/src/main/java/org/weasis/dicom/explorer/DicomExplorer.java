@@ -67,10 +67,9 @@ import org.slf4j.LoggerFactory;
 import org.weasis.core.api.explorer.DataExplorerView;
 import org.weasis.core.api.explorer.ObservableEvent;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.api.gui.util.ActionW;
 import org.weasis.core.api.gui.util.GuiExecutor;
-import org.weasis.core.api.gui.util.JMVUtils;
+import org.weasis.core.api.gui.util.ItemDialogPage;
 import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.MediaSeriesGroupNode;
@@ -92,6 +91,7 @@ import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.util.ArrayListComboBoxModel;
 import org.weasis.core.ui.util.ColorLayerUI;
 import org.weasis.core.ui.util.DefaultAction;
+import org.weasis.core.ui.util.JMVUtils;
 import org.weasis.core.ui.util.TitleMenuItem;
 import org.weasis.core.ui.util.WrapLayout;
 import org.weasis.dicom.codec.DicomSpecialElement;
@@ -1470,7 +1470,7 @@ public class DicomExplorer extends PluginTool implements DataExplorerView, Serie
                     ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(this);
                     DicomImport dialog = new DicomImport(SwingUtilities.getWindowAncestor(this), model);
                     dialog.showPage(Messages.getString("LocalImport.local_dev")); //$NON-NLS-1$
-                    AbstractItemDialogPage page = dialog.getCurrentPage();
+                    ItemDialogPage page = dialog.getCurrentPage();
                     if (page instanceof LocalImport) {
                         ((LocalImport) page).setImportPath(file.getParent());
                     }

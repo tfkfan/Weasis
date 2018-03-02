@@ -19,12 +19,12 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Deactivate;
 import org.weasis.core.api.explorer.DataExplorerView;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
-import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.ui.docking.UIManager;
 import org.weasis.core.ui.editor.SeriesViewer;
 import org.weasis.core.ui.editor.SeriesViewerFactory;
 import org.weasis.core.ui.editor.ViewerPluginBuilder;
+import org.weasis.core.ui.editor.image.GridBagLayoutModel;
 import org.weasis.dicom.explorer.DicomExplorer;
 import org.weasis.dicom.explorer.DicomModel;
 
@@ -58,7 +58,7 @@ public class WaveFactory implements SeriesViewerFactory {
         GridBagLayoutModel model = WaveContainer.VIEWS_1x1;
         String uid = null;
         if (properties != null) {
-            Object obj = properties.get(org.weasis.core.api.image.GridBagLayoutModel.class.getName());
+            Object obj = properties.get(org.weasis.core.ui.editor.image.GridBagLayoutModel.class.getName());
             if (obj instanceof GridBagLayoutModel) {
                 model = (GridBagLayoutModel) obj;
             }

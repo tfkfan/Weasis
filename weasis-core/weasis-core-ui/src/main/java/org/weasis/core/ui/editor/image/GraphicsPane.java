@@ -33,13 +33,13 @@ import javax.swing.JComponent;
 
 import org.weasis.core.api.gui.model.ViewModel;
 import org.weasis.core.api.gui.model.ViewModelChangeListener;
-import org.weasis.core.api.gui.util.GeomUtil;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.imp.XmlGraphicModel;
 import org.weasis.core.ui.model.layer.GraphicModelChangeListener;
 import org.weasis.core.ui.model.utils.imp.DefaultGraphicLabel;
 import org.weasis.core.ui.model.utils.imp.DefaultViewModel;
+import org.weasis.core.ui.util.GeomUtil;
 
 /**
  * The Class GraphicsPane.

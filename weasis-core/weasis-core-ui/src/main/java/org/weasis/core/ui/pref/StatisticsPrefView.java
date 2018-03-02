@@ -23,10 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.model.utils.ImageStatistics;
 import org.weasis.core.ui.model.utils.bean.Measurement;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
 
 @SuppressWarnings("serial")
 public class StatisticsPrefView extends AbstractItemDialogPage {

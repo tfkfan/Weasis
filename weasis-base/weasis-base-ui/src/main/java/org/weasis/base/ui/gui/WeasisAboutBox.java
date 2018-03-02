@@ -37,10 +37,11 @@ import javax.swing.border.Border;
 
 import org.weasis.base.ui.Messages;
 import org.weasis.core.api.gui.util.AppProperties;
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.util.ResourceUtil;
+import org.weasis.core.ui.util.JMVUtils;
 import org.weasis.core.ui.util.SimpleTableModel;
+import org.weasis.core.ui.util.TableHeaderRenderer;
 
 public class WeasisAboutBox extends JDialog implements ActionListener {
 
@@ -72,7 +73,7 @@ public class WeasisAboutBox extends JDialog implements ActionListener {
             Messages.getString("WeasisAboutBox.val") }, //$NON-NLS-1$
             createSysInfo()));
         sysTable.getColumnModel().setColumnMargin(5);
-        JMVUtils.formatTableHeaders(sysTable, SwingConstants.CENTER);
+        TableHeaderRenderer.formatTableHeaders(sysTable, SwingConstants.CENTER);
         init();
         pack();
     }

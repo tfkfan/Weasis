@@ -28,9 +28,9 @@ import javax.swing.border.TitledBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
-import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
+import org.weasis.core.ui.util.JMVUtils;
 import org.weasis.dicom.explorer.internal.Activator;
 
 public class LocalImport extends AbstractItemDialogPage implements ImportDicom {

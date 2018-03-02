@@ -184,20 +184,6 @@ public class ActionW implements KeyActionValue {
         return smallIcon;
     }
 
-    public Icon getDropButtonIcon() {
-        if (icon == null) {
-            return null;
-        }
-        return new DropButtonIcon(icon);
-    }
-
-    public Icon getSmallDropButtonIcon() {
-        if (smallIcon == null) {
-            return null;
-        }
-        return new DropButtonIcon(smallIcon);
-    }
-
     public static Cursor getCustomCursor(String filename, String cursorName, int hotSpotX, int hotSpotY) {
         Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
         URL path = ActionW.class.getResource("/icon/cursor/" + filename); //$NON-NLS-1$

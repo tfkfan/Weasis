@@ -32,15 +32,8 @@ import org.osgi.service.prefs.Preferences;
 import org.weasis.core.api.gui.Insertable.Type;
 import org.weasis.core.api.gui.InsertableUtil;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.BasicActionState;
-import org.weasis.core.api.gui.util.ComboItemListener;
 import org.weasis.core.api.gui.util.Filter;
-import org.weasis.core.api.gui.util.SliderChangeListener;
-import org.weasis.core.api.gui.util.SliderCineListener;
-import org.weasis.core.api.gui.util.SliderCineListener.TIME;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.image.FilterOp;
-import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.api.image.ImageOpNode;
 import org.weasis.core.api.image.OpManager;
 import org.weasis.core.api.image.PseudoColorOp;
@@ -61,6 +54,7 @@ import org.weasis.core.ui.docking.DockableTool;
 import org.weasis.core.ui.editor.SeriesViewerEvent;
 import org.weasis.core.ui.editor.SeriesViewerEvent.EVENT;
 import org.weasis.core.ui.editor.image.DefaultView2d;
+import org.weasis.core.ui.editor.image.GridBagLayoutModel;
 import org.weasis.core.ui.editor.image.ImageViewerEventManager;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
 import org.weasis.core.ui.editor.image.MeasureToolBar;
@@ -70,8 +64,14 @@ import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ZoomToolBar;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.graphic.GraphicSelectionListener;
+import org.weasis.core.ui.util.BasicActionState;
 import org.weasis.core.ui.util.ColorLayerUI;
+import org.weasis.core.ui.util.ComboItemListener;
 import org.weasis.core.ui.util.PrintDialog;
+import org.weasis.core.ui.util.SliderChangeListener;
+import org.weasis.core.ui.util.SliderCineListener;
+import org.weasis.core.ui.util.ToggleButtonListener;
+import org.weasis.core.ui.util.SliderCineListener.TIME;
 
 /**
  * The event processing center for this application. This class responses for loading data sets, processing the events

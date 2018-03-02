@@ -34,10 +34,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.explorer.DataExplorerView;
 import org.weasis.core.api.gui.InsertableUtil;
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
-import org.weasis.core.api.gui.util.AbstractWizardDialog;
+import org.weasis.core.api.gui.util.ItemDialogPage;
 import org.weasis.core.api.media.data.Series;
 import org.weasis.core.ui.docking.UIManager;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
+import org.weasis.core.ui.util.AbstractWizardDialog;
 import org.weasis.dicom.codec.DicomSeries;
 import org.weasis.dicom.explorer.internal.Activator;
 
@@ -103,7 +104,7 @@ public class DicomExport extends AbstractWizardDialog {
                 DicomExportFactory factory = context.getService(service);
                 if (factory != null) {
                     ExportDicom page = factory.createDicomExportPage(properties);
-                    if (page instanceof AbstractItemDialogPage) {
+                    if (page instanceof ItemDialogPage) {
                         list.add((AbstractItemDialogPage) page);
                     }
                 }
@@ -113,7 +114,7 @@ public class DicomExport extends AbstractWizardDialog {
         }
 
         InsertableUtil.sortInsertable(list);
-        for (AbstractItemDialogPage page : list) {
+        for (ItemDialogPage page : list) {
             pagesRoot.add(new DefaultMutableTreeNode(page));
         }
 

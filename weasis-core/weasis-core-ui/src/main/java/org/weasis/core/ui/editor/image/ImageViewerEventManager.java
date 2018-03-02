@@ -30,15 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.DecFormater;
 import org.weasis.core.api.gui.util.Filter;
 import org.weasis.core.api.gui.util.GuiExecutor;
-import org.weasis.core.api.gui.util.SliderChangeListener;
-import org.weasis.core.api.gui.util.SliderCineListener;
-import org.weasis.core.api.gui.util.SliderCineListener.TIME;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
-import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.media.data.MediaSeries;
@@ -52,6 +45,12 @@ import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.utils.imp.DefaultViewModel;
 import org.weasis.core.ui.pref.ZoomSetting;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.DecFormater;
+import org.weasis.core.ui.util.SliderChangeListener;
+import org.weasis.core.ui.util.SliderCineListener;
+import org.weasis.core.ui.util.ToggleButtonListener;
+import org.weasis.core.ui.util.SliderCineListener.TIME;
 
 public abstract class ImageViewerEventManager<E extends ImageElement> implements KeyListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageViewerEventManager.class);

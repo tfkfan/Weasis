@@ -34,15 +34,15 @@ import org.weasis.acquire.Messages;
 import org.weasis.base.viewer2d.EventManager;
 import org.weasis.core.api.gui.util.ActionState;
 import org.weasis.core.api.gui.util.ActionW;
-import org.weasis.core.api.gui.util.ComboItemListener;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.image.util.Unit;
 import org.weasis.core.api.util.FontTools;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.ui.editor.image.MeasureToolBar;
 import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.pref.ViewSetting;
+import org.weasis.core.ui.util.ComboItemListener;
+import org.weasis.core.ui.util.JMVUtils;
+import org.weasis.core.ui.util.ToggleButtonListener;
 
 @SuppressWarnings("serial")
 public class AnnotationOptionsPanel extends JPanel {

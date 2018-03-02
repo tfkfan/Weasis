@@ -30,8 +30,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.api.util.StringUtil;
+import org.weasis.core.ui.util.AbstractItemDialogPage;
 import org.weasis.dicom.codec.TransferSyntax;
 import org.weasis.dicom.explorer.wado.DicomManager;
 

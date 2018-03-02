@@ -22,10 +22,10 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.plaf.PanelUI;
 
-import org.weasis.core.api.image.GridBagLayoutModel;
-import org.weasis.core.api.image.LayoutConstraints;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.ui.editor.image.ExportImage;
+import org.weasis.core.ui.editor.image.GridBagLayoutModel;
+import org.weasis.core.ui.editor.image.LayoutConstraints;
 import org.weasis.core.ui.editor.image.ViewCanvas;
 
 public class ExportLayout<E extends ImageElement> extends JPanel {
