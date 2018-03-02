@@ -19,7 +19,9 @@ import javax.jnlp.ServiceManager;
 import javax.jnlp.SingleInstanceListener;
 import javax.jnlp.SingleInstanceService;
 import javax.jnlp.UnavailableServiceException;
-import javax.swing.SwingUtilities;
+
+import javafx.application.Application;
+import javafx.application.Platform;
 
 public class WebstartLauncher extends WeasisLauncher implements SingleInstanceListener {
 
@@ -75,32 +77,28 @@ public class WebstartLauncher extends WeasisLauncher implements SingleInstanceLi
         }
         if (m_tracker != null) {
             if (argv.length > 0) {
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        m_tracker.open();
-                        Object commandSession = getCommandSession(m_tracker.getService());
-                        if (commandSession != null) {
-                            List<StringBuilder> commandList = splitCommand(argv);
-                            // Set the main window visible and to the front
-                            commandSession_execute(commandSession, "weasis:ui -v"); //$NON-NLS-1$
-                            // execute the commands from main argv
-                            for (StringBuilder command : commandList) {
-                                commandSession_execute(commandSession, command);
-                            }
-                            commandSession_close(commandSession);
+                Platform.runLater(() -> {
+                    m_tracker.open();
+                    Object commandSession = getCommandSession(m_tracker.getService());
+                    if (commandSession != null) {
+                        List<StringBuilder> commandList = splitCommand(argv);
+                        // Set the main window visible and to the front
+                        commandSession_execute(commandSession, "weasis:ui -v"); //$NON-NLS-1$
+                        // execute the commands from main argv
+                        for (StringBuilder command : commandList) {
+                            commandSession_execute(commandSession, command);
                         }
-
-                        m_tracker.close();
+                        commandSession_close(commandSession);
                     }
+
+                    m_tracker.close();
                 });
             }
         }
     }
 
     public static void launch(String[] argv) throws Exception {
-        WeasisLauncher.launch(argv);
+        Application.launch(WeasisApp.class, argv);
     }
 
     public static void main(String[] argv) throws Exception {

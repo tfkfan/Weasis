@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.VBox?>
+
+<Group fx:id="patientGroup" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.PatientController">
+   <children>
+      <TitledPane fx:id="title" animated="false" stylesheets="@titlePane.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="untitled">
+         <content>
+            <VBox fx:id="patientImageVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0">
+               <padding>
+                  <Insets bottom="5.0" left="0.0" right="0.0" top="5.0" />
+               </padding></VBox>
+         </content>
+      </TitledPane>
+   </children>
+   <userData>
+     		<fx:reference source="controller" />
+	</userData>
+</Group>

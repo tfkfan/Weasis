@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.AudioListenerController">
+   <top>
+      <HBox fx:id="controlPane1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <JFXSlider fx:id="timeSlider" blockIncrement="1.0" indicatorPosition="RIGHT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="0.0" stylesheets="@sliderTime.css" value="-1.0" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXSlider>
+            <Label fx:id="playTime" text="Label" textFill="WHITE" />
+            <Label text="Vol" textFill="WHITE" />
+            <JFXSlider fx:id="volumeSlider" blockIncrement="1.0" indicatorPosition="RIGHT" minWidth="0.0" stylesheets="@slider.css" value="100.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXSlider>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <bottom>
+      <HBox fx:id="controlPane2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <BorderPane fx:id="preview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0">
+               <center>
+                  <SVGPath content="M200,544 C204.418278,544 208,540.418278 208,536 C208,531.581722 204.418278,528 200,528 C195.581722,528 192,531.581722 192,536 C192,540.418278 195.581722,544 200,544 L200,544 Z M197,532 L199,532 L199,536 L199,540 L197,540 L197,532 L197,532 Z M199,536 L203,532 L203,536 L203,540 L199,536 L199,536 Z M199,536" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </BorderPane>
+            <BorderPane fx:id="stop" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0">
+               <center>
+                  <SVGPath content="M344,544 C339.581722,544 336,540.418278 336,536 C336,531.581722 339.581722,528 344,528 C348.418278,528 352,531.581722 352,536 C352,540.418278 348.418278,544 344,544 L344,544 Z M348,532 L340,532 L340,536 L340,540 L348,540 L348,532 L348,532 Z M348,532" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </BorderPane>
+            <BorderPane fx:id="play" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0">
+               <center>
+                  <SVGPath fx:id="playSVG" content="M296,544 C291.581722,544 288,540.418278 288,536 C288,531.581722 291.581722,528 296,528 C300.418278,528 304,531.581722 304,536 C304,540.418278 300.418278,544 296,544 L296,544 Z M299,532 L297,532 L297,536 L297,540 L299,540 L299,532 L299,532 Z M295,532 L293,532 L293,536 L293,540 L295,540 L295,532 L295,532 Z M295,532" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </BorderPane>
+            <BorderPane fx:id="next" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0">
+               <center>
+                  <SVGPath content="M248,544 C243.581722,544 240,540.418278 240,536 C240,531.581722 243.581722,528 248,528 C252.418278,528 256,531.581722 256,536 C256,540.418278 252.418278,544 248,544 L248,544 Z M251,532 L249,532 L249,536 L249,540 L251,540 L251,532 L251,532 Z M249,536 L245,532 L245,536 L245,540 L249,536 L249,536 Z M249,536" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </BorderPane>
+            <JFXToggleButton fx:id="loopToggleButton" text="Loop" textFill="WHITE" toggleColor="#b34711" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>

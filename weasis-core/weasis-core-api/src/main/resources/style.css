@@ -1,0 +1,4 @@
+.custom-combo .arrow-button {
+    -fx-alignment: top-right;
+    -fx-padding: 0.333333em 0.333333em 0.333333em 0.666667em; /* 4 4 4 8 */
+}

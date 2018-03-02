@@ -35,6 +35,7 @@
 		<set type="response-header" name="Pragma">no-cache</set>
 		<set type="response-header" name="AppVersion">${app.version}</set>
 		<set type="response-header" name="FelixVersion">${felix.framework.version}</set>
+		<!-- Return an fake package required by pacs-connector API -->
 		<set type="response-header" name="SubstanceVersion">${substance.version}</set>
 		<set type="response-header" name="JavaVersion">${java-version}</set>
 		<set type="response-header" name="BuildTime">${build.timestamp}</set>

@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<artifactId>weasis-core-parent</artifactId>
+		<artifactId>weasis-core-parent-fx</artifactId>
 		<groupId>org.weasis.core</groupId>
 		<version>3.0.1-SNAPSHOT</version>
 		<relativePath>../weasis-core-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>weasis-core-api</artifactId>
+	<artifactId>weasis-core-api-fx</artifactId>
 	<packaging>bundle</packaging>
 	<name>Weasis Core API [${project.artifactId}]</name>
 	
@@ -35,12 +35,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.weasis.core</groupId>
-			<artifactId>weasis-core-util</artifactId>
+			<artifactId>weasis-core-util-fx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.prefs</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.controlsfx</groupId>
+		    <artifactId>controlsfx</artifactId>
 		</dependency>
 
 		<!-- FOR TESTS -->

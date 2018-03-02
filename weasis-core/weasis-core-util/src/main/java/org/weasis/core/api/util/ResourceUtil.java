@@ -20,6 +20,8 @@ import javax.swing.ImageIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.scene.image.Image;
+
 public class ResourceUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceUtil.class);
 
@@ -115,5 +117,26 @@ public class ResourceUtil {
             path = buf.toString();
         }
         return new File(path, filename);
+    }
+    
+    public static Image getFxLargeLogo() {
+        return getFxLogo("images" + File.separator + "about.png"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    public static Image getFxIconLogo64() {
+        return getFxLogo("images" + File.separator + "logo-button.png"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    public static Image getFxLogo(String filename) {
+        Image icon = null;
+        try {
+            File file = getResource(filename);
+            if (file != null && file.canRead()) {
+                icon = new Image(file.toURI().toURL().toString());
+            }
+        } catch (Exception e) {
+            LOGGER.error("Cannot read logo image:{}", e); //$NON-NLS-1$
+        }
+        return icon;
     }
 }

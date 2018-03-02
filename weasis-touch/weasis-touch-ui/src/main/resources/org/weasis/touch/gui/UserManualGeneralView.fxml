@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="444.0" spacing="10.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <children>
+      <Group fx:id="gLoad">
+         <children>
+            <VBox prefWidth="444.0" spacing="10.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Load an image">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <HBox prefHeight="0.0" prefWidth="424.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@loadImage.JPG" />
+                           </image>
+                        </ImageView>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <left>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Drag and drop a thumbnail from the left pane to the main view." wrappingWidth="217.0" BorderPane.alignment="CENTER" />
+                           </left>
+                        </BorderPane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Group>
+      <Separator prefWidth="200.0" />
+      <Group fx:id="gHide">
+         <children>
+            <VBox prefWidth="444.0" spacing="10.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hide / Show the thumbnail">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <HBox prefHeight="0.0" prefWidth="424.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@hide.JPG" />
+                           </image>
+                        </ImageView>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <left>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Touch or click  the red arraw on the upper left corner to hide or to show the thumbnails." wrappingWidth="217.0" BorderPane.alignment="CENTER" />
+                           </left>
+                        </BorderPane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Group>
+      <Separator prefWidth="200.0" />
+      <Group fx:id="gOpenMenu">
+         <children>
+            <VBox prefWidth="444.0" spacing="10.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Open the menu">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <HBox prefHeight="0.0" prefWidth="424.0" spacing="5.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@menu.JPG" />
+                           </image>
+                        </ImageView>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <left>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Touch or click the red &quot;+&quot; on the lower right corner to open the menu." wrappingWidth="217.0" BorderPane.alignment="CENTER" />
+                           </left>
+                        </BorderPane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Group>
+   </children>
+</VBox>

@@ -19,10 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.command.Option;
 import org.weasis.core.api.command.Options;
-import org.weasis.core.api.explorer.ObservableEvent;
 import org.weasis.core.api.explorer.model.AbstractFileModel;
 import org.weasis.core.api.gui.util.AppProperties;
-import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.util.FileUtil;
 
 // TODO required to change the static ref
@@ -63,19 +61,19 @@ public class FileModel extends AbstractFileModel {
             opt.usage();
             return;
         }
-        GuiExecutor.instance().execute(() -> {
-            AbstractFileModel dataModel = ViewerPluginBuilder.DefaultDataModel;
-            dataModel.firePropertyChange(
-                new ObservableEvent(ObservableEvent.BasicAction.SELECT, dataModel, null, dataModel));
-            if (opt.isSet("file")) { //$NON-NLS-1$
-                fargs.stream().map(File::new).filter(File::isFile)
-                    .forEach(f -> ViewerPluginBuilder.openSequenceInDefaultPlugin(f, true, true));
-            }
-            if (opt.isSet("url")) { //$NON-NLS-1$
-                uargs.stream().map(this::getFile)
-                    .forEach(f -> ViewerPluginBuilder.openSequenceInDefaultPlugin(f, true, true));
-            }
-        });
+//        GuiExecutor.instance().execute(() -> {
+//            AbstractFileModel dataModel = ViewerPluginBuilder.DefaultDataModel;
+//            dataModel.firePropertyChange(
+//                new ObservableEvent(ObservableEvent.BasicAction.SELECT, dataModel, null, dataModel));
+//            if (opt.isSet("file")) { //$NON-NLS-1$
+//                fargs.stream().map(File::new).filter(File::isFile)
+//                    .forEach(f -> ViewerPluginBuilder.openSequenceInDefaultPlugin(f, true, true));
+//            }
+//            if (opt.isSet("url")) { //$NON-NLS-1$
+//                uargs.stream().map(this::getFile)
+//                    .forEach(f -> ViewerPluginBuilder.openSequenceInDefaultPlugin(f, true, true));
+//            }
+//        });
 
     }
 

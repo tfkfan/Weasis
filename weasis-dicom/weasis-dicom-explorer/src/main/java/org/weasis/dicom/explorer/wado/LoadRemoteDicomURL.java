@@ -32,7 +32,7 @@ import org.weasis.dicom.explorer.Messages;
 import org.weasis.dicom.mf.SopInstance;
 import org.weasis.dicom.mf.WadoParameters;
 
-public class LoadRemoteDicomURL extends ExplorerTask<Boolean, String> {
+public class LoadRemoteDicomURL extends ExplorerTask<Boolean> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadRemoteDicomURL.class);
 
     private final URL[] urls;
@@ -67,7 +67,7 @@ public class LoadRemoteDicomURL extends ExplorerTask<Boolean, String> {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean call() throws Exception {
         String seriesUID = null;
         for (int i = 0; i < urls.length; i++) {
             if (urls[i] != null) {

@@ -43,8 +43,6 @@ import org.weasis.core.api.image.util.MeasurableLayer;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.Canvas;
-import org.weasis.core.ui.editor.image.DefaultView2d;
-import org.weasis.core.ui.editor.image.MeasureToolBar;
 import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.model.graphic.DragGraphic;
 import org.weasis.core.ui.model.graphic.Graphic;
@@ -582,9 +580,9 @@ public abstract class AbstractGraphicModel extends DefaultUUID implements Graphi
         Rectangle2D bound = area.getBounds2D();
 
         g2d.translate(0.5, 0.5);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, DefaultView2d.antialiasingOn);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         models.forEach(g -> applyPaint(g, g2d, transform, bound));
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, DefaultView2d.antialiasingOff);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         g2d.translate(-0.5, -0.5);
     }
 
@@ -677,7 +675,8 @@ public abstract class AbstractGraphicModel extends DefaultUUID implements Graphi
 
     public static Graphic drawFromCurrentGraphic(ViewCanvas<?> canvas, Graphic graphicCreator) {
         Objects.requireNonNull(canvas);
-        Graphic newGraphic = Optional.ofNullable(graphicCreator).orElse(MeasureToolBar.selectionGraphic);
+        // TODO
+        Graphic newGraphic = Optional.ofNullable(graphicCreator).orElse(new SelectGraphic());
         GraphicLayer layer = getOrBuildLayer(canvas, newGraphic.getLayerType());
 
         if (!layer.getVisible() || !(Boolean) canvas.getActionValue(ActionW.DRAWINGS.cmd())) {

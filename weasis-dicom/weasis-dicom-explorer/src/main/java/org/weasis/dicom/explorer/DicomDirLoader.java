@@ -32,14 +32,11 @@ import org.dcm4che3.util.UIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
-import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.MediaSeriesGroupNode;
 import org.weasis.core.api.media.data.Series;
 import org.weasis.core.api.media.data.TagW;
 import org.weasis.core.api.media.data.Thumbnail;
-import org.weasis.core.ui.docking.UIManager;
-import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.dicom.codec.DicomSeries;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
@@ -96,20 +93,16 @@ public class DicomDirLoader {
         if (pat == 1) {
             // In case of the patient already exists, select it
             final MediaSeriesGroup uniquePatient = patient;
-            GuiExecutor.instance().execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    synchronized (UIManager.VIEWER_PLUGINS) {
-                        for (final ViewerPlugin p : UIManager.VIEWER_PLUGINS) {
-                            if (uniquePatient.equals(p.getGroupID())) {
-                                p.setSelectedAndGetFocus();
-                                break;
-                            }
-                        }
-                    }
-                }
-            });
+//            GuiExecutor.executeFX(() -> {
+//                synchronized (UIManager.VIEWER_PLUGINS) {
+//                    for (final ViewerPlugin p : UIManager.VIEWER_PLUGINS) {
+//                        if (uniquePatient.equals(p.getGroupID())) {
+//                            p.setSelectedAndGetFocus();
+//                            break;
+//                        }
+//                    }
+//                }
+//            });
         }
         for (LoadSeries loadSeries : seriesList) {
             String modality = TagD.getTagValue(loadSeries.getDicomSeries(), Tag.Modality, String.class);
@@ -252,7 +245,7 @@ public class DicomDirLoader {
                     if (thumbnailPath != null) {
                         int width = iconInstance.getInt(Tag.Columns, 0);
                         int height = iconInstance.getInt(Tag.Rows, 0);
-                        if (width != 0 && height != 0) {          
+                        if (width != 0 && height != 0) {
                             WritableRaster raster =
                                 Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 1, new Point(0, 0));
                             raster.setDataElements(0, 0, width, height, pixelData);

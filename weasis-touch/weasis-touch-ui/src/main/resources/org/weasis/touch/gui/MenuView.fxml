@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXColorPicker?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Group fx:id="menuGroup" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.MenuController">
+   <children>
+      <BorderPane fx:id="buttonPlus" layoutX="651.0" layoutY="202.0" prefHeight="70.0" prefWidth="70.0">
+         <center>
+            <SVGPath content="m2.735314,7.129162l0,2l3,0l0,3l2,0l0,-3l3,0l0,-2l-3,0l0,-3l-2,0l0,3l-3,0zm4,9c-4.41828,0 -8,-3.58172 -8,-8c0,-4.41828 3.58172,-8 8,-8c4.41828,0 8,3.58172 8,8c0,4.41828 -3.58172,8 -8,8zm0,0" fill="#b34711" scaleX="4.0" scaleY="4.0" />
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="trashMeasure" layoutX="559.0" layoutY="202.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0">
+         <center>
+            <SVGPath fx:id="trashMeasureSVG" content="M89.4,100l26.2,347.9c2.5,32.5,29.6,58.1,60.7,58.1h159.3c31.1,0,58.2-25.6,60.7-58.1L422.6,100H89.4z M190.1,460.8   c0.3,7.1-5.1,12.7-12,12.7s-12.7-5.7-13.1-12.7l-14.6-296.6c-0.5-9.6,5.7-17.4,13.8-17.4s14.9,7.8,15.3,17.4L190.1,460.8z    M268.5,460.8c0,7.1-5.7,12.7-12.5,12.7s-12.5-5.7-12.5-12.7l-2-296.6c-0.1-9.6,6.4-17.4,14.5-17.4c8.1,0,14.6,7.8,14.5,17.4   L268.5,460.8z M346.9,460.8c-0.3,7.1-6.2,12.7-13.1,12.7s-12.2-5.7-12-12.7l10.6-296.6c0.3-9.6,7.2-17.4,15.3-17.4   c8.1,0,14.3,7.8,13.8,17.4L346.9,460.8z M445.3,82.8H66.7v0c-1.8-21.1,10.7-38.4,27.9-38.4h322.9C434.6,44.4,447.1,61.8,445.3,82.8L445.3,82.8z M324.3,58.6H187.7l-0.2-7.8C186.7,26.3,202.1,6,221.9,6h68.3c19.7,0,35.1,20.3,34.4,44.7L324.3,58.6z" fill="#b34711" scaleX="0.12" scaleY="0.12" />
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="exitMeasure" layoutX="651.0" layoutY="202.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0">
+         <center>
+            <SVGPath fx:id="exitMeasureSVG" content="M7.1,12.6 L8.5,14 L13.5,9 L8.5,4 L7.1,5.4 L9.7,8 L0,8 L0,10 L9.7,10 L7.1,12.6 L7.1,12.6 Z M16,0 L2,0 C0.9,0 0,0.9 0,2 L0,6 L2,6 L2,2 L16,2 L16,16 L2,16 L2,12 L0,12 L0,16 C0,17.1 0.9,18 2,18 L16,18 C17.1,18 18,17.1 18,16 L18,2 C18,0.9 17.1,0 16,0 L16,0 Z" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+      <GridPane fx:id="menu" hgap="10.0" style="-fx-background-color: #EAEAEAF0; -fx-border-color: black;" vgap="10.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <BorderPane fx:id="exit" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <center>
+                  <SVGPath content="M7.1,12.6 L8.5,14 L13.5,9 L8.5,4 L7.1,5.4 L9.7,8 L0,8 L0,10 L9.7,10 L7.1,12.6 L7.1,12.6 Z M16,0 L2,0 C0.9,0 0,0.9 0,2 L0,6 L2,6 L2,2 L16,2 L16,16 L2,16 L2,12 L0,12 L0,16 C0,17.1 0.9,18 2,18 L16,18 C17.1,18 18,17.1 18,16 L18,2 C18,0.9 17.1,0 16,0 L16,0 Z" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="reset" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="125.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <center>
+                  <SVGPath content="M 20 0 C 8.9199974 0 0 8.9199974 0 20 L 0 80 C 0 91.080002 8.9199974 100 20 100 L 80 100 C 91.080002 100 100 91.080002 100 80 L 100 20 C 100 8.9199974 91.080002 0 80 0 L 20 0 z M 48.636719 14.226562 C 60.889082 14.226562 71.636982 20.789332 77.583984 30.572266 L 84.607422 26.306641 L 84.978516 49.835938 L 64.220703 38.6875 L 71.677734 34.160156 C 66.969259 26.368904 58.437081 21.167969 48.636719 21.167969 C 37.184857 21.167969 27.44882 28.192693 23.542969 38.234375 C 23.455871 38.502525 23.397493 38.769271 23.259766 39.082031 C 22.296473 41.222173 20.089636 42.3191 18.330078 41.53125 C 17.177135 41.01256 16.456466 39.776158 16.447266 38.298828 C 16.463335 37.593688 16.724999 36.755854 17.039062 35.927734 C 21.941795 23.251392 34.2594 14.226562 48.636719 14.226562 z M 15.021484 50.164062 L 35.779297 61.3125 L 28.322266 65.839844 C 33.03074 73.631075 41.56292 78.832031 51.363281 78.832031 C 62.81514 78.832031 72.551181 71.807306 76.457031 61.765625 C 76.54413 61.497475 76.602507 61.230739 76.740234 60.917969 C 77.703528 58.777828 79.910365 57.6809 81.669922 58.46875 C 82.822866 58.98745 83.543534 60.223862 83.552734 61.701172 C 83.536665 62.406322 83.275001 63.244146 82.960938 64.072266 C 78.058205 76.748617 65.740598 85.773438 51.363281 85.773438 C 39.110918 85.773438 28.363019 79.210656 22.416016 69.427734 L 15.392578 73.693359 L 15.021484 50.164062 z" fill="#b34711" scaleX="0.6" scaleY="0.6" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="lock" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="125.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <center>
+                  <SVGPath content="M131.889,150.061v63.597h-27.256  c-20.079,0-36.343,16.263-36.343,36.342v181.711c0,20.078,16.264,36.34,36.343,36.34h290.734c20.078,0,36.345-16.262,36.345-36.34  V250c0-20.079-16.267-36.342-36.345-36.342h-27.254v-63.597c0-65.232-52.882-118.111-118.112-118.111  S131.889,84.828,131.889,150.061z M177.317,213.658v-63.597c0-40.157,32.525-72.685,72.683-72.685  c40.158,0,72.685,32.528,72.685,72.685v63.597H177.317z M213.658,313.599c0-20.078,16.263-36.341,36.342-36.341  s36.341,16.263,36.341,36.341c0,12.812-6.634,24.079-16.625,30.529c0,0,3.55,21.446,7.542,46.699  c0,7.538-6.087,13.625-13.629,13.625h-27.258c-7.541,0-13.627-6.087-13.627-13.625l7.542-46.699  C220.294,337.678,213.658,326.41,213.658,313.599z" fill="#b34711" scaleX="0.15" scaleY="0.15" scaleZ="0.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="openFile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <center>
+                  <SVGPath content="m 275.75249,553.75275 a 16.0016,16.0016 0 0 0 -2.21875,0.21875 l -141.53125,0 a 16.0016,16.0016 0 0 0 -16,16 l 0,109 -25.000005,0 a 20.002,20.002 0 0 0 -17.5625,10 l -22.4375,0 a 20.002,20.002 0 0 0 -18.71875,12.28125 L 3.8462355,748.659 a 20.002,20.002 0 0 0 -2.34375,14.8125 l 59.9999995,260 a 20.002,20.002 0 0 0 19.5,15.5 l 399.968755,0 a 20.00703,20.00703 0 0 0 0.15625,0 20.00703,20.00703 0 0 0 1.1875,-0.062 20.009763,20.009763 0 0 0 0.9375,-0.062 20.00703,20.00703 0 0 0 1.65625,-0.2812 20.00703,20.00703 0 0 0 0.0625,0 20.00703,20.00703 0 0 0 1.875,-0.4688 20.00703,20.00703 0 0 0 0.0625,-0.031 20.009763,20.009763 0 0 0 0.0312,0 20.00703,20.00703 0 0 0 1.84375,-0.6875 20.00703,20.00703 0 0 0 0.84375,-0.375 20.002,20.002 0 0 0 0.125,-0.062 20.002,20.002 0 0 0 0.8125,-0.375 20.009763,20.009763 0 0 0 0.0312,-0.031 20.002,20.002 0 0 0 0.46875,-0.2812 20.00703,20.00703 0 0 0 0.15625,-0.094 20.009763,20.009763 0 0 0 1.53125,-1 20.00703,20.00703 0 0 0 0.125,-0.094 20.009763,20.009763 0 0 0 0.0937,-0.062 20.009763,20.009763 0 0 0 0.5,-0.4375 20.00703,20.00703 0 0 0 1.03125,-0.8438 20.009763,20.009763 0 0 0 0.125,-0.125 20.009763,20.009763 0 0 0 0.6875,-0.6562 20.002,20.002 0 0 0 0.40625,-0.4375 20.00703,20.00703 0 0 0 0.90625,-1.0625 20.002,20.002 0 0 0 0.125,-0.1563 20.00703,20.00703 0 0 0 0.6875,-0.9375 20.002,20.002 0 0 0 0.53125,-0.8125 20.002,20.002 0 0 0 0.15625,-0.2187 20.00703,20.00703 0 0 0 0.25,-0.4688 20.002,20.002 0 0 0 0.4375,-0.75 20.009763,20.009763 0 0 0 0.0312,-0.031 20.002,20.002 0 0 0 0.21875,-0.5 20.002,20.002 0 0 0 0.6875,-1.625 20.002,20.002 0 0 0 0.0937,-0.2188 20.00703,20.00703 0 0 0 0.0937,-0.3437 20.002,20.002 0 0 0 0.1875,-0.5313 20.002,20.002 0 0 0 0.15625,-0.4687 20.009763,20.009763 0 0 0 0,-0.031 20.002,20.002 0 0 0 0.125,-0.5625 20.002,20.002 0 0 0 0.3125,-1.375 20.009763,20.009763 0 0 0 0.0312,-0.2812 20.00703,20.00703 0 0 0 0.125,-1.0313 20.009763,20.009763 0 0 0 0.0937,-0.6875 20.009763,20.009763 0 0 0 0,-0.375 20.009763,20.009763 0 0 0 0.0312,-0.1875 20.00703,20.00703 0 0 0 0,-0.25 l 10,-320 a 20.002,20.002 0 0 0 -20,-20.625 l -95,0 0,-2.40625 a 16.0016,16.0016 0 0 0 -6.03125,-15.28125 l -101.375,-101.375 a 16.0016,16.0016 0 0 0 -12.84375,-6.15625 z m -127.75,32.21875 112,0 0,85.4375 a 16.0016,16.0016 0 0 0 4.59375,14 16.0016,16.0016 0 0 0 0.125,0.125 16.0016,16.0016 0 0 0 0.21875,0.21875 16.0016,16.0016 0 0 0 13.6875,4.21875 l 85.375,0 0,49 -131.6875,0 -24.15625,-40.28125 a 20.002,20.002 0 0 0 -17.15625,-9.71875 l -43,0 0,-103 z m 144,22.625 49.375,49.375 -49.375,0 0,-49.375 z m 104,110.375 74.34375,0 -5.59375,179.125 -44.625,-145 a 20.002,20.002 0 0 0 0,-0.0312 20.002,20.002 0 0 0 -0.6875,-1.84375 20.002,20.002 0 0 0 0,-0.0312 20.002,20.002 0 0 0 -0.875,-1.78125 20.002,20.002 0 0 0 0,-0.0312 20.002,20.002 0 0 0 -1.03125,-1.65625 20.002,20.002 0 0 0 0,-0.0312 20.002,20.002 0 0 0 -1.21875,-1.5625 20.002,20.002 0 0 0 0,-0.0312 20.002,20.002 0 0 0 -1.34375,-1.4375 20.002,20.002 0 0 0 -0.0312,-0.0312 20.002,20.002 0 0 0 -1.46875,-1.3125 20.002,20.002 0 0 0 -0.0312,0 20.002,20.002 0 0 0 -1.59375,-1.15625 20.002,20.002 0 0 0 -0.0312,0 20.002,20.002 0 0 0 -1.6875,-1 20.002,20.002 0 0 0 -0.0312,0 20.002,20.002 0 0 0 -1.8125,-0.8125 20.002,20.002 0 0 0 -1.875,-0.625 20.002,20.002 0 0 0 -3.71875,-0.65625 20.002,20.002 0 0 0 -0.21875,-0.0312 20.002,20.002 0 0 0 -0.0312,0 20.002,20.002 0 0 0 -1.4375,-0.0625 l -5,0 0,-20 z m -333.687505,10 53.687505,0 63.6875,0 24.15625,40.28125 a 20.002,20.002 0 0 0 17.15625,9.71875 l 165.21875,0 9.78125,31.78125 13.375,43.53125 44.53125,144.6875 -356.968755,0 -54.625,-236.65625 20,-33.34375 z" fill="#b34711" scaleX="0.12" scaleY="0.12" scaleZ="0.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="contraste" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <center>
+                  <SVGPath content="M632,590 C635.313709,590 638,587.313709 638,584 C638,580.686291 635.313709,578 632,578 C628.686291,578 626,580.686291 626,584 C626,587.313709 628.686291,590 632,590 M632,592 C627.581722,592 624,588.418278 624,584 C624,579.581722 627.581722,576 632,576 C636.418278,576 640,579.581722 640,584 C640,588.418278 636.418278,592 632,592 M632,589 C634.761424,589 637,586.761424 637,584 C637,581.238576 634.761424,579 632,579" fill="#b34711" scaleX="4.0" scaleY="4.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="lut" GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <center>
+                  <SVGPath content="M24 6c-9.94 0-18 8.06-18 18s8.06 18 18 18c1.66 0 3-1.34 3-3 0-.78-.29-1.48-.78-2.01-.47-.53-.75-1.22-.75-1.99 0-1.66 1.34-3 3-3h3.53c5.52 0 10-4.48 10-10 0-8.84-8.06-16-18-16zm-11 18c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm6-8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm10 0c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm6 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" fill="#b34711" scaleX="1.6" scaleY="1.6" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4">
+               <left>
+                  <Text fx:id="info" fill="#b34711" strokeType="OUTSIDE" strokeWidth="0.0" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+               </left>
+            </BorderPane>
+            <BorderPane fx:id="fullScreen" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <center>
+                  <SVGPath content="M20,8l8,8V8H20z M4,24h8l-8-8V24z M32,28V4H0v24h14v2H8v2h16v-2h-6v-2H32z M2,26V6h28v20H2z" fill="#b34711" scaleX="2.0" scaleY="2.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="settings" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <center>
+                  <SVGPath content="M30.391,12.68l-3.064-0.614c-0.154-0.443-0.336-0.873-0.537-1.289l1.736-2.604   c0.529-0.793,0.424-1.85-0.25-2.523l-1.924-1.924c-0.387-0.387-0.898-0.586-1.416-0.586c-0.383,0-0.77,0.11-1.107,0.336   l-2.604,1.735c-0.418-0.202-0.848-0.382-1.291-0.536L19.32,1.61c-0.186-0.936-1.008-1.608-1.961-1.608h-2.72   c-0.953,0-1.774,0.673-1.961,1.608l-0.614,3.065c-0.443,0.154-0.873,0.335-1.289,0.536L8.172,3.476   C7.833,3.25,7.447,3.14,7.063,3.14c-0.517,0-1.028,0.199-1.415,0.586L3.725,5.65c-0.674,0.674-0.779,1.73-0.25,2.523l1.735,2.604   c-0.202,0.417-0.382,0.847-0.536,1.29L1.608,12.68C0.673,12.867,0,13.688,0,14.641v2.72c0,0.953,0.673,1.775,1.608,1.961   l3.065,0.615c0.154,0.443,0.335,0.873,0.536,1.289L3.475,23.83c-0.529,0.793-0.424,1.85,0.25,2.523l1.924,1.924   c0.387,0.387,0.898,0.586,1.415,0.586c0.384,0,0.771-0.111,1.108-0.336l2.604-1.736c0.417,0.203,0.847,0.383,1.29,0.537   l0.613,3.064c0.187,0.936,1.008,1.609,1.961,1.609h2.72c0.953,0,1.775-0.674,1.961-1.609l0.615-3.064   c0.443-0.154,0.873-0.336,1.289-0.537l2.604,1.736c0.338,0.225,0.725,0.336,1.107,0.336c0.518,0,1.029-0.199,1.416-0.586   l1.924-1.924c0.674-0.674,0.779-1.73,0.25-2.523l-1.736-2.604c0.203-0.418,0.383-0.848,0.537-1.291l3.064-0.613   C31.326,19.137,32,18.314,32,17.361v-2.72C32,13.688,31.326,12.867,30.391,12.68z M26.934,17.975   c-0.695,0.139-1.264,0.635-1.496,1.305c-0.129,0.369-0.279,0.727-0.447,1.074c-0.311,0.639-0.258,1.393,0.135,1.982l1.736,2.604   l-1.924,1.924l-2.604-1.736c-0.334-0.223-0.721-0.336-1.109-0.336c-0.297,0-0.596,0.066-0.871,0.199   c-0.348,0.168-0.705,0.32-1.076,0.449c-0.668,0.232-1.164,0.801-1.303,1.496l-0.615,3.066h-2.72l-0.613-3.066   c-0.139-0.695-0.635-1.264-1.304-1.496c-0.369-0.129-0.728-0.279-1.075-0.447c-0.276-0.135-0.574-0.201-0.872-0.201   c-0.389,0-0.775,0.113-1.109,0.336l-2.604,1.736l-1.924-1.924l1.735-2.604c0.393-0.59,0.444-1.344,0.137-1.98   c-0.168-0.348-0.319-0.705-0.448-1.076c-0.232-0.668-0.802-1.164-1.496-1.303l-3.065-0.615L2,14.641l3.066-0.613   c0.694-0.139,1.264-0.635,1.496-1.304c0.129-0.369,0.278-0.728,0.447-1.075c0.31-0.638,0.258-1.392-0.136-1.981L5.139,7.064   L7.062,5.14l2.604,1.735C10,7.098,10.387,7.211,10.775,7.211c0.297,0,0.595-0.066,0.871-0.199c0.347-0.168,0.705-0.319,1.075-0.448   c0.669-0.232,1.165-0.802,1.304-1.496l0.614-3.065l2.72-0.001l0.613,3.066c0.139,0.694,0.635,1.264,1.305,1.496   c0.369,0.129,0.727,0.278,1.074,0.447c0.277,0.134,0.574,0.2,0.873,0.2c0.389,0,0.775-0.113,1.109-0.336l2.604-1.735l1.924,1.924   l-1.736,2.604c-0.393,0.59-0.443,1.343-0.137,1.98c0.168,0.347,0.32,0.705,0.449,1.075c0.232,0.669,0.801,1.165,1.496,1.304   l3.064,0.614L30,17.361L26.934,17.975z M16,9.001c-3.865,0-7,3.135-7,7c0,3.866,3.135,7,7,7s7-3.135,7-7C23,12.136,19.865,9.001,16,9.001z    M16,22.127c-3.382,0-6.125-2.744-6.125-6.125c0-3.382,2.743-6.125,6.125-6.125c3.381,0,6.125,2.743,6.125,6.125   C22.125,19.383,19.381,22.127,16,22.127z M16,12.001c-2.21,0-4,1.79-4,4c0,2.209,1.79,4,4,4c2.209,0,4-1.791,4-4C20,13.792,18.209,12.001,16,12.001z    M16,19.002c-1.656,0-3-1.344-3-3c0-1.656,1.344-3,3-3s3,1.344,3,3C19,17.658,17.656,19.002,16,19.002z" fill="#b34711" scaleX="2.0" scaleY="2.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="tools" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <center>
+                  <SVGPath content="M25.1,4.7c-0.4,0.4-0.4,1.1,0,1.6c0.4,0.4,1.1,0.4,1.6,0c0.4-0.4,0.4-1.1,0-1.6    C26.3,4.3,25.6,4.3,25.1,4.7z M29.2,3.9l-3.1-3.1c-0.9-0.8-2.3-0.9-3.2,0L0.8,22.9c-0.9,0.9-0.9,2.3,0,3.2l3.1,3.1    c0.4,0.4,1,0.7,1.6,0.7c0.6,0,1.2-0.2,1.6-0.7L29.2,7.1c0.4-0.4,0.7-1,0.7-1.6S29.6,4.3,29.2,3.9z M28.1,6.1L6.1,28.1    c-0.3,0.3-0.8,0.3-1.1,0L1.9,25c-0.3-0.3-0.3-0.8,0-1.1l1.7-1.7l1,1c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2    c0.3-0.3,0.3-0.8,0-1.1l-1-1l2.9-2.9l1,1c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2c0.3-0.3,0.3-0.8,0-1.1l-1-1l2.9-2.9l1,1    c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2c0.3-0.3,0.3-0.8,0-1.1l-1-1l2.9-2.9l1,1c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2    c0.3-0.3,0.3-0.8,0-1.1l-1-1l2.9-2.9l1,1c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2c0.3-0.3,0.3-0.8,0-1.1l-1-1l3.5-3.5    c0.1-0.1,0.3-0.2,0.5-0.2c0.2,0,0.4,0.1,0.5,0.2L28.1,5c0.1,0.1,0.2,0.3,0.2,0.5S28.3,5.9,28.1,6.1z" fill="#b34711" scaleX="2.5" scaleY="2.5" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+      <BorderPane fx:id="unlockBorder" layoutX="651.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="70.0">
+         <center>
+            <SVGPath fx:id="unlock" content="M131.889,150.061v63.597h-27.256  c-20.079,0-36.343,16.263-36.343,36.342v181.711c0,20.078,16.264,36.34,36.343,36.34h290.734c20.078,0,36.345-16.262,36.345-36.34  V250c0-20.079-16.267-36.342-36.345-36.342h-27.254v-63.597c0-65.232-52.882-118.111-118.112-118.111  S131.889,84.828,131.889,150.061z M177.317,213.658v-63.597c0-40.157,32.525-72.685,72.683-72.685  c40.158,0,72.685,32.528,72.685,72.685v63.597H177.317z M213.658,313.599c0-20.078,16.263-36.341,36.342-36.341  s36.341,16.263,36.341,36.341c0,12.812-6.634,24.079-16.625,30.529c0,0,3.55,21.446,7.542,46.699  c0,7.538-6.087,13.625-13.629,13.625h-27.258c-7.541,0-13.627-6.087-13.627-13.625l7.542-46.699  C220.294,337.678,213.658,326.41,213.658,313.599z" fill="#b34711" scaleX="0.13" scaleY="0.13" />
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="unlockProgressBorder">
+         <center>
+            <ProgressIndicator fx:id="unlockProgress" progress="0.0" style="-fx-progress-color: #b34711;" stylesheets="@progress.css" visible="false" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+      <GridPane fx:id="contrasteGrid" hgap="10.0" layoutY="-70.0" style="-fx-border-color: black; -fx-background-color: #EAEAEAF0;" vgap="10.0">
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+         </rowConstraints>
+         <columnConstraints>
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="125.0" />
+         </columnConstraints>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+      <GridPane fx:id="lutGrid" hgap="10.0" layoutY="-70.0" style="-fx-border-color: black; -fx-background-color: #EAEAEAF0;" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="125.0" />
+         </columnConstraints>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+         </rowConstraints>
+      </GridPane>
+      <GridPane fx:id="toolsGrid" hgap="10.0" layoutY="-67.0" style="-fx-border-color: black; -fx-background-color: #EAEAEAF0;" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="125.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="125.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="125.0" />
+         </columnConstraints>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" />
+         </rowConstraints>
+         <children>
+            <BorderPane fx:id="line" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00000022;">
+               <center>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchMeasure.line" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <JFXToggleButton fx:id="showHideMeasure" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="125.0" selected="true" text="%WeasisTouchMeasure.show" toggleColor="#b34711" GridPane.columnIndex="2" />
+            <BorderPane fx:id="rectangle" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00000022;" GridPane.columnIndex="1">
+               <center>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchMeasure.rectangle" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <JFXColorPicker fx:id="colorPicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="125.0" GridPane.columnIndex="3" />
+            <JFXToggleButton fx:id="editMode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="125.0" text="%WeasisTouchMeasure.edit" toggleColor="#b34711" GridPane.columnIndex="4" />
+         </children>
+      </GridPane>
+
+   </children>
+</Group>

@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import org.weasis.core.api.gui.Image2DViewer;
 import org.weasis.core.api.image.OpManager;
@@ -37,7 +36,6 @@ public interface ViewCanvas<E extends ImageElement>
     extends Canvas, Image2DViewer<E>, PropertyChangeListener, FocusListener, ImageLayerChangeListener<E>, KeyListener {
 
     public static final String ZOOM_TYPE_CMD = "zoom.type"; //$NON-NLS-1$
-    public static final ImageIcon SYNCH_ICON = new ImageIcon(DefaultView2d.class.getResource("/icon/22x22/synch.png")); //$NON-NLS-1$
     public static final int CENTER_POINTER = 1 << 1;
     public static final int HIGHLIGHTED_POINTER = 1 << 2;
 
@@ -48,13 +46,9 @@ public interface ViewCanvas<E extends ImageElement>
 
     void copyActionWState(HashMap<String, Object> actionsInView);
 
-    ImageViewerEventManager<E> getEventManager();
-
     void updateSynchState();
 
     PixelInfo getPixelInfo(Point p);
-
-    Panner<E> getPanner();
 
     void setSeries(MediaSeries<E> series);
 
@@ -128,15 +122,11 @@ public interface ViewCanvas<E extends ImageElement>
 
     List<Action> getExportToClipboardAction();
 
-    void enableMouseAndKeyListener(MouseActions mouseActions);
-
     void resetZoom();
 
     void resetPan();
 
     void reset();
-
-    List<ViewButton> getViewButtons();
 
     void closeLens();
 

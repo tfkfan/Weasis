@@ -10,14 +10,13 @@
  *******************************************************************************/
 package org.weasis.core.api.media.data;
 
-import java.awt.datatransfer.Transferable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 import org.weasis.core.api.gui.util.Filter;
 
-public interface MediaSeries<E> extends MediaSeriesGroup, Transferable {
+public interface MediaSeries<E> extends MediaSeriesGroup {
 
     enum MEDIA_POSITION {
         FIRST, MIDDLE, LAST, RANDOM

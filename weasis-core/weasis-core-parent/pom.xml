@@ -9,7 +9,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.weasis.core</groupId>
-	<artifactId>weasis-core-parent</artifactId>
+	<artifactId>weasis-core-parent-fx</artifactId>
 	<name>Parent of Core Plug-ins [${project.artifactId}]</name>
 	<packaging>pom</packaging>
 

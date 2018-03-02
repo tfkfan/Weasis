@@ -10,33 +10,30 @@
  *******************************************************************************/
 package org.weasis.launcher;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Window;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.RootPaneContainer;
-import javax.swing.SwingConstants;
-
 import org.osgi.framework.BundleContext;
-import org.weasis.launcher.applet.WeasisFrame;
+
+import javafx.application.Platform;
+import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class WeasisLoader {
 
@@ -50,125 +47,27 @@ public class WeasisLoader {
         String.format(Messages.getString("WebStartLoader.title"), System.getProperty("weasis.name")); //$NON-NLS-1$ //$NON-NLS-2$
     public static final String PRG_STRING_FORMAT = Messages.getString("WebStartLoader.end"); //$NON-NLS-1$
 
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel loadingLabel;
-    private volatile javax.swing.JProgressBar downloadProgress;
-    private Container container;
+    private final ProgressBar loadProgress;
+    private final Label progressText;
 
     private final File resPath;
-    private final WeasisFrame mainFrame;
     private final Properties localProperties;
 
-    public WeasisLoader(File resPath, WeasisFrame mainFrame, Properties localProperties) {
+    private volatile int maxProgress = 100;
+    private volatile int curProgress = 0;
+
+    public WeasisLoader(File resPath, Properties localProperties) {
         this.resPath = resPath;
-        this.mainFrame = mainFrame;
         this.localProperties = localProperties;
+        this.loadProgress = new ProgressBar();
+        this.progressText = new Label(LBL_DOWNLOADING + "\n" + LBL_LOADING);
     }
 
     public void writeLabel(String text) {
-        loadingLabel.setText(text);
-    }
-
-    /*
-     * Init splashScreen
-     */
-    public void initGUI() {
-        loadingLabel = new javax.swing.JLabel();
-        loadingLabel.setFont(new Font("Dialog", Font.PLAIN, 10)); //$NON-NLS-1$
-        downloadProgress = new javax.swing.JProgressBar();
-        Font font = new Font("Dialog", Font.PLAIN, 12); //$NON-NLS-1$
-        downloadProgress.setFont(font);
-        cancelButton = new javax.swing.JButton();
-        cancelButton.setFont(font);
-
-        RootPaneContainer frame = mainFrame.getRootPaneContainer();
-
-        if (frame == null || frame instanceof JFrame) {
-            Window win = new Window((Frame) frame);
-            win.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent evt) {
-                    closing();
-                }
-            });
-            container = win;
-        } else {
-            JPanel splashScreenPanel = new JPanel(new BorderLayout());
-            frame.getContentPane().add(splashScreenPanel, BorderLayout.CENTER);
-            container = splashScreenPanel;
+        if (progressText != null) {
+            Platform.runLater(
+                () -> progressText.setText(text + "\n" + String.format(PRG_STRING_FORMAT, curProgress, maxProgress)));
         }
-
-        loadingLabel.setText(LBL_LOADING);
-        loadingLabel.setFocusable(false);
-
-        downloadProgress.setFocusable(false);
-        downloadProgress.setStringPainted(true);
-        downloadProgress.setString(LBL_LOADING);
-
-        cancelButton.setText(Messages.getString("WebStartLoader.cancel")); //$NON-NLS-1$
-        cancelButton.addActionListener(evt -> closing());
-
-        Icon icon;
-        File iconFile = null;
-        if (resPath != null) {
-            iconFile = new File(resPath, "images" + File.separator + "about.png"); //$NON-NLS-1$ //$NON-NLS-2$
-            if (!iconFile.canRead()) {
-                iconFile = null;
-            }
-        }
-        if (iconFile == null) {
-            icon = new Icon() {
-
-                @Override
-                public void paintIcon(Component c, Graphics g, int x, int y) {
-
-                }
-
-                @Override
-                public int getIconWidth() {
-                    return 350;
-                }
-
-                @Override
-                public int getIconHeight() {
-                    return 75;
-                }
-            };
-        } else {
-            icon = new ImageIcon(iconFile.getAbsolutePath());
-        }
-
-        JLabel imagePane = new JLabel(FRM_TITLE, icon, SwingConstants.CENTER);
-        imagePane.setFont(new Font("Dialog", Font.BOLD, 16)); //$NON-NLS-1$
-        imagePane.setVerticalTextPosition(SwingConstants.TOP);
-        imagePane.setHorizontalTextPosition(SwingConstants.CENTER);
-        imagePane.setFocusable(false);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
-        panel.add(imagePane, BorderLayout.CENTER);
-
-        JPanel panelProgress = new JPanel(new BorderLayout());
-        panelProgress.setBackground(Color.WHITE);
-        panelProgress.add(loadingLabel, BorderLayout.NORTH);
-        panelProgress.add(downloadProgress, BorderLayout.CENTER);
-        panelProgress.add(cancelButton, BorderLayout.EAST);
-
-        panel.add(panelProgress, BorderLayout.SOUTH);
-        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.black),
-            BorderFactory.createEmptyBorder(3, 3, 3, 3)));
-
-        container.add(panel, BorderLayout.CENTER);
-
-        if (container instanceof Window) {
-            ((Window) container).pack();
-        }
-
-    }
-
-    public WeasisFrame getMainFrame() {
-        return mainFrame;
     }
 
     public Properties getLocalProperties() {
@@ -178,87 +77,78 @@ public class WeasisLoader {
     /*
      * Set maximum value for progress bar
      */
-    public void setMax(final int max) {
-        if (isClosed()) {
-            return;
-        }
-        EventQueue.invokeLater(() -> downloadProgress.setMaximum(max));
+    public void setMax(int max) {
+        maxProgress = max;
     }
 
     /*
      * Set actual value of progress bar
      */
     public void setValue(final int val) {
-        if (isClosed()) {
-            return;
-        }
-        EventQueue.invokeLater(() -> {
-            downloadProgress.setString(String.format(PRG_STRING_FORMAT, val, downloadProgress.getMaximum()));
-            downloadProgress.setValue(val);
-            downloadProgress.repaint();
-        });
-
-    }
-
-    private void closing() {
-        System.exit(0);
-    }
-
-    public boolean isClosed() {
-        return container == null;
-    }
-
-    public void open() {
-        try {
-            EventQueue.invokeAndWait(() -> {
-                if (container == null) {
-                    initGUI();
-                }
-                displayOnScreen();
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        if (isClosed()) {
-            return;
-        }
-        EventQueue.invokeLater(() -> {
-            container.setVisible(false);
-            if (container.getParent() != null) {
-                container.getParent().remove(container);
-            }
-            if (container instanceof Window) {
-                ((Window) container).dispose();
-            }
-            container = null;
-            cancelButton = null;
-            downloadProgress = null;
-            loadingLabel = null;
-        });
-    }
-
-    private void displayOnScreen() {
-        if (container instanceof Window) {
-            try {
-                Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-                    .getDefaultConfiguration().getBounds();
-                int x = bounds.x + (bounds.width - container.getWidth()) / 2;
-                int y = bounds.y + (bounds.height - container.getHeight()) / 2;
-
-                container.setLocation(x, y);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            container.setVisible(true);
+        curProgress = val;
+        if (loadProgress != null) {
+            Platform.runLater(() -> loadProgress.setProgress(curProgress / (double) maxProgress));
         }
     }
 
     public void setFelix(Map<String, String> serverProp, BundleContext bundleContext) {
         AutoProcessor.process(serverProp, bundleContext, this);
+    }
+
+    public void start(final Stage initStage) throws Exception {
+        StackPane stackPane = new StackPane();
+        final ImageView splash = new ImageView();
+        Image img = null;
+        if (resPath != null) {
+            File iconFile = new File(resPath, "images" + File.separator + "about.png"); //$NON-NLS-1$ //$NON-NLS-2$
+            if (iconFile.canRead()) {
+                String localUrl;
+                try {
+                    localUrl = iconFile.toURI().toURL().toString();
+                    img = new Image(localUrl);
+                } catch (MalformedURLException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        if (img == null) {
+            splash.setFitWidth(350);
+            splash.setFitHeight(75);
+            Label l = new Label(FRM_TITLE);
+            l.setStyle("-fx-font-size: 20;");
+            stackPane.getChildren().add(splash);
+            stackPane.getChildren().add(l);
+        } else {
+            splash.setImage(img);
+            stackPane.getChildren().add(splash);
+        }
+
+        Bounds bound = splash.getBoundsInLocal();
+        Pane splashLayout = new VBox();
+        loadProgress.setPrefWidth(bound.getWidth());
+        progressText.setTextAlignment(TextAlignment.CENTER);
+        progressText.setPrefWidth(bound.getWidth());
+        progressText.setStyle("-fx-font-size: 11;");
+        progressText.setAlignment(Pos.CENTER);
+        splashLayout.getChildren().addAll(stackPane, loadProgress, progressText);
+        splashLayout.setStyle(
+            "-fx-padding: 5; -fx-background-color: cornsilk; -fx-border-width:5; -fx-border-color: linear-gradient(to bottom, chocolate, derive(chocolate, 50%)"
+                + ");");
+        splashLayout.setEffect(new DropShadow());
+        Scene splashScene = new Scene(splashLayout);
+        initStage.initStyle(StageStyle.UNDECORATED);
+        // initStage.initModality(Modality.APPLICATION_MODAL);
+        initStage.setScene(splashScene);
+        // initStage.centerOnScreen(); => does not really center, see
+        // http://stackoverflow.com/questions/29558449/javafx-center-stage-on-screen
+        initStage.show();
+
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        initStage.setX((primScreenBounds.getWidth() - initStage.getWidth()) / 2);
+        initStage.setY((primScreenBounds.getHeight() - initStage.getHeight()) / 2);
+    }
+
+    public void close() {
+
     }
 }

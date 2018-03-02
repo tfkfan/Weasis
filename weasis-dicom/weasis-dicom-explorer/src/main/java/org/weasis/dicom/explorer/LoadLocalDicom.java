@@ -31,9 +31,6 @@ import org.weasis.core.api.media.data.SeriesThumbnail;
 import org.weasis.core.api.media.data.TagW;
 import org.weasis.core.api.media.data.Thumbnail;
 import org.weasis.core.api.util.FileUtil;
-import org.weasis.core.ui.docking.UIManager;
-import org.weasis.core.ui.editor.SeriesViewerFactory;
-import org.weasis.core.ui.editor.ViewerPluginBuilder;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.serialize.XmlSerializer;
 import org.weasis.dicom.codec.DicomCodec;
@@ -42,7 +39,7 @@ import org.weasis.dicom.codec.DicomSpecialElement;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
 
-public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
+public class LoadLocalDicom extends ExplorerTask<Boolean> {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LoadLocalDicom.class);
     private final File[] files;
@@ -62,7 +59,7 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean call() throws Exception {
         dicomModel
             .firePropertyChange(new ObservableEvent(ObservableEvent.BasicAction.LOADING_START, dicomModel, null, this));
         addSelectionAndnotify(files, true);
@@ -71,9 +68,11 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
 
     @Override
     protected void done() {
-        dicomModel
-            .firePropertyChange(new ObservableEvent(ObservableEvent.BasicAction.LOADING_STOP, dicomModel, null, this));
-        LOGGER.info("End of loading DICOM locally"); //$NON-NLS-1$
+        GuiExecutor.executeFX(() -> {
+            dicomModel.firePropertyChange(
+                new ObservableEvent(ObservableEvent.BasicAction.LOADING_STOP, dicomModel, null, this));
+            LOGGER.info("End of loading DICOM locally"); //$NON-NLS-1$
+        });
     }
 
     public void addSelectionAndnotify(File[] file, boolean firstLevel) {
@@ -117,10 +116,10 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
             }
         }
         for (final SeriesThumbnail t : thumbs) {
-            MediaSeries<MediaElement> series = t.getSeries();
+            MediaSeries<MediaElement> series = (MediaSeries<MediaElement>) t.getSeries();
             // Avoid to rebuild most of CR series thumbnail
             if (series != null && series.size(null) > 2) {
-                GuiExecutor.instance().execute(t::reBuildThumbnail);
+                GuiExecutor.executeFX(t::reBuildThumbnail);
             }
         }
         for (int i = 0; i < folders.size(); i++) {
@@ -175,7 +174,7 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
                 // Load image and create thumbnail in this Thread
                 SeriesThumbnail t = (SeriesThumbnail) dicomSeries.getTagValue(TagW.Thumbnail);
                 if (t == null) {
-                    t = DicomExplorer.createThumbnail(dicomSeries, dicomModel, Thumbnail.DEFAULT_SIZE);
+                    t = DicomModel.createThumbnail(dicomSeries, dicomModel, Thumbnail.DEFAULT_SIZE);
                     dicomSeries.setTag(TagW.Thumbnail, t);
                     t.repaint();
                 }
@@ -200,15 +199,15 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
                 }
 
                 if (open) {
-                    SeriesViewerFactory plugin = UIManager.getViewerFactory(dicomSeries.getMimeType());
-                    if (plugin != null && !(plugin instanceof MimeSystemAppFactory)) {
-                        openPlugin = false;
-                        ViewerPluginBuilder.openSequenceInPlugin(plugin, dicomSeries, dicomModel, true, true);
-                    } else if (plugin != null) {
+//                    SeriesViewerFactory plugin = UIManager.getViewerFactory(dicomSeries.getMimeType());
+//                    if (plugin != null && !(plugin instanceof MimeSystemAppFactory)) {
+//                        openPlugin = false;
+//                        ViewerPluginBuilder.openSequenceInPlugin(plugin, dicomSeries, dicomModel, true, true);
+//                    } else if (plugin != null) {
                         // Send event to select the related patient in Dicom Explorer.
                         dicomModel.firePropertyChange(
                             new ObservableEvent(ObservableEvent.BasicAction.SELECT, dicomModel, null, dicomSeries));
-                    }
+                //    }
                 }
             } else {
                 // Test if SOPInstanceUID already exists

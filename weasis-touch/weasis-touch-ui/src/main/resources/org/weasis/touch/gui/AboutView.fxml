@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.AboutController">
+   <children>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="466.0" spacing="15.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Weasis" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsAbout.by" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsAbout.masterThesis" />
+            <Hyperlink fx:id="weasisLink" text="%WeasisTouchSettingsAbout.weasisWebSite" />
+            <Hyperlink fx:id="hessoLink" text="%WeasisTouchSettingsAbout.hessoWebSite" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

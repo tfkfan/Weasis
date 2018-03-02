@@ -54,7 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.explorer.ObservableEvent;
 import org.weasis.core.api.gui.util.AppProperties;
-import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.media.MimeInspector;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.MediaSeriesGroupNode;
@@ -68,15 +67,11 @@ import org.weasis.core.api.util.FileUtil;
 import org.weasis.core.api.util.NetworkUtil;
 import org.weasis.core.api.util.StreamIOException;
 import org.weasis.core.api.util.StringUtil;
-import org.weasis.core.api.util.StringUtil.Suffix;
 import org.weasis.core.api.util.ThreadUtil;
-import org.weasis.core.ui.docking.UIManager;
-import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.ReferencedImage;
 import org.weasis.core.ui.model.ReferencedSeries;
 import org.weasis.core.ui.serialize.XmlSerializer;
-import org.weasis.core.ui.util.ColorLayerUI;
 import org.weasis.dicom.codec.DicomSeries;
 import org.weasis.dicom.codec.KOSpecialElement;
 import org.weasis.dicom.codec.TagD;
@@ -172,10 +167,10 @@ public class DownloadManager {
             if (startLoading) {
                 offerSeriesInQueue(series);
             } else {
-                GuiExecutor.instance().execute(() -> {
-                    series.getProgressBar().setValue(0);
-                    series.stop();
-                });
+//                GuiExecutor.executeFX(() -> {
+//                    series.getProgressBar().setProgress(0);
+//                    series.stop();
+//                });
             }
             if (dicomModel != null) {
                 dicomModel.firePropertyChange(
@@ -350,16 +345,16 @@ public class DownloadManager {
             String message = getErrorMessage(uri);
             LOGGER.error("{}", message, e); //$NON-NLS-1$
             final int messageType = JOptionPane.ERROR_MESSAGE;
-
-            GuiExecutor.instance().execute(() -> {
-                ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(UIManager.BASE_AREA);
-                JOptionPane.showOptionDialog(ColorLayerUI.getContentPane(layer),
-                    StringUtil.getTruncatedString(message, 130, Suffix.THREE_PTS), null, JOptionPane.DEFAULT_OPTION,
-                    messageType, null, null, null);
-                if (layer != null) {
-                    layer.hideUI();
-                }
-            });
+// TODO
+//            GuiExecutor.executeFX(() -> {
+//                ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(UIManager.BASE_AREA);
+//                JOptionPane.showOptionDialog(ColorLayerUI.getContentPane(layer),
+//                    StringUtil.getTruncatedString(message, 130, Suffix.THREE_PTS), null, JOptionPane.DEFAULT_OPTION,
+//                    messageType, null, null, null);
+//                if (layer != null) {
+//                    layer.hideUI();
+//                }
+//            });
         } finally {
             FileUtil.safeClose(xmler);
             FileUtil.safeClose(stream);
@@ -422,14 +417,14 @@ public class DownloadManager {
                     final int messageType = "ERROR".equals(severity) ? JOptionPane.ERROR_MESSAGE //$NON-NLS-1$
                         : "INFO" //$NON-NLS-1$
                             .equals(severity) ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
-
-                    GuiExecutor.instance().execute(() -> {
-                        ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(UIManager.BASE_AREA);
-                        JOptionPane.showMessageDialog(ColorLayerUI.getContentPane(layer), message, title, messageType);
-                        if (layer != null) {
-                            layer.hideUI();
-                        }
-                    });
+// TODO
+//                    GuiExecutor.instance().execute(() -> {
+//                        ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(UIManager.BASE_AREA);
+//                        JOptionPane.showMessageDialog(ColorLayerUI.getContentPane(layer), message, title, messageType);
+//                        if (layer != null) {
+//                            layer.hideUI();
+//                        }
+//                    });
                 }
             }
         };
@@ -439,16 +434,16 @@ public class DownloadManager {
         if (patients.size() == 1) {
             // In case of the patient already exists, select it
             final MediaSeriesGroup uniquePatient = patients.iterator().next();
-            GuiExecutor.instance().execute(() -> {
-                synchronized (UIManager.VIEWER_PLUGINS) {
-                    for (final ViewerPlugin<?> p : UIManager.VIEWER_PLUGINS) {
-                        if (uniquePatient.equals(p.getGroupID())) {
-                            p.setSelectedAndGetFocus();
-                            break;
-                        }
-                    }
-                }
-            });
+//            GuiExecutor.executeFX(() -> {
+//                synchronized (UIManager.VIEWER_PLUGINS) {
+//                    for (final ViewerPlugin<?> p : UIManager.VIEWER_PLUGINS) {
+//                        if (uniquePatient.equals(p.getGroupID())) {
+//                            p.setSelectedAndGetFocus();
+//                            break;
+//                        }
+//                    }
+//                }
+//            });
         }
         for (LoadSeries loadSeries : params.getSeriesMap().values()) {
             String modality = TagD.getTagValue(loadSeries.getDicomSeries(), Tag.Modality, String.class);

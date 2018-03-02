@@ -24,8 +24,6 @@ import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.TagW;
 import org.weasis.dicom.codec.TagD;
-import org.weasis.dicom.explorer.DicomExplorer.SeriesPane;
-import org.weasis.dicom.explorer.DicomExplorer.StudyPane;
 
 public class DicomSorter {
     private static final Collator collator = Collator.getInstance(Locale.getDefault());
@@ -36,9 +34,9 @@ public class DicomSorter {
 
         @Override
         public int compare(Object o1, Object o2) {
-            if (o1 instanceof StudyPane && o2 instanceof StudyPane) {
-                o1 = ((StudyPane) o1).dicomStudy;
-                o2 = ((StudyPane) o2).dicomStudy;
+            if (o1 instanceof StudyNode && o2 instanceof StudyNode) {
+                o1 = ((StudyNode) o1).getStudy();
+                o2 = ((StudyNode) o2).getStudy();
             } else if (o1 instanceof DefaultMutableTreeNode && o2 instanceof DefaultMutableTreeNode) {
                 o1 = ((DefaultMutableTreeNode) o1).getUserObject();
                 o2 = ((DefaultMutableTreeNode) o2).getUserObject();
@@ -102,9 +100,9 @@ public class DicomSorter {
         @Override
         public int compare(Object o1, Object o2) {
 
-            if (o1 instanceof SeriesPane && o2 instanceof SeriesPane) {
-                o1 = ((SeriesPane) o1).sequence;
-                o2 = ((SeriesPane) o2).sequence;
+            if (o1 instanceof SeriesNode && o2 instanceof SeriesNode) {
+                o1 = ((SeriesNode) o1).getSeries();
+                o2 = ((SeriesNode) o2).getSeries();
             } else if (o1 instanceof DefaultMutableTreeNode && o2 instanceof DefaultMutableTreeNode) {
                 o1 = ((DefaultMutableTreeNode) o1).getUserObject();
                 o2 = ((DefaultMutableTreeNode) o2).getUserObject();

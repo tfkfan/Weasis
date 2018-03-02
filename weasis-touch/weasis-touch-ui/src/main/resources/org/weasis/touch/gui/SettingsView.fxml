@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="mainPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.SettingsController">
+   <children>
+      <AnchorPane fx:id="background" prefHeight="200.0" prefWidth="200.0" />
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="600.0" style="-fx-border-color: #b34711; -fx-border-width: 2;">
+         <children>
+            <VBox fx:id="categorie" prefHeight="400.0" prefWidth="130.0" spacing="1.0" style="-fx-background-color: #e5e0de;">
+               <children>
+                  <JFXButton fx:id="generalSettings" buttonType="RAISED" prefHeight="35.0" prefWidth="130.0" ripplerFill="#b34711" text="%WeasisTouchSettings.general" textFill="#b34711" />
+                  <JFXButton fx:id="viewerSettings" buttonType="RAISED" prefHeight="35.0" prefWidth="130.0" ripplerFill="#b34711" text="%WeasisTouchSettings.viewer" textFill="#b34711" />
+                  <JFXButton fx:id="userManual" buttonType="RAISED" prefHeight="35.0" prefWidth="130.0" ripplerFill="#b34711" text="%WeasisTouchSettings.userManual" textFill="#b34711" />
+                  <JFXButton fx:id="about" buttonType="RAISED" prefHeight="35.0" prefWidth="130.0" ripplerFill="#b34711" text="%WeasisTouchSettings.about" textFill="#b34711" />
+               </children>
+            </VBox>
+            <BorderPane prefHeight="396.0" prefWidth="466.0">
+               <center>
+                  <StackPane fx:id="detail" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="466.0" BorderPane.alignment="CENTER" />
+               </center>
+               <bottom>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="466.0" spacing="5.0" style="-fx-background-color: #e5e0de;" BorderPane.alignment="CENTER_LEFT">
+                     <children>
+                        <JFXButton fx:id="close" buttonType="RAISED" style="-fx-border-color: b34711;" text="%WeasisTouchSettings.close" textFill="#b34711" />
+                        <JFXButton fx:id="restoreDefault" style="-fx-border-color: b34711;" text="%WeasisTouchSettings.restoreDefault" textFill="#b34711" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </children>
+      </HBox>
+   </children>
+</StackPane>

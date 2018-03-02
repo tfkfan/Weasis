@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.util.Objects;
 
-import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.media.data.Series;
 import org.weasis.core.api.media.data.SeriesImporter;
 import org.weasis.core.api.media.data.TagW;
@@ -45,12 +44,10 @@ public class SeriesProgressMonitor extends FilterInputStream {
 
     protected void updateSeriesProgression(double addSize) {
         series.setFileSize(series.getFileSize() + addSize);
-        GuiExecutor.instance().execute(() -> {
-            Thumbnail thumb = (Thumbnail) series.getTagValue(TagW.Thumbnail);
-            if (thumb != null) {
-                thumb.repaint();
-            }
-        });
+        Thumbnail thumb = (Thumbnail) series.getTagValue(TagW.Thumbnail);
+        if (thumb != null) {
+            thumb.repaint();
+        }
     }
 
     @Override

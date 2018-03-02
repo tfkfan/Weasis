@@ -1,0 +1,32 @@
+
+.series0.chart-area-symbol {
+    -fx-background-color: black, white;
+}
+
+.series0.chart-series-area-line {
+    -fx-stroke: black;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.series0.chart-series-area-fill {
+    -fx-fill: linear-gradient(
+        to bottom,
+        #ff0000,
+        #fff000 50%,
+        #00d8ff 80%,
+        #0984df
+    );
+}
+
+.axis {
+    -fx-font-size: 1.4em;    
+    -fx-tick-label-fill: white;
+}
+ 
+
+.axis-label {
+   -fx-text-fill: white; 
+}

@@ -130,6 +130,6 @@ fi
 
 echo "Weasis launcher directory: $curPath"
 
-cps="$curPath/weasis/weasis-launcher.jar:$curPath/weasis/felix.jar:$curPath/weasis/substance.jar"
+cps="$curPath/weasis/weasis-launcher.jar:$curPath/weasis/felix.jar"
 # Launch
 $JAVACMD $DEFAULT_JVM_OPTIONS"$GOSH_ARGS" -Xdock:name=Weasis -Xdock:icon="$resourcespath/logo-button.icns" -Dapple.laf.useScreenMenuBar=true -Dweasis.portable.dir="$curPath" -classpath "$cps" org.weasis.launcher.WeasisLauncher \$dicom:get --portable ${userParameters[@]}

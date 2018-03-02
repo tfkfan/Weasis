@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<artifactId>weasis-dicom-parent</artifactId>
+		<artifactId>weasis-dicom-parent-fx</artifactId>
 		<groupId>org.weasis.dicom</groupId>
 		<version>3.0.1-SNAPSHOT</version>
 		<relativePath>../weasis-dicom-parent/pom.xml</relativePath>
@@ -43,13 +43,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.weasis.dicom</groupId>
-			<artifactId>weasis-dicom-explorer</artifactId>
+			<artifactId>weasis-dicom-explorer-fx</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.weasis.core</groupId>
-			<artifactId>weasis-core-ui</artifactId>
+			<artifactId>weasis-core-ui-fx</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

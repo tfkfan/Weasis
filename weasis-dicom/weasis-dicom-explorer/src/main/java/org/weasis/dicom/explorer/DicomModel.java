@@ -24,12 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.apache.felix.service.command.CommandProcessor;
@@ -51,15 +48,13 @@ import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.MediaSeriesGroupNode;
 import org.weasis.core.api.media.data.Series;
+import org.weasis.core.api.media.data.SeriesThumbnail;
 import org.weasis.core.api.media.data.TagView;
 import org.weasis.core.api.media.data.TagW;
 import org.weasis.core.api.media.data.Thumbnail;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.util.GzipManager;
 import org.weasis.core.api.util.ThreadUtil;
-import org.weasis.core.ui.docking.UIManager;
-import org.weasis.core.ui.editor.SeriesViewerFactory;
-import org.weasis.core.ui.editor.ViewerPluginBuilder;
 import org.weasis.dicom.codec.DicomEncapDocElement;
 import org.weasis.dicom.codec.DicomEncapDocSeries;
 import org.weasis.dicom.codec.DicomImageElement;
@@ -77,7 +72,6 @@ import org.weasis.dicom.codec.display.Modality;
 import org.weasis.dicom.codec.utils.SplittingModalityRules;
 import org.weasis.dicom.codec.utils.SplittingModalityRules.Rule;
 import org.weasis.dicom.codec.utils.SplittingRules;
-import org.weasis.dicom.explorer.wado.DicomManager;
 import org.weasis.dicom.explorer.wado.DownloadManager;
 import org.weasis.dicom.explorer.wado.LoadRemoteDicomManifest;
 import org.weasis.dicom.explorer.wado.LoadRemoteDicomURL;
@@ -640,32 +634,32 @@ public class DicomModel implements TreeModel, DataExplorerModel {
 
     public void openrelatedSeries(KOSpecialElement koSpecialElement, MediaSeriesGroup patient) {
         if (koSpecialElement != null && patient != null) {
-            SeriesViewerFactory plugin = UIManager.getViewerFactory(DicomMediaIO.SERIES_MIMETYPE);
-            if (plugin != null && !(plugin instanceof MimeSystemAppFactory)) {
-                Set<String> koSet = koSpecialElement.getReferencedSeriesInstanceUIDSet();
-                List<MediaSeries<MediaElement>> seriesList = new ArrayList<>();
-
-                for (MediaSeriesGroup st : this.getChildren(patient)) {
-                    for (MediaSeriesGroup s : this.getChildren(st)) {
-                        if (koSet.contains(TagD.getTagValue(s, Tag.SeriesInstanceUID))) {
-                            seriesList.add((MediaSeries<MediaElement>) s);
-                        }
-                    }
-                }
-                if (!seriesList.isEmpty()) {
-                    String uid = UUID.randomUUID().toString();
-                    Map<String, Object> props = Collections.synchronizedMap(new HashMap<String, Object>());
-                    props.put(ViewerPluginBuilder.CMP_ENTRY_BUILD_NEW_VIEWER, false);
-                    props.put(ViewerPluginBuilder.BEST_DEF_LAYOUT, false);
-                    props.put(ViewerPluginBuilder.ICON,
-                        new ImageIcon(getClass().getResource("/icon/16x16/key-images.png"))); //$NON-NLS-1$
-                    props.put(ViewerPluginBuilder.UID, uid);
-                    ViewerPluginBuilder builder = new ViewerPluginBuilder(plugin, seriesList, this, props);
-                    ViewerPluginBuilder.openSequenceInPlugin(builder);
-                    this.firePropertyChange(
-                        new ObservableEvent(ObservableEvent.BasicAction.SELECT, uid, null, koSpecialElement));
-                }
-            }
+            // SeriesViewerFactory plugin = UIManager.getViewerFactory(DicomMediaIO.SERIES_MIMETYPE);
+            // if (plugin != null && !(plugin instanceof MimeSystemAppFactory)) {
+            // Set<String> koSet = koSpecialElement.getReferencedSeriesInstanceUIDSet();
+            // List<MediaSeries<MediaElement>> seriesList = new ArrayList<>();
+            //
+            // for (MediaSeriesGroup st : this.getChildren(patient)) {
+            // for (MediaSeriesGroup s : this.getChildren(st)) {
+            // if (koSet.contains(TagD.getTagValue(s, Tag.SeriesInstanceUID))) {
+            // seriesList.add((MediaSeries<MediaElement>) s);
+            // }
+            // }
+            // }
+            // if (!seriesList.isEmpty()) {
+            // String uid = UUID.randomUUID().toString();
+            // Map<String, Object> props = Collections.synchronizedMap(new HashMap<String, Object>());
+            // props.put(ViewerPluginBuilder.CMP_ENTRY_BUILD_NEW_VIEWER, false);
+            // props.put(ViewerPluginBuilder.BEST_DEF_LAYOUT, false);
+            // props.put(ViewerPluginBuilder.ICON,
+            // new ImageIcon(getClass().getResource("/icon/16x16/key-images.png"))); //$NON-NLS-1$
+            // props.put(ViewerPluginBuilder.UID, uid);
+            // ViewerPluginBuilder builder = new ViewerPluginBuilder(plugin, seriesList, this, props);
+            // ViewerPluginBuilder.openSequenceInPlugin(builder);
+            // this.firePropertyChange(
+            // new ObservableEvent(ObservableEvent.BasicAction.SELECT, uid, null, koSpecialElement));
+            // }
+            // }
         }
     }
 
@@ -770,9 +764,8 @@ public class DicomModel implements TreeModel, DataExplorerModel {
         // Load image and create thumbnail in this Thread
         Thumbnail t = (Thumbnail) dicomSeries.getTagValue(TagW.Thumbnail);
         if (t == null) {
-            t = DicomExplorer.createThumbnail(dicomSeries, this, Thumbnail.DEFAULT_SIZE);
+            t = createThumbnail(dicomSeries, this, Thumbnail.DEFAULT_SIZE);
             dicomSeries.setTag(TagW.Thumbnail, t);
-            t.repaint();
         }
         firePropertyChange(new ObservableEvent(ObservableEvent.BasicAction.ADD, this, null, dicomSeries));
     }
@@ -940,6 +933,28 @@ public class DicomModel implements TreeModel, DataExplorerModel {
         return true;
     }
 
+    public static SeriesThumbnail createThumbnail(final Series series, final DicomModel dicomModel,
+        final int thumbnailSize) {
+
+//        Callable<SeriesThumbnail> callable = () -> {
+//            final SeriesThumbnail thumb = new SeriesThumbnail(series, thumbnailSize);
+//            thumb.registerListeners();
+//            return thumb;
+//        };
+//        FutureTask<SeriesThumbnail> future = new FutureTask<>(callable);
+//        GuiExecutor.runFxAndWait(future);
+        
+        final SeriesThumbnail thumb = new SeriesThumbnail(series, thumbnailSize);
+        thumb.registerListeners();
+//        SeriesThumbnail result = null;
+//        try {
+//            result = future.get();
+//        } catch (InterruptedException | ExecutionException e) {
+//            LOGGER.error("Building Series thumbnail", e); //$NON-NLS-1$
+//        }
+        return thumb;
+    }
+
     public void get(String[] argv) throws IOException {
         final String[] usage = { "Load DICOM files remotely or locally", //$NON-NLS-1$
             "Usage: dicom:get ([-l PATH]... [-r URI]... [-p] [-i DATA]... [-w URI]...)", //$NON-NLS-1$
@@ -961,7 +976,7 @@ public class DicomModel implements TreeModel, DataExplorerModel {
             return;
         }
 
-        GuiExecutor.instance().execute(() -> {
+        GuiExecutor.executeFX(() -> {
             firePropertyChange(
                 new ObservableEvent(ObservableEvent.BasicAction.SELECT, DicomModel.this, null, DicomModel.this));
             getCommand(opt, largs, rargs, iargs, wargs);
@@ -1035,8 +1050,8 @@ public class DicomModel implements TreeModel, DataExplorerModel {
                 File dcmDirFile = new File(baseDir, "DICOMDIR"); //$NON-NLS-1$
                 if (dcmDirFile.canRead()) {
                     // Copy images in cache if property weasis.portable.dicom.cache = true (default is true)
-                    DicomDirLoader dirImport = new DicomDirLoader(dcmDirFile, DicomModel.this,
-                        DicomManager.getInstance().isPortableDirCache());
+                    String cache = AppProperties.getBundleContext() == null ? null : AppProperties.getBundleContext().getProperty("weasis.portable.dicom.cache"); //$NON-NLS-1$
+                    DicomDirLoader dirImport = new DicomDirLoader(dcmDirFile, DicomModel.this, !((cache != null) && cache.equalsIgnoreCase("false")));
                     loadSeries = dirImport.readDicomDir();
                 }
                 if (loadSeries != null && !loadSeries.isEmpty()) {
@@ -1063,7 +1078,7 @@ public class DicomModel implements TreeModel, DataExplorerModel {
             return;
         }
 
-        GuiExecutor.instance().execute(() -> {
+        GuiExecutor.executeFX(() -> {
             firePropertyChange(
                 new ObservableEvent(ObservableEvent.BasicAction.SELECT, DicomModel.this, null, DicomModel.this));
             closeCommand(opt, yargs, sargs);

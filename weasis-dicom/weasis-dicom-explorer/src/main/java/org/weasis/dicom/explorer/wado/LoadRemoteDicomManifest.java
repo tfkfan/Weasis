@@ -25,8 +25,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import javax.swing.JOptionPane;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.explorer.ObservableEvent;
@@ -37,14 +35,12 @@ import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.util.StreamIOException;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.core.api.util.StringUtil.Suffix;
-import org.weasis.core.ui.docking.UIManager;
 import org.weasis.dicom.explorer.DicomModel;
 import org.weasis.dicom.explorer.ExplorerTask;
 import org.weasis.dicom.explorer.Messages;
-import org.weasis.dicom.explorer.pref.download.SeriesDownloadPrefView;
 import org.weasis.dicom.explorer.wado.DownloadManager.PriorityTaskComparator;
 
-public class LoadRemoteDicomManifest extends ExplorerTask<Boolean, String> {
+public class LoadRemoteDicomManifest extends ExplorerTask<Boolean> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadRemoteDicomManifest.class);
 
     private final DicomModel dicomModel;
@@ -107,11 +103,12 @@ public class LoadRemoteDicomManifest extends ExplorerTask<Boolean, String> {
             return true;
         }
         boolean[] ret = { false };
-        GuiExecutor.instance().invokeAndWait(() -> {
-            int confirm = JOptionPane.showConfirmDialog(UIManager.getApplicationWindow(), getErrorMessage(e),
-                Messages.getString("LoadRemoteDicomManifest.net_err_msg"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
-            ret[0] = JOptionPane.YES_OPTION == confirm;
-        });
+        // TODO
+//        GuiExecutor.runFxAndWait(() -> {
+//            int confirm = JOptionPane.showConfirmDialog(UIManager.getApplicationWindow(), getErrorMessage(e),
+//                Messages.getString("LoadRemoteDicomManifest.net_err_msg"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+//            ret[0] = JOptionPane.YES_OPTION == confirm;
+//        });
         return ret[0];
     }
 
@@ -138,11 +135,13 @@ public class LoadRemoteDicomManifest extends ExplorerTask<Boolean, String> {
 
     @Override
     protected void done() {
-        DownloadManager.CONCURRENT_EXECUTOR.prestartAllCoreThreads();
+        GuiExecutor.executeFX(() -> {
+            DownloadManager.CONCURRENT_EXECUTOR.prestartAllCoreThreads();
+        });
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean call() throws Exception {
         try {
             Iterator<String> iter = xmlFiles.iterator();
             while (iter.hasNext()) {
@@ -154,7 +153,7 @@ public class LoadRemoteDicomManifest extends ExplorerTask<Boolean, String> {
                 LOGGER.info("Try donloaging again: {}", xmlFiles); //$NON-NLS-1$
                 LoadRemoteDicomManifest mf = new LoadRemoteDicomManifest(xmlFiles, dicomModel);
                 mf.retryNb.set(retryNb.get());
-                mf.execute();
+                DicomModel.LOADING_EXECUTOR.execute(mf);
             }
         }
 
@@ -188,7 +187,7 @@ public class LoadRemoteDicomManifest extends ExplorerTask<Boolean, String> {
             if (wadoTasks != null) {
                 loadSeriesList.addAll(wadoTasks);
                 boolean downloadImmediately = BundleTools.SYSTEM_PREFERENCES
-                    .getBooleanProperty(SeriesDownloadPrefView.DOWNLOAD_IMMEDIATELY, true);
+                    .getBooleanProperty("weasis.download.immediately", true);
                 startDownloadingSeries(wadoTasks, downloadImmediately);
             }
         } catch (URISyntaxException | MalformedURLException e) {

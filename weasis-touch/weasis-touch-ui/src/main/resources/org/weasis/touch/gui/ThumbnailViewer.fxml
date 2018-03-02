@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fx:id="thumbnailViewer" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="0.0" pannable="true" stylesheets="@application.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.ThumbnailViewerController">
+	<content>
+	   <VBox fx:id="thumbnailContener" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
+	</content>          
+</ScrollPane>

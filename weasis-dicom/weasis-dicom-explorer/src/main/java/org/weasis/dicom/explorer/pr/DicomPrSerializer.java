@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
@@ -42,7 +41,6 @@ import org.slf4j.LoggerFactory;
 import org.weasis.core.api.gui.util.AppProperties;
 import org.weasis.core.api.image.util.CIELab;
 import org.weasis.core.api.util.GzipManager;
-import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.ReferencedImage;
 import org.weasis.core.ui.model.ReferencedSeries;
@@ -204,8 +202,7 @@ public class DicomPrSerializer {
                 Attributes l = new Attributes(2);
                 l.setString(Tag.GraphicLayer, VR.CS, layerName);
                 l.setInt(Tag.GraphicLayerOrder, VR.IS, i);
-                float[] lab = PresentationStateReader
-                    .colorToLAB(Optional.ofNullable(MeasureTool.viewSetting.getLineColor()).orElse(Color.YELLOW));
+                float[] lab = PresentationStateReader.colorToLAB(Color.YELLOW);
                 if (lab != null) {
                     l.setInt(Tag.GraphicLayerRecommendedDisplayCIELabValue, VR.US, CIELab.convertToDicomLab(lab));
                 }

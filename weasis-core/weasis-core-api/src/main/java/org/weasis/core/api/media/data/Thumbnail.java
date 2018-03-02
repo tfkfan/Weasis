@@ -10,88 +10,108 @@
  *******************************************************************************/
 package org.weasis.core.api.media.data;
 
-import java.awt.Component;
+
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-
+import org.controlsfx.control.PopOver;
 import org.opencv.core.MatOfInt;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.Messages;
 import org.weasis.core.api.gui.util.AppProperties;
+import org.weasis.core.api.gui.util.FxUtil;
+import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.image.OpManager;
 import org.weasis.core.api.media.MimeInspector;
 import org.weasis.core.api.util.FileUtil;
-import org.weasis.core.api.util.FontTools;
 import org.weasis.core.api.util.ThreadUtil;
 import org.weasis.opencv.data.PlanarImage;
 import org.weasis.opencv.op.ImageConversion;
 import org.weasis.opencv.op.ImageProcessor;
 
-@SuppressWarnings("serial")
-public class Thumbnail extends JLabel implements Thumbnailable {
+import javafx.animation.PauseTransition;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.geometry.Bounds;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+public class Thumbnail extends Canvas implements Thumbnailable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Thumbnail.class);
 
     public static final File THUMBNAIL_CACHE_DIR =
         AppProperties.buildAccessibleTempDirectory(AppProperties.FILE_CACHE_DIR.getName(), "thumb"); //$NON-NLS-1$
     public static final ExecutorService THUMB_LOADER = ThreadUtil.buildNewSingleThreadExecutor("Thumbnail Loader"); //$NON-NLS-1$
 
-    public static final RenderingHints DownScaleQualityHints =
-        new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
     public static final int MIN_SIZE = 48;
-    public static final int DEFAULT_SIZE = 112;
+    public static final int DEFAULT_SIZE = 176;
     public static final int MAX_SIZE = 256;
 
-    private static final NativeCache<Thumbnail, PlanarImage> mCache = new NativeCache<Thumbnail, PlanarImage>(30_000_000) {
+    private static final NativeCache<Thumbnail, PlanarImage> mCache =
+        new NativeCache<Thumbnail, PlanarImage>(30_000_000) {
 
-        @Override
-        protected void afterEntryRemove(Thumbnail key, PlanarImage img) {
-            if(img != null){
-                img.release();
+            @Override
+            protected void afterEntryRemove(Thumbnail key, PlanarImage img) {
+                if (img != null) {
+                    img.release();
+                }
             }
-        }
-    };
+        };
 
+    protected BooleanProperty lockedProperty = new SimpleBooleanProperty(false);
     protected volatile boolean readable = true;
     protected volatile AtomicBoolean loading = new AtomicBoolean(false);
     protected File thumbnailPath = null;
-    protected int thumbnailSize;
+
+    protected MediaElement media;
+    protected boolean keepMediaCache;
+    protected OpManager opManager;
 
     public Thumbnail(int thumbnailSize) {
-        super(null, null, SwingConstants.CENTER);
-        this.thumbnailSize = thumbnailSize;
+        super(thumbnailSize, thumbnailSize);
+        pause.setOnFinished(this::pause);
     }
 
     public Thumbnail(final MediaElement media, int thumbnailSize, boolean keepMediaCache, OpManager opManager) {
-        super(null, null, SwingConstants.CENTER);
+        this(media, thumbnailSize, keepMediaCache, opManager, null);
+    }
+
+    public Thumbnail(final MediaElement media, int thumbnailSize, boolean keepMediaCache, OpManager opManager,
+        BooleanProperty lockedProperty) {
+        super(thumbnailSize, thumbnailSize);
         if (media == null) {
             throw new IllegalArgumentException("image cannot be null"); //$NON-NLS-1$
         }
-        this.thumbnailSize = thumbnailSize;
+        if (lockedProperty != null) {
+            this.lockedProperty.bind(lockedProperty);
+        }
         init(media, keepMediaCache, opManager);
+        pause.setOnFinished(this::pause);
     }
 
     /**
@@ -100,12 +120,18 @@ public class Thumbnail extends JLabel implements Thumbnailable {
      *            if true will remove the media from cache after building the thumbnail. Only when media is an image.
      */
     protected void init(MediaElement media, boolean keepMediaCache, OpManager opManager) {
-        this.setFont(FontTools.getFont10());
+        // this.setFont(FontTools.getFont10());
         buildThumbnail(media, keepMediaCache, opManager);
     }
 
     @Override
     public void registerListeners() {
+        this.setOnDragDetected(this::handleOnDragDetected);
+        this.setOnDragDone(this::handleOnDragDone);
+
+        this.setOnTouchPressed(this::handleTouchPress);
+        this.setOnTouchReleased(this::handleTouchRelease);
+        
         removeMouseAndKeyListener();
     }
 
@@ -117,84 +143,82 @@ public class Thumbnail extends JLabel implements Thumbnailable {
     }
 
     protected synchronized void buildThumbnail(MediaElement media, boolean keepMediaCache, OpManager opManager) {
-        Icon icon = MimeInspector.unknownIcon;
-        String type = Messages.getString("Thumbnail.unknown"); //$NON-NLS-1$
-        if (media != null) {
-            String mime = media.getMimeType();
-            if (mime != null) {
-                if (mime.startsWith("image")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.img"); //$NON-NLS-1$
-                    icon = MimeInspector.imageIcon;
-                } else if (mime.startsWith("video")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.video"); //$NON-NLS-1$
-                    icon = MimeInspector.videoIcon;
-                } else if (mime.startsWith("audio")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.audio"); //$NON-NLS-1$
-                    icon = MimeInspector.audioIcon;
-                } else if (mime.equals("sr/dicom")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.dicom_sr"); //$NON-NLS-1$
-                    icon = MimeInspector.textIcon;
-                } else if (mime.startsWith("txt")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.text"); //$NON-NLS-1$
-                    icon = MimeInspector.textIcon;
-                } else if (mime.endsWith("html")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.html"); //$NON-NLS-1$
-                    icon = MimeInspector.htmlIcon;
-                } else if (mime.equals("application/pdf")) { //$NON-NLS-1$
-                    type = Messages.getString("Thumbnail.pdf"); //$NON-NLS-1$
-                    icon = MimeInspector.pdfIcon;
-                } else {
-                    type = mime;
+        this.media = media;
+        this.keepMediaCache = keepMediaCache;
+        this.opManager = opManager;
+
+        repaint();
+    }
+
+    public void repaint() {
+        GuiExecutor.executeFX(this::draw);
+    }
+
+    private void draw() {
+        double width = getWidth();
+        double height = getHeight();
+        GraphicsContext gc = getGraphicsContext2D();
+        gc.clearRect(0, 0, this.getWidth(), this.getHeight());
+        double x = 0;
+        double y = 0;
+        final PlanarImage thumbnail = Thumbnail.this.getImage(media, keepMediaCache, opManager);
+        if (thumbnail == null) {
+            Image icon = MimeInspector.unknownIcon;
+            String type = Messages.getString("Thumbnail.unknown"); //$NON-NLS-1$
+            if (media != null) {
+                String mime = media.getMimeType();
+                if (mime != null) {
+                    if (mime.startsWith("image")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.img"); //$NON-NLS-1$
+                        icon = MimeInspector.imageIcon;
+                    } else if (mime.startsWith("video")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.video"); //$NON-NLS-1$
+                        icon = MimeInspector.videoIcon;
+                    } else if (mime.startsWith("audio")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.audio"); //$NON-NLS-1$
+                        icon = MimeInspector.audioIcon;
+                    } else if (mime.equals("sr/dicom")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.dicom_sr"); //$NON-NLS-1$
+                        icon = MimeInspector.textIcon;
+                    } else if (mime.startsWith("txt")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.text"); //$NON-NLS-1$
+                        icon = MimeInspector.textIcon;
+                    } else if (mime.endsWith("html")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.html"); //$NON-NLS-1$
+                        icon = MimeInspector.htmlIcon;
+                    } else if (mime.equals("application/pdf")) { //$NON-NLS-1$
+                        type = Messages.getString("Thumbnail.pdf"); //$NON-NLS-1$
+                        icon = MimeInspector.pdfIcon;
+                    } else {
+                        type = mime;
+                    }
                 }
+
+                Font font = gc.getFont();
+                Bounds fb = FxUtil.getTextBounds(type, font);
+                double x1 = x + (getWidth() - icon.getWidth()) / 2;
+                double y1 = y + (height - fb.getHeight() - 5.0 - icon.getHeight()) / 2;
+                gc.drawImage(icon, x1, y1);
+                x1 = x + (getWidth() - fb.getWidth()) / 2.0;
+                y1 = y + (getHeight() - icon.getHeight()) / 2;
+                gc.strokeText(type, x1, y1 + icon.getHeight() + fb.getHeight() + 5.0);
+            }
+
+        } else {
+            width = thumbnail.width();
+            height = thumbnail.height();
+            x += (getWidth() - width) / 2;
+            y += (getHeight() - height) / 2;
+
+            WritableImage image = SwingFXUtils.toFXImage(ImageConversion.toBufferedImage(thumbnail), null);
+            if (image != null) {
+                gc.drawImage(image, x, y);
             }
         }
-        setIcon(media, icon, type, keepMediaCache, opManager);
+        drawOverIcon(gc, x, y, width, height);
     }
 
-    private void setIcon(final MediaElement media, final Icon mime, final String type, final boolean keepMediaCache,
-        OpManager opManager) {
-        this.setSize(thumbnailSize, thumbnailSize);
-
-        ImageIcon icon = new ImageIcon() {
-
-            @Override
-            public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
-                Graphics2D g2d = (Graphics2D) g;
-                int width = thumbnailSize;
-                int height = thumbnailSize;
-                final PlanarImage thumbnail = Thumbnail.this.getImage(media, keepMediaCache, opManager);
-                if (thumbnail == null) {
-                    FontMetrics fontMetrics = g2d.getFontMetrics();
-                    int fheight = y + (thumbnailSize - fontMetrics.getAscent() + 5 - mime.getIconHeight()) / 2;
-                    mime.paintIcon(c, g2d, x + (thumbnailSize - mime.getIconWidth()) / 2, fheight);
-
-                    int startx = x + (thumbnailSize - fontMetrics.stringWidth(type)) / 2;
-                    g2d.drawString(type, startx, fheight + mime.getIconHeight() + fontMetrics.getAscent() + 5);
-                } else {
-                    width = thumbnail.width();
-                    height = thumbnail.height();
-                    x += (thumbnailSize - width) / 2;
-                    y += (thumbnailSize - height) / 2;
-                    g2d.drawImage(ImageConversion.toBufferedImage(thumbnail), AffineTransform.getTranslateInstance(x, y),
-                        null);
-                }
-                drawOverIcon(g2d, x, y, width, height);
-            }
-
-            @Override
-            public int getIconWidth() {
-                return thumbnailSize;
-            }
-
-            @Override
-            public int getIconHeight() {
-                return thumbnailSize;
-            }
-        };
-        setIcon(icon);
-    }
-
-    protected void drawOverIcon(Graphics2D g2d, int x, int y, int width, int height) {
+    protected void drawOverIcon(GraphicsContext gc, double x, double y, double width, double height) {
 
     }
 
@@ -203,24 +227,20 @@ public class Thumbnail extends JLabel implements Thumbnailable {
         return thumbnailPath;
     }
 
-
     protected synchronized PlanarImage getImage(final MediaElement media, final boolean keepMediaCache,
         final OpManager opManager) {
         PlanarImage cacheImage;
         if ((cacheImage = mCache.get(this)) == null && readable && loading.compareAndSet(false, true)) {
             try {
-                SwingWorker<Boolean, String> thumbnailReader = new SwingWorker<Boolean, String>() {
+                Task<Boolean> thumbnailReader = new Task<Boolean>() {
+                    
                     @Override
-                    protected void done() {
-                        repaint();
-                    }
-
-                    @Override
-                    protected Boolean doInBackground() throws Exception {
+                    protected Boolean call() throws Exception {
                         loadThumbnail(media, keepMediaCache, opManager);
+                        // Force UI to repaint with the image
+                        repaint();
                         return Boolean.TRUE;
                     }
-
                 };
                 THUMB_LOADER.execute(thumbnailReader);
             } catch (Exception e) {
@@ -304,6 +324,7 @@ public class Thumbnail extends JLabel implements Thumbnailable {
                     } else {
                         int width = img.width();
                         int height = img.height();
+                        int thumbnailSize = (int) getHeight();
                         if (width > thumbnailSize || height > thumbnailSize) {
                             thumb =
                                 ImageProcessor.buildThumbnail(img, new Dimension(thumbnailSize, thumbnailSize), true);
@@ -345,22 +366,22 @@ public class Thumbnail extends JLabel implements Thumbnailable {
 
     @Override
     public void removeMouseAndKeyListener() {
-        MouseListener[] listener = this.getMouseListeners();
-        MouseMotionListener[] motionListeners = this.getMouseMotionListeners();
-        KeyListener[] keyListeners = this.getKeyListeners();
-        MouseWheelListener[] wheelListeners = this.getMouseWheelListeners();
-        for (int i = 0; i < listener.length; i++) {
-            this.removeMouseListener(listener[i]);
-        }
-        for (int i = 0; i < motionListeners.length; i++) {
-            this.removeMouseMotionListener(motionListeners[i]);
-        }
-        for (int i = 0; i < keyListeners.length; i++) {
-            this.removeKeyListener(keyListeners[i]);
-        }
-        for (int i = 0; i < wheelListeners.length; i++) {
-            this.removeMouseWheelListener(wheelListeners[i]);
-        }
+        // MouseListener[] listener = this.getMouseListeners();
+        // MouseMotionListener[] motionListeners = this.getMouseMotionListeners();
+        // KeyListener[] keyListeners = this.getKeyListeners();
+        // MouseWheelListener[] wheelListeners = this.getMouseWheelListeners();
+        // for (int i = 0; i < listener.length; i++) {
+        // this.removeMouseListener(listener[i]);
+        // }
+        // for (int i = 0; i < motionListeners.length; i++) {
+        // this.removeMouseMotionListener(motionListeners[i]);
+        // }
+        // for (int i = 0; i < keyListeners.length; i++) {
+        // this.removeKeyListener(keyListeners[i]);
+        // }
+        // for (int i = 0; i < wheelListeners.length; i++) {
+        // this.removeMouseWheelListener(wheelListeners[i]);
+        // }
     }
 
     class Load implements Callable<PlanarImage> {
@@ -375,6 +396,90 @@ public class Thumbnail extends JLabel implements Thumbnailable {
         public PlanarImage call() throws Exception {
             return ImageProcessor.readImageWithCvException(path);
         }
+    }
+
+    /*****************************************************************
+     * DRAG *
+     *****************************************************************/
+    public void handleOnDragDetected(MouseEvent event) {
+        /* drag was detected, start drag-and-drop gesture */
+        LOGGER.trace("onDragDetected");
+        if (!lockedProperty.getValue()) {
+            /* allow any transfer mode */
+            Thumbnail thumb = (Thumbnail) event.getSource();
+            if (thumb != null) {
+                Dragboard db = thumb.startDragAndDrop(TransferMode.COPY);
+
+                SnapshotParameters sp = new SnapshotParameters();
+                db.setDragView((thumb).snapshot(sp, null));
+
+                /* put a string on dragboard */
+                ClipboardContent content = new ClipboardContent();
+                content.putString(thumb.toString());
+                db.setContent(content);
+            }
+        }
+        event.consume();
+    }
+
+    public void handleOnDragDone(DragEvent event) {
+        /* the drag-and-drop gesture ended */
+        LOGGER.trace("onDragDone");
+        /* if the data was successfully moved, clear it */
+        if (event.getTransferMode() == TransferMode.COPY) {
+            // vbox.getChildren().remove((Node)child);
+            // im1.setImage(null);
+            // ((ImageView) child).setImage(event.getDragboard().getImage());
+        }
+        event.consume();
+    }
+
+    public void setLockedProperty(BooleanProperty lockedProperty) {
+        this.lockedProperty.bind(lockedProperty);
+    }
+
+    /*****************************************************************
+     * TOUCH *
+     *****************************************************************/
+    private static ArrayList<String> doubleTab1Finger =
+        new ArrayList<>(Arrays.asList("press", "release", "press", "release"));
+
+    private ArrayList<String> touchevent = new ArrayList<>();
+    private PauseTransition pause = new PauseTransition(Duration.millis(130));
+
+    PopOver popOver = new PopOver();
+    // HiddenSidesPane pane = new HiddenSidesPane(this, new Text("bonjour vous"),new Text("bonjour vous"),new
+    // Text("bonjour vous"),new Text("bonjour vous"));
+    // InfoOverlay over = new InfoOverlay(this, "hello coucou bonour");
+
+    private void handleTouchPress(TouchEvent event) {
+        if (!lockedProperty.getValue()) {
+            pause.stop();
+            touchevent.add("press");
+            pause.playFromStart();
+        }
+        event.consume();
+    }
+
+    private void handleTouchRelease(TouchEvent event) {
+        if (!lockedProperty.getValue()) {
+            pause.stop();
+            touchevent.add("release");
+            pause.playFromStart();
+        }
+        event.consume();
+    }
+
+    private void pause(ActionEvent e) {
+        if (touchevent.equals(doubleTab1Finger)) {
+            popOver.setContentNode(new Text("place your text \nhere"));
+            popOver.setAnimated(true);
+            popOver.setAutoFix(true);
+            popOver.setDetachable(false);
+
+            popOver.show(this);
+        }
+        touchevent.clear();
     }
 
 }

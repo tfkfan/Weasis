@@ -10,13 +10,9 @@
  *******************************************************************************/
 package org.weasis.core.api.media.data;
 
-import javax.swing.JProgressBar;
-
 public interface SeriesImporter {
 
     boolean isStopped();
-
-    JProgressBar getProgressBar();
 
     boolean stop();
 

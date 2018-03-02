@@ -13,12 +13,15 @@ package org.weasis.core.api.gui.util;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.application.Platform;
 
 public class GuiExecutor extends AbstractExecutorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuiExecutor.class);
@@ -78,5 +81,63 @@ public class GuiExecutor extends AbstractExecutorService {
     @Override
     public boolean isTerminated() {
         return false;
+    }
+
+    public static void executeFX(Runnable action) {
+        if (action == null) {
+            throw new NullPointerException("action");
+        }
+
+        // run synchronously on JavaFX thread
+        if (Platform.isFxApplicationThread()) {
+            try {
+                action.run();
+            } catch (Throwable t) {
+                LOGGER.error("Exception in JavaFX runnable", t);
+            }
+            return;
+        }
+
+        Platform.runLater(action::run);
+    }
+
+    /**
+     * Runs the specified {@link Runnable} on the JavaFX application thread and waits for completion.
+     *
+     * @param action
+     *            the {@link Runnable} to run
+     * @throws NullPointerException
+     *             if {@code action} is {@code null}
+     */
+    public static void runFxAndWait(Runnable action) {
+        if (action == null) {
+            throw new NullPointerException("action");
+        }
+
+        // run synchronously on JavaFX thread
+        if (Platform.isFxApplicationThread()) {
+            try {
+                action.run();
+            } catch (Throwable t) {
+                LOGGER.error("Exception in JavaFX runnable", t);
+            }
+            return;
+        }
+
+        // queue on JavaFX thread and wait for completion
+        final CountDownLatch doneLatch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            try {
+                action.run();
+            } finally {
+                doneLatch.countDown();
+            }
+        });
+
+        try {
+            doneLatch.await();
+        } catch (InterruptedException e) {
+            LOGGER.error("Interruption in JavaFX runAndWait", e);
+        }
     }
 }

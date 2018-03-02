@@ -72,13 +72,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.weasis.core</groupId>
-			<artifactId>weasis-core-api</artifactId>
+			<artifactId>weasis-core-api-fx</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.weasis.core</groupId>
-			<artifactId>weasis-core-ui</artifactId>
+			<artifactId>weasis-core-ui-fx</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -96,7 +96,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.weasis.dicom</groupId>
-			<artifactId>weasis-dicom-explorer</artifactId>
+			<artifactId>weasis-dicom-explorer-fx</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

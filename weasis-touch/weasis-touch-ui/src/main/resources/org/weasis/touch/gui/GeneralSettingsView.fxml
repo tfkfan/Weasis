@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="generalSettings" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="466.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.GeneralSettingsController">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="466.0" style="-fx-focus-color: transparent; -fx-background-color: transparent;" stylesheets="@application.css" vbarPolicy="NEVER">
+         <content>
+            <VBox prefWidth="466.0" spacing="10.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <HBox prefHeight="15.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane prefHeight="25.0" prefWidth="126.0">
+                           <left>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.language" BorderPane.alignment="CENTER" />
+                           </left>
+                        </BorderPane>
+                        <ChoiceBox fx:id="language" prefWidth="150.0" stylesheets="@choiseBox.css" />
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox prefHeight="25.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.startFullScreen" wrappingWidth="165.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <JFXToggleButton fx:id="fullScreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" text=" " toggleColor="#b34711" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.showTutorial" wrappingWidth="165.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <JFXToggleButton fx:id="showTuto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" text=" " toggleColor="#b34711" />
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox prefHeight="25.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.askReset" wrappingWidth="165.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <JFXToggleButton fx:id="askReset" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" text=" " toggleColor="#b34711" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.askClose" wrappingWidth="165.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <JFXToggleButton fx:id="askExit" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" text=" " toggleColor="#b34711" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="448.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%WeasisTouchSettingsGeneral.notifications" wrappingWidth="165.0" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <JFXToggleButton fx:id="notifications" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" text=" " toggleColor="#b34711" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

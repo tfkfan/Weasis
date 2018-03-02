@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
-import org.weasis.core.ui.docking.DockableTool;
-import org.weasis.core.ui.util.Toolbar;
 
 public abstract class MimeSystemAppViewer implements SeriesViewer<MediaElement> {
 
@@ -78,16 +76,6 @@ public abstract class MimeSystemAppViewer implements SeriesViewer<MediaElement> 
 
     @Override
     public JMenu fillSelectedPluginMenu(JMenu menu) {
-        return null;
-    }
-
-    @Override
-    public List<Toolbar> getToolBar() {
-        return null;
-    }
-
-    @Override
-    public List<DockableTool> getToolPanel() {
         return null;
     }
 

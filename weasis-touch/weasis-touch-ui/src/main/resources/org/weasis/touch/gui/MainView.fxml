@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.MainViewController">
+   <children>
+      <AnchorPane fx:id="mainViewPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <SplitPane fx:id="mainSplitPane" dividerPositions="0.1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <items>
+                  <AnchorPane fx:id="left" maxHeight="-Infinity" minHeight="-Infinity" minWidth="240.0" style="-fx-background-color: black;" SplitPane.resizableWithParent="false" />
+                  <AnchorPane fx:id="right" style="-fx-background-color: black;" SplitPane.resizableWithParent="true" />
+               </items>
+            </SplitPane>
+            <BorderPane fx:id="closeThumbnail" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+               <center>
+                  <SVGPath content="M8,0C3.582,0,0,3.582,0,8s3.582,8,8,8s8-3.582,8-8S12.418,0,8,0z M10.354,12.646l-0.707,0.707L4.293,8l5.354-5.354  l0.707,0.707L5.707,8L10.354,12.646z" fill="#b34711" scaleX="3.0" scaleY="3.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

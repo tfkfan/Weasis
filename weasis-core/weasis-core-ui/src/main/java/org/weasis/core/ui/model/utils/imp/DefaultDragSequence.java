@@ -11,21 +11,16 @@
 package org.weasis.core.ui.model.utils.imp;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.swing.JDialog;
-
 import org.weasis.core.api.gui.util.MathUtil;
-import org.weasis.core.ui.dialog.MeasureDialog;
 import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.model.graphic.AbstractDragGraphic;
 import org.weasis.core.ui.model.graphic.DragGraphic;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.model.utils.Draggable;
-import org.weasis.core.ui.util.ColorLayerUI;
 import org.weasis.core.ui.util.MouseEventDouble;
 
 public class DefaultDragSequence implements Draggable {
@@ -121,11 +116,12 @@ public class DefaultDragSequence implements Draggable {
                         }
 
                         if (!isEditingGraph && graphPane.getGraphicManager().getSelectedGraphics().size() == 1) {
-                            ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(graphPane.getJComponent());
-                            final ArrayList<DragGraphic> list = new ArrayList<>();
-                            list.add(graphic);
-                            JDialog dialog = new MeasureDialog(graphPane, list);
-                            ColorLayerUI.showCenterScreen(dialog, layer);
+                            // TODO
+                            // ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(graphPane.getJComponent());
+                            // final ArrayList<DragGraphic> list = new ArrayList<>();
+                            // list.add(graphic);
+                            // JDialog dialog = new MeasureDialog(graphPane, list);
+                            // ColorLayerUI.showCenterScreen(dialog, layer);
                             mouseEvent.consume();
                         }
                     }

@@ -20,9 +20,8 @@
 		<module>weasis-opencv</module>
 		<module>weasis-core</module>
 		<module>weasis-imageio</module>
-		<module>weasis-base</module>
-		<module>weasis-acquire</module>
 		<module>weasis-dicom</module>
+		<module>weasis-touch</module>
 		<module>weasis-launcher</module>
 	</modules>
 </project>

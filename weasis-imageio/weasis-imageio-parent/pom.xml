@@ -9,13 +9,13 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.weasis.imageio</groupId>
-	<artifactId>weasis-imageio-parent</artifactId>
+	<artifactId>weasis-imageio-parent-fx</artifactId>
 	<name>Parent of ImageIO Plug-ins [${project.artifactId}]</name>
 	<packaging>pom</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.weasis.core</groupId>
-			<artifactId>weasis-core-api</artifactId>
+			<artifactId>weasis-core-api-fx</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 		</dependency>

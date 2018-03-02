@@ -11,10 +11,8 @@
 package org.weasis.core.api.media.data;
 
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,11 +39,7 @@ import org.weasis.opencv.data.PlanarImage;
 public abstract class Series<E extends MediaElement> extends MediaSeriesGroupNode implements MediaSeries<E> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Series.class);
 
-    public static final DataFlavor sequenceDataFlavor =
-        createConstant(DataFlavor.javaJVMLocalObjectMimeType + ";class=" + Series.class.getName(), null); //$NON-NLS-1$
-
     private static final Random RANDOM = new Random();
-    private static final DataFlavor[] flavors = { sequenceDataFlavor };
 
     private PropertyChangeSupport propertyChange = null;
     protected final List<E> medias;
@@ -267,24 +261,6 @@ public abstract class Series<E extends MediaElement> extends MediaSeriesGroupNod
     @Override
     public void setSeriesLoader(SeriesImporter seriesLoader) {
         this.seriesLoader = seriesLoader;
-    }
-
-    @Override
-    public DataFlavor[] getTransferDataFlavors() {
-        return flavors;
-    }
-
-    @Override
-    public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return sequenceDataFlavor.equals(flavor);
-    }
-
-    @Override
-    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-        if (sequenceDataFlavor.equals(flavor)) {
-            return this;
-        }
-        throw new UnsupportedFlavorException(flavor);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener propertychangelistener) {

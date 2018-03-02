@@ -15,7 +15,6 @@ import java.awt.Rectangle;
 
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.PixelInfo;
-import org.weasis.core.ui.editor.image.ViewCanvas;
 
 public interface LayerAnnotation extends Layer {
 
@@ -50,8 +49,6 @@ public interface LayerAnnotation extends Layer {
     void setBorder(Integer border);
 
     void paint(Graphics2D g2d);
-
-    LayerAnnotation getLayerCopy(ViewCanvas view2DPane);
 
     Boolean isShowBottomScale();
 

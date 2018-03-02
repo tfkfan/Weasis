@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.shape.Rectangle?>
+
+<Group fx:id="scrollbarGroup" xmlns="http://javafx.com/javafx/8.0.151" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.ScrollController">
+   <children>
+      <Rectangle fx:id="zoneScrollVirtual" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="200.0" stroke="TRANSPARENT" strokeType="INSIDE" width="100.0" />
+      <ScrollBar fx:id="scrollBar" blockIncrement="1.0" disable="true" layoutX="40.0" layoutY="50.0" max="0.0" min="0.0" orientation="VERTICAL" stylesheets="@application.css" visibleAmount="1.0">
+      </ScrollBar>
+   </children>
+</Group>

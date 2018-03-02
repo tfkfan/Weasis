@@ -26,14 +26,13 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.core.api.internal.mime.InvalidMagicMimeEntryException;
 import org.weasis.core.api.internal.mime.MagicMimeEntry;
 import org.weasis.core.api.util.FileUtil;
+
+import javafx.scene.image.Image;
 
 /**
  * The Class MimeInspector is a manager for mime types.
@@ -42,19 +41,19 @@ public class MimeInspector {
     private static final Logger LOGGER = LoggerFactory.getLogger(MimeInspector.class);
 
     public static final String UNKNOWN_MIME_TYPE = "application/x-unknown-mime-type"; //$NON-NLS-1$
-    public static final Icon unknownIcon = new ImageIcon(MimeInspector.class.getResource("/icon/22x22/unknown.png")); //$NON-NLS-1$
-    public static final Icon textIcon =
-        new ImageIcon(MimeInspector.class.getResource("/icon/22x22/text-x-generic.png")); //$NON-NLS-1$
-    public static final Icon htmlIcon = new ImageIcon(MimeInspector.class.getResource("/icon/22x22/text-html.png")); //$NON-NLS-1$
-    public static final Icon imageIcon =
-        new ImageIcon(MimeInspector.class.getResource("/icon/22x22/image-x-generic.png")); //$NON-NLS-1$
-    public static final Icon audioIcon =
-        new ImageIcon(MimeInspector.class.getResource("/icon/22x22/audio-x-generic.png")); //$NON-NLS-1$
-    public static final Icon videoIcon =
-        new ImageIcon(MimeInspector.class.getResource("/icon/22x22/video-x-generic.png")); //$NON-NLS-1$
-    public static final Icon dicomIcon = new ImageIcon(MimeInspector.class.getResource("/icon/22x22/dicom.png")); //$NON-NLS-1$
-    public static final Icon dicomVideo = new ImageIcon(MimeInspector.class.getResource("/icon/22x22/dicom-video.png")); //$NON-NLS-1$
-    public static final Icon pdfIcon = new ImageIcon(MimeInspector.class.getResource("/icon/22x22/pdf.png")); //$NON-NLS-1$
+    public static final Image unknownIcon = new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/unknown.png")); //$NON-NLS-1$
+    public static final Image textIcon =
+        new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/text-x-generic.png")); //$NON-NLS-1$
+    public static final Image htmlIcon = new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/text-html.png")); //$NON-NLS-1$
+    public static final Image imageIcon =
+        new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/image-x-generic.png")); //$NON-NLS-1$
+    public static final Image audioIcon =
+        new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/audio-x-generic.png")); //$NON-NLS-1$
+    public static final Image videoIcon =
+        new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/video-x-generic.png")); //$NON-NLS-1$
+    public static final Image dicomIcon = new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/dicom.png")); //$NON-NLS-1$
+    public static final Image dicomVideo = new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/dicom-video.png")); //$NON-NLS-1$
+    public static final Image pdfIcon = new Image(MimeInspector.class.getResourceAsStream("/icon/22x22/pdf.png")); //$NON-NLS-1$
 
     private static final Properties mimeTypes = new Properties();
     private static final ArrayList<MagicMimeEntry> mMagicMimeEntries = new ArrayList<>();

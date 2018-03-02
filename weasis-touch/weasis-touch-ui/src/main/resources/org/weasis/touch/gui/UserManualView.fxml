@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="466.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.weasis.touch.gui.UserManualController">
+   <children>
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="389.0" prefWidth="466.0" style="-fx-focus-color: transparent; -fx-background-color: transparent;" stylesheets="@application.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <Accordion fx:id="accordion" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="443.0" stylesheets="@titlePane.css">
+              <panes>
+                <TitledPane fx:id="general" animated="false" text="General" />
+                <TitledPane fx:id="gesture" animated="false" text="Gesture" />
+                <TitledPane fx:id="menu" animated="false" text="Menu" />
+                <TitledPane fx:id="mouseKeyboard" animated="false" text="Mouse and Keyboard" />
+              </panes>
+            </Accordion>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

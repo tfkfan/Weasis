@@ -16,7 +16,7 @@ import org.weasis.core.api.explorer.model.DataExplorerModel;
 import org.weasis.dicom.explorer.wado.DownloadManager;
 import org.weasis.dicom.explorer.wado.LoadSeries;
 
-public class LoadDicomDir extends ExplorerTask<Boolean, String> {
+public class LoadDicomDir extends ExplorerTask<Boolean> {
 
     private final List<LoadSeries> seriesList;
     private final DicomModel dicomModel;
@@ -31,7 +31,7 @@ public class LoadDicomDir extends ExplorerTask<Boolean, String> {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean call() throws Exception {
         for (LoadSeries s : seriesList) {
             DownloadManager.addLoadSeries(s, dicomModel, true);
         }
