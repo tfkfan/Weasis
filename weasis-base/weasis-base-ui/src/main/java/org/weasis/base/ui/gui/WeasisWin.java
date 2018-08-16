@@ -714,6 +714,17 @@ public class WeasisWin {
             ColorLayerUI.showCenterScreen(about, layer);
         });
         helpMenuItem.add(aboutMenuItem);
+
+
+        final JMenuItem ablyTestMenuItem =
+                new JMenuItem("Test ably"); //$NON-NLS-1$
+        ablyTestMenuItem.addActionListener(e -> {
+            ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(rootPaneContainer);
+            WeasisAblyBox ably = new  WeasisAblyBox(getFrame());
+            ColorLayerUI.showCenterScreen(ably, layer);
+        });
+        helpMenuItem.add(ablyTestMenuItem);
+
         menuBar.add(helpMenuItem);
         return menuBar;
     }
