@@ -10,18 +10,14 @@
  *******************************************************************************/
 package org.weasis.base.ui.gui;
 
-import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
-import io.ably.lib.types.Message;
 
 import org.weasis.base.ui.Messages;
-import org.weasis.core.api.gui.util.AppProperties;
-import org.weasis.core.api.gui.util.JMVUtils;
-import org.weasis.core.api.service.BundleTools;
-import org.weasis.core.api.util.ResourceUtil;
+import org.weasis.core.api.networking.AblyService;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,26 +26,28 @@ import java.awt.event.WindowEvent;
 public class WeasisAblyBox extends JDialog implements ActionListener {
 
     private final JPanel jpanelRoot = new JPanel();
-    private final JPanel jPanelClose = new JPanel();
     private final JButton jButtonclose = new JButton();
-    private final BorderLayout borderLayout1 = new BorderLayout();
-    private final JPanel jPanelAbly = new JPanel();
+    private final JTextArea jTextArea = new JTextArea();
+    private final JTextField jTextInput = new JTextField();
+    private final JButton jButtonsend = new JButton();
+    private final JPanel jPanelBtns = new JPanel();
+    private final JPanel jPanelText = new JPanel();
     private final FlowLayout flowLayout1 = new FlowLayout();
-    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final BorderLayout borderLayout1 = new BorderLayout();
 
-    private final JPanel jPanel3 = new JPanel();
-    private final BorderLayout borderLayout3 = new BorderLayout();
-    private final JTextPane jTextPane1 = new JTextPane();
-
+    private final AblyService ablyService = new AblyService();
+    private Channel channel;
 
     public WeasisAblyBox(Frame owner) {
-        super(owner, "Ably test", true); //$NON-NLS-1$
+        super(owner, Messages.getString("WeasisAblyBox.title"), true); //$NON-NLS-1$
         init();
         pack();
         try {
             initAbly();
         } catch (AblyException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            jTextArea.setText(e.getMessage());
         }
     }
 
@@ -57,48 +55,44 @@ public class WeasisAblyBox extends JDialog implements ActionListener {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setModal(true);
 
-        setSize(700, 400);
-
         jpanelRoot.setLayout(borderLayout1);
-        jPanelClose.setLayout(flowLayout1);
+        jPanelBtns.setLayout(flowLayout1);
         flowLayout1.setAlignment(FlowLayout.RIGHT);
         flowLayout1.setHgap(15);
         flowLayout1.setVgap(10);
 
-        jButtonclose.setText(Messages.getString("WeasisAboutBox.close")); //$NON-NLS-1$
-
+        jButtonclose.setText(Messages.getString("WeasisAblyBox.close")); //$NON-NLS-1$
         jButtonclose.addActionListener(this);
 
-        jPanelAbly.setLayout(gridBagLayout1);
+        jTextInput.setPreferredSize(new Dimension(200, 28));
+        jTextArea.setPreferredSize(new Dimension(200, 200));
 
-        jTextPane1.setEditorKit(JMVUtils.buildHTMLEditorKit(jTextPane1));
-        jTextPane1.setContentType("text/html"); //$NON-NLS-1$
-        jTextPane1.setEditable(false);
+        jButtonsend.setText(Messages.getString("WeasisAblyBox.send"));
+        jButtonsend.addActionListener(this);
 
-        jPanel3.add(jTextPane1);
+        jPanelBtns.add(jButtonsend, null);
+        jPanelBtns.add(jButtonclose, null);
 
-        jPanel3.setLayout(borderLayout3);
-        jPanelClose.add(jButtonclose, null);
+        jPanelText.setBorder(new EmptyBorder(10, 10, 10, 10));
+        jPanelText.setLayout(new BorderLayout());
+        jPanelText.add(jTextArea, BorderLayout.NORTH);
+        jPanelText.add(jTextInput, BorderLayout.SOUTH);
 
-        jpanelRoot.add(jPanelClose, BorderLayout.SOUTH);
-        jpanelRoot.add(jPanel3, BorderLayout.CENTER);
+        jpanelRoot.add(jPanelBtns, BorderLayout.SOUTH);
+        jpanelRoot.add(jPanelText, BorderLayout.CENTER);
 
+        this.getContentPane().setPreferredSize(new Dimension(600, 600));
         this.getContentPane().add(jpanelRoot, null);
     }
 
     protected void initAbly() throws AblyException {
-        AblyRealtime ably = new AblyRealtime("Rzgycw.3FHJ-Q:75oKq_HwuSSeV_Rn");
-        Channel channel = ably.channels.get("test");
+        ablyService.init();
+        ablyService.setChannelName("test");
 
-        /* Publish a message to the test channel */
-        channel.publish("test", "hello");
-
-        Channel.MessageListener listener = message -> {
-            jTextPane1.setText(message.data.toString());
-        };
-
-        channel.subscribe("greeting2", listener);
-
+        /*channel = ablyService.getAblyChannel();
+        channel.subscribe( message -> {
+            jTextArea.append(message.data.toString());
+        });*/
     }
 
     // Overridden so we can exit when window is closed
@@ -114,11 +108,17 @@ public class WeasisAblyBox extends JDialog implements ActionListener {
         dispose();
     }
 
-    // Close the dialog on a button event
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jButtonclose) {
             cancel();
+        } else if (e.getSource() == jButtonsend) {
+            try {
+                ablyService.publish("test", jTextInput.getText());
+                jTextInput.setText("");
+            } catch (AblyException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
