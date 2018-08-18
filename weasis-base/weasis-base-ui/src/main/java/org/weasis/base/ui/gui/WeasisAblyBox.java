@@ -39,6 +39,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private final BorderLayout borderLayout1 = new BorderLayout();
     private final JPanel userInputPanel = new JPanel();
     private final JPanel textInputPanel = new JPanel();
+    private final JPanel jPanelInputs = new JPanel();
 
     private final JLabel jLabel = new JLabel();
     private final JLabel jLabel2 = new JLabel();
@@ -73,6 +74,8 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         flowLayout1.setHgap(15);
         flowLayout1.setVgap(10);
 
+        jPanelInputs.setLayout(new BoxLayout(jPanelInputs, BoxLayout.Y_AXIS));
+
         jButtonclose.setText(Messages.getString("WeasisAblyBox.close")); //$NON-NLS-1$
         jButtonclose.addActionListener(this);
 
@@ -91,20 +94,21 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         jPanelBtns.add(jButtonclose, null);
 
         jLabel.setText(Messages.getString("WeasisAblyBox.username"));
-        jLabel2.setText(Messages.getString("WeasisAblyBox.inputtext"));
+        jLabel2.setText("-");
 
         userInputPanel.add(jLabel);
         userInputPanel.add(userTextInput);
         userInputPanel.add(jButtonusername);
 
-
-        textInputPanel.add(jLabel2);
         textInputPanel.add(jTextInput);
+
+        jPanelInputs.add(jLabel2);
+        jPanelInputs.add(userInputPanel);
 
         jPanelText.setBorder(new EmptyBorder(50, 50, 50, 50));
         jPanelText.setLayout(new BorderLayout());
         jPanelText.add(jTextArea, BorderLayout.NORTH);
-        jPanelText.add(userInputPanel, BorderLayout.CENTER);
+        jPanelText.add(jPanelInputs, BorderLayout.CENTER);
         jPanelText.add(textInputPanel, BorderLayout.SOUTH);
 
         jpanelRoot.add(jPanelBtns, BorderLayout.SOUTH);
@@ -156,7 +160,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
             userName = userTextInput.getText();
             userTextInput.setText("");
 
-            jLabel.setText("You're signed in as: " + userName);
+            jLabel2.setText("You're signed in as: " + userName);
         }
     }
 }
