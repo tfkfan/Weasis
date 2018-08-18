@@ -10,11 +10,12 @@
  *******************************************************************************/
 package org.weasis.base.ui.gui;
 
+import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
 
+import io.ably.lib.types.Message;
 import org.weasis.base.ui.Messages;
-import org.weasis.core.api.networking.AblyService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,19 +24,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-public class WeasisAblyBox extends JDialog implements ActionListener {
+public class WeasisAblyBox extends JDialog implements ActionListener, Channel.MessageListener {
 
     private final JPanel jpanelRoot = new JPanel();
     private final JButton jButtonclose = new JButton();
     private final JTextArea jTextArea = new JTextArea();
     private final JTextField jTextInput = new JTextField();
+    private final JTextField userTextInput = new JTextField();
     private final JButton jButtonsend = new JButton();
+    private final JButton jButtonusername = new JButton();
     private final JPanel jPanelBtns = new JPanel();
     private final JPanel jPanelText = new JPanel();
     private final FlowLayout flowLayout1 = new FlowLayout();
     private final BorderLayout borderLayout1 = new BorderLayout();
+    private final JPanel userInputPanel = new JPanel();
+    private final JPanel textInputPanel = new JPanel();
 
-    private final AblyService ablyService = new AblyService();
+    private final JLabel jLabel = new JLabel();
+    private final JLabel jLabel2 = new JLabel();
+
+    private final static String CHANNEL_NAME = "test";
+    private final static String API_KEY = "Rzgycw.3FHJ-Q:75oKq_HwuSSeV_Rn";
+
+    private String userName = null;
+    private AblyRealtime ablyRealtime;
     private Channel channel;
 
     public WeasisAblyBox(Frame owner) {
@@ -65,34 +77,53 @@ public class WeasisAblyBox extends JDialog implements ActionListener {
         jButtonclose.addActionListener(this);
 
         jTextInput.setPreferredSize(new Dimension(200, 28));
+        userTextInput.setPreferredSize(new Dimension(200, 28));
         jTextArea.setPreferredSize(new Dimension(200, 200));
+        jTextArea.setEnabled(false);
 
         jButtonsend.setText(Messages.getString("WeasisAblyBox.send"));
         jButtonsend.addActionListener(this);
 
+        jButtonusername.setText(Messages.getString("WeasisAblyBox.login"));
+        jButtonusername.addActionListener(this);
+
         jPanelBtns.add(jButtonsend, null);
         jPanelBtns.add(jButtonclose, null);
 
-        jPanelText.setBorder(new EmptyBorder(10, 10, 10, 10));
+        jLabel.setText(Messages.getString("WeasisAblyBox.username"));
+        jLabel2.setText(Messages.getString("WeasisAblyBox.inputtext"));
+
+        userInputPanel.add(jLabel);
+        userInputPanel.add(userTextInput);
+        userInputPanel.add(jButtonusername);
+
+
+        textInputPanel.add(jLabel2);
+        textInputPanel.add(jTextInput);
+
+        jPanelText.setBorder(new EmptyBorder(50, 50, 50, 50));
         jPanelText.setLayout(new BorderLayout());
         jPanelText.add(jTextArea, BorderLayout.NORTH);
-        jPanelText.add(jTextInput, BorderLayout.SOUTH);
+        jPanelText.add(userInputPanel, BorderLayout.CENTER);
+        jPanelText.add(textInputPanel, BorderLayout.SOUTH);
 
         jpanelRoot.add(jPanelBtns, BorderLayout.SOUTH);
         jpanelRoot.add(jPanelText, BorderLayout.CENTER);
 
-        this.getContentPane().setPreferredSize(new Dimension(600, 600));
+        this.getContentPane().setPreferredSize(new Dimension(600, 500));
         this.getContentPane().add(jpanelRoot, null);
     }
 
     protected void initAbly() throws AblyException {
-        ablyService.init();
-        ablyService.setChannelName("test");
+        ablyRealtime = new AblyRealtime(API_KEY);
 
-        /*channel = ablyService.getAblyChannel();
-        channel.subscribe( message -> {
-            jTextArea.append(message.data.toString());
-        });*/
+        channel = ablyRealtime.channels.get(CHANNEL_NAME);
+        channel.subscribe(this);
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        jTextArea.append(String.format("\n %s : %s", message.name, message.data.toString()));
     }
 
     // Overridden so we can exit when window is closed
@@ -114,12 +145,18 @@ public class WeasisAblyBox extends JDialog implements ActionListener {
             cancel();
         } else if (e.getSource() == jButtonsend) {
             try {
-                ablyService.publish("test", jTextInput.getText());
-                jTextInput.setText("");
+                if (userName != null) {
+                    channel.publish(userName, jTextInput.getText());
+                    jTextInput.setText("");
+                }
             } catch (AblyException ex) {
                 ex.printStackTrace();
             }
+        } else if (e.getSource() == jButtonusername) {
+            userName = userTextInput.getText();
+            userTextInput.setText("");
+
+            jLabel.setText("You're signed in as: " + userName);
         }
     }
-
 }
