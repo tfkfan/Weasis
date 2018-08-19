@@ -15,16 +15,16 @@ import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
 
 import io.ably.lib.types.Message;
+import javafx.scene.input.KeyCode;
 import org.weasis.base.ui.Messages;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
-public class WeasisAblyBox extends JDialog implements ActionListener, Channel.MessageListener {
+public class WeasisAblyBox extends JDialog implements ActionListener, Channel.MessageListener, KeyListener {
 
     private final JPanel jpanelRoot = new JPanel();
     private final JButton jButtonclose = new JButton();
@@ -79,10 +79,18 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         jButtonclose.setText(Messages.getString("WeasisAblyBox.close")); //$NON-NLS-1$
         jButtonclose.addActionListener(this);
 
+        jTextInput.addKeyListener(this);
         jTextInput.setPreferredSize(new Dimension(200, 28));
         userTextInput.setPreferredSize(new Dimension(200, 28));
-        jTextArea.setPreferredSize(new Dimension(200, 200));
+        //jTextArea.setPreferredSize(new Dimension(200, 200));
         jTextArea.setEnabled(false);
+        jTextArea.setVisible(true);
+        jTextArea.setColumns(20);
+        jTextArea.setRows(10);
+
+        DefaultCaret caret = (DefaultCaret) jTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
 
         jButtonsend.setText(Messages.getString("WeasisAblyBox.send"));
         jButtonsend.addActionListener(this);
@@ -107,7 +115,10 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
         jPanelText.setBorder(new EmptyBorder(50, 50, 50, 50));
         jPanelText.setLayout(new BorderLayout());
-        jPanelText.add(jTextArea, BorderLayout.NORTH);
+
+
+        jPanelText.add(new JScrollPane(jTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.NORTH);
         jPanelText.add(jPanelInputs, BorderLayout.CENTER);
         jPanelText.add(textInputPanel, BorderLayout.SOUTH);
 
@@ -143,16 +154,20 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         dispose();
     }
 
+    public void sendMessage() throws AblyException {
+        if (userName != null) {
+            channel.publish(userName, jTextInput.getText());
+            jTextInput.setText("");
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jButtonclose) {
             cancel();
         } else if (e.getSource() == jButtonsend) {
             try {
-                if (userName != null) {
-                    channel.publish(userName, jTextInput.getText());
-                    jTextInput.setText("");
-                }
+                sendMessage();
             } catch (AblyException ex) {
                 ex.printStackTrace();
             }
@@ -162,5 +177,28 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
             jLabel2.setText("You're signed in as: " + userName);
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getSource() == jTextInput) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                try {
+                    sendMessage();
+                } catch (AblyException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
