@@ -13,9 +13,7 @@ package org.weasis.base.ui.gui;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
-
 import io.ably.lib.types.Message;
-import javafx.scene.input.KeyCode;
 import org.weasis.base.ui.Messages;
 
 import javax.swing.*;
@@ -23,8 +21,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.Properties;
 
 public class WeasisAblyBox extends JDialog implements ActionListener, Channel.MessageListener, KeyListener {
+    private final static String configs = "/config.properties";
 
     private final JPanel jpanelRoot = new JPanel();
     private final JButton jButtonclose = new JButton();
@@ -44,27 +45,28 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private final JLabel jLabel = new JLabel();
     private final JLabel jLabel2 = new JLabel();
 
-    private final static String CHANNEL_NAME = "test";
-    private final static String API_KEY = "Rzgycw.3FHJ-Q:75oKq_HwuSSeV_Rn";
-
+    private Properties properties = new Properties();
     private String userName = null;
     private AblyRealtime ablyRealtime;
     private Channel channel;
 
     public WeasisAblyBox(Frame owner) {
         super(owner, Messages.getString("WeasisAblyBox.title"), true); //$NON-NLS-1$
-        init();
-        pack();
         try {
+            init();
+            pack();
             initAbly();
         } catch (AblyException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (Exception e) {
-            jTextArea.setText(e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void init() {
+    private void init() throws IOException {
+        properties.load(WeasisAblyBox.class.getResourceAsStream(configs));
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setModal(true);
 
@@ -82,7 +84,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         jTextInput.addKeyListener(this);
         jTextInput.setPreferredSize(new Dimension(200, 28));
         userTextInput.setPreferredSize(new Dimension(200, 28));
-        //jTextArea.setPreferredSize(new Dimension(200, 200));
+
         jTextArea.setEnabled(false);
         jTextArea.setVisible(true);
         jTextArea.setColumns(20);
@@ -90,7 +92,6 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
         DefaultCaret caret = (DefaultCaret) jTextArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
 
         jButtonsend.setText(Messages.getString("WeasisAblyBox.send"));
         jButtonsend.addActionListener(this);
@@ -118,7 +119,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
 
         jPanelText.add(new JScrollPane(jTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.NORTH);
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.NORTH);
         jPanelText.add(jPanelInputs, BorderLayout.CENTER);
         jPanelText.add(textInputPanel, BorderLayout.SOUTH);
 
@@ -130,9 +131,8 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     }
 
     protected void initAbly() throws AblyException {
-        ablyRealtime = new AblyRealtime(API_KEY);
-
-        channel = ablyRealtime.channels.get(CHANNEL_NAME);
+        ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
+        channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
         channel.subscribe(this);
     }
 
