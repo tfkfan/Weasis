@@ -12,6 +12,9 @@ public class CustomTelnetExecutor {
     private InputStream in;
     private PrintStream out;
 
+    private String host;
+    private Integer port;
+
     public CustomTelnetExecutor() {
 
     }
@@ -21,9 +24,10 @@ public class CustomTelnetExecutor {
     }
 
     public void init(String server, Integer port) throws IOException {
-        telnet = new TelnetClient();
-        telnet.connect(server, port);
+        setHost(host);
+        setPort(port);
 
+        telnet = new TelnetClient();
         in = telnet.getInputStream();
         out = new PrintStream(telnet.getOutputStream());
     }
@@ -37,7 +41,27 @@ public class CustomTelnetExecutor {
         write(command);
     }
 
+    public void connect() throws IOException {
+        telnet.connect(getHost(), getPort());
+    }
+
     public void disconnect() throws IOException {
         telnet.disconnect();
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 }
