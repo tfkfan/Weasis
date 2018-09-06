@@ -14,7 +14,9 @@ import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.Message;
+import org.apache.commons.net.telnet.TelnetClient;
 import org.weasis.base.ui.Messages;
+import org.weasis.core.api.telnet.CustomTelnetExecutor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -49,6 +51,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private String userName = null;
     private AblyRealtime ablyRealtime;
     private Channel channel;
+    private CustomTelnetExecutor telnet;
 
     public WeasisAblyBox(Frame owner) {
         super(owner, Messages.getString("WeasisAblyBox.title"), true); //$NON-NLS-1$
@@ -99,6 +102,21 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         jButtonusername.setText(Messages.getString("WeasisAblyBox.login"));
         jButtonusername.addActionListener(this);
 
+        JButton testTelnet = new JButton("Test telnet");
+        testTelnet.addActionListener(e -> {
+            try {
+                telnet = new CustomTelnetExecutor(properties.getProperty("telnet_host"), Integer.valueOf(properties.getProperty("telnet_port")));
+                JOptionPane.showMessageDialog(null, "Telnet connected");
+                telnet.sendCommand("dicom:get");
+                telnet.disconnect();
+                JOptionPane.showMessageDialog(null, "Telnet disconnected");
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage());
+
+                e1.printStackTrace();
+            }
+        });
+        jPanelBtns.add(testTelnet, null);
         jPanelBtns.add(jButtonsend, null);
         jPanelBtns.add(jButtonclose, null);
 
