@@ -10,11 +10,13 @@
  *******************************************************************************/
 package org.weasis.base.ui.gui;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.Message;
-import org.apache.commons.net.telnet.TelnetClient;
 import org.weasis.base.ui.Messages;
 import org.weasis.core.api.telnet.CustomTelnetExecutor;
 
@@ -52,13 +54,14 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private AblyRealtime ablyRealtime;
     private Channel channel;
     private CustomTelnetExecutor telnet;
+    private JsonParser jsonParser;
 
     public WeasisAblyBox(Frame owner) {
         super(owner, Messages.getString("WeasisAblyBox.title"), true); //$NON-NLS-1$
         try {
             init();
             pack();
-            initAbly();
+            initFeatures();
         } catch (AblyException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -102,21 +105,6 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         jButtonusername.setText(Messages.getString("WeasisAblyBox.login"));
         jButtonusername.addActionListener(this);
 
-        JButton testTelnet = new JButton("Test telnet");
-        testTelnet.addActionListener(e -> {
-            try {
-                telnet = new CustomTelnetExecutor(properties.getProperty("telnet_host"), Integer.valueOf(properties.getProperty("telnet_port")));
-                JOptionPane.showMessageDialog(null, "Telnet connected");
-                telnet.sendCommand("dicom:get");
-                telnet.disconnect();
-                JOptionPane.showMessageDialog(null, "Telnet disconnected");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, e1.getMessage());
-
-                e1.printStackTrace();
-            }
-        });
-        jPanelBtns.add(testTelnet, null);
         jPanelBtns.add(jButtonsend, null);
         jPanelBtns.add(jButtonclose, null);
 
@@ -148,15 +136,38 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         this.getContentPane().add(jpanelRoot, null);
     }
 
-    protected void initAbly() throws AblyException {
+    protected void initFeatures() throws AblyException, IOException {
         ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
         channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
         channel.subscribe(this);
+
+        telnet = new CustomTelnetExecutor(properties.getProperty("telnet_host"), Integer.valueOf(properties.getProperty("telnet_port")));
+        jsonParser = new JsonParser();
     }
 
     @Override
     public void onMessage(Message message) {
-        jTextArea.append(String.format("\n %s : %s", message.name, message.data.toString()));
+        final String msgData = message.data.toString();
+        try {
+            final Object data = jsonParser.parse(msgData);
+            if (data instanceof JsonObject) {
+                final JsonObject json = (JsonObject) data;
+                final String path = json.get("path").getAsString();
+                final String command = String.format("dicom:get -l %s", path);
+                
+                jTextArea.append(String.format("\n %s : sending command from json: %s", message.name, command));
+
+                telnet.connect();
+                telnet.sendCommand(command);
+                telnet.disconnect();
+            } else if (data instanceof JsonPrimitive) {
+                JsonPrimitive primitive = (JsonPrimitive) data;
+                jTextArea.append(String.format("\n %s : %s", message.name, primitive.getAsString()));
+            } else
+                jTextArea.append(String.format("\n %s : %s", message.name, msgData));
+        } catch (Exception e1) {
+            JOptionPane.showMessageDialog(null, e1.getMessage());
+        }
     }
 
     // Overridden so we can exit when window is closed
