@@ -20,11 +20,11 @@ public class CustomTelnetExecutor {
 
     }
 
-    public CustomTelnetExecutor(String server, Integer port) throws IOException {
-        init(server, port);
+    public CustomTelnetExecutor(String host, Integer port) throws IOException {
+        init(host, port);
     }
 
-    public void init(String server, Integer port) throws IOException {
+    public void init(String host, Integer port) throws IOException {
         setHost(host);
         setPort(port);
 
@@ -35,9 +35,8 @@ public class CustomTelnetExecutor {
         out.println(value);
         out.flush();
         Scanner sc = new Scanner(in);
-        while(sc.hasNextLine()){
-           sc.nextLine();
-        }
+        while (sc.hasNextLine())
+            sc.nextLine();
     }
 
     public void sendCommand(String command) throws IOException {

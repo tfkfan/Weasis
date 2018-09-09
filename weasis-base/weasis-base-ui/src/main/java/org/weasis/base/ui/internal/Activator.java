@@ -111,9 +111,7 @@ public class Activator implements BundleActivator {
                     final String command = String.format("dicom:get -l %s", path);
 
                     telnet.connect();
-
                     telnet.sendCommand(command);
-
                     telnet.disconnect();
                 }
             } catch (Exception e1) {
