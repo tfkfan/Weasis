@@ -1,10 +1,11 @@
-package org.weasis.core.api.telnet;
+package org.weasis.base.ui.gui;
 
 import org.apache.commons.net.telnet.TelnetClient;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class CustomTelnetExecutor {
 
@@ -28,21 +29,25 @@ public class CustomTelnetExecutor {
         setPort(port);
 
         telnet = new TelnetClient();
-        in = telnet.getInputStream();
-        out = new PrintStream(telnet.getOutputStream());
     }
 
-    public void write(String value) {
+    public void write(String value) throws IOException {
         out.println(value);
         out.flush();
+        Scanner sc = new Scanner(in);
+        while(sc.hasNextLine()){
+           sc.nextLine();
+        }
     }
 
-    public void sendCommand(String command) {
+    public void sendCommand(String command) throws IOException {
         write(command);
     }
 
     public void connect() throws IOException {
         telnet.connect(getHost(), getPort());
+        in = telnet.getInputStream();
+        out = new PrintStream(telnet.getOutputStream());
     }
 
     public void disconnect() throws IOException {
