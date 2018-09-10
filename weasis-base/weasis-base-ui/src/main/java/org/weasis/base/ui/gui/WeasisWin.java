@@ -37,13 +37,8 @@ import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.management.InstanceNotFoundException;
@@ -70,12 +65,19 @@ import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.WindowConstants;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import io.ably.lib.realtime.AblyRealtime;
+import io.ably.lib.realtime.Channel;
+import io.ably.lib.types.AblyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.base.ui.Messages;
+import org.weasis.base.ui.internal.Activator;
 import org.weasis.core.api.command.Option;
 import org.weasis.core.api.command.Options;
 import org.weasis.core.api.explorer.DataExplorerView;
+import org.weasis.core.api.explorer.DataExplorerViewFactory;
 import org.weasis.core.api.explorer.model.DataExplorerModel;
 import org.weasis.core.api.explorer.model.TreeModel;
 import org.weasis.core.api.explorer.model.TreeModelNode;
@@ -138,11 +140,14 @@ import bibliothek.gui.dock.util.Priority;
 import bibliothek.gui.dock.util.color.ColorManager;
 import bibliothek.gui.dock.util.laf.LookAndFeelColors;
 import bibliothek.util.Colors;
+import org.weasis.dicom.explorer.DicomExplorerFactory;
+import org.weasis.dicom.explorer.utils.ImportUtils;
 
 public class WeasisWin {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeasisWin.class);
+    private final static String configs = "/config.properties";
 
-    public static final String[] functions = { "info", "ui" }; //$NON-NLS-1$ //$NON-NLS-2$
+    public static final String[] functions = {"info", "ui"}; //$NON-NLS-1$ //$NON-NLS-2$
 
     private final JMenu menuFile = new JMenu(Messages.getString("WeasisWin.file")); //$NON-NLS-1$
     private final JMenu menuView = new JMenu(Messages.getString("WeasisWin.display")); //$NON-NLS-1$
@@ -163,6 +168,13 @@ public class WeasisWin {
 
     private final Frame frame;
     private final RootPaneContainer rootPaneContainer;
+    private DataExplorerViewFactory factory;
+
+    private Properties properties = new Properties();
+    private String userName = null;
+    private AblyRealtime ablyRealtime;
+    private Channel channel;
+    private JsonParser jsonParser;
 
     private CFocusListener selectionListener = new CFocusListener() {
 
@@ -232,6 +244,38 @@ public class WeasisWin {
                 frame.setIconImage(icon.getImage());
             }
         }
+    }
+
+    public void init() {
+        try {
+            initFeatures();
+        } catch (Exception e) {
+            LOGGER.error("", e);
+        }
+    }
+
+    public void setFactory(DataExplorerViewFactory factory) {
+        this.factory = factory;
+    }
+
+    protected void initFeatures() throws AblyException, IOException {
+        properties.load(Activator.class.getResourceAsStream(configs));
+        jsonParser = new JsonParser();
+        ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
+        channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
+        channel.subscribe(message -> {
+            try {
+                final String msgData = message.data.toString();
+                final Object data = jsonParser.parse(msgData);
+                if (data instanceof JsonObject) {
+                    final JsonObject json = (JsonObject) data;
+                    final String path = json.get("path").getAsString();
+                    ImportUtils.importDICOMLocal(((DicomExplorerFactory)factory).getModel(), path);
+                }
+            } catch (Exception e1) {
+                LOGGER.error("", e1);
+            }
+        });
     }
 
     public Frame getFrame() {
@@ -340,7 +384,7 @@ public class WeasisWin {
     }
 
     HashMap<MediaSeriesGroup, List<MediaSeries<?>>> getSeriesByEntry(TreeModel treeModel,
-        List<? extends MediaSeries<?>> series, TreeModelNode entry) {
+                                                                     List<? extends MediaSeries<?>> series, TreeModelNode entry) {
         HashMap<MediaSeriesGroup, List<MediaSeries<?>>> map = new HashMap<>();
         if (series != null && treeModel != null && entry != null) {
             for (MediaSeries<?> s : series) {
@@ -367,7 +411,7 @@ public class WeasisWin {
 
         if (screenBound == null && group != null) {
             boolean bestDefaultLayout =
-                LangUtil.getNULLtoTrue((Boolean) props.get(ViewerPluginBuilder.BEST_DEF_LAYOUT));
+                    LangUtil.getNULLtoTrue((Boolean) props.get(ViewerPluginBuilder.BEST_DEF_LAYOUT));
             synchronized (UIManager.VIEWER_PLUGINS) {
                 for (int i = UIManager.VIEWER_PLUGINS.size() - 1; i >= 0; i--) {
                     final ViewerPlugin p = UIManager.VIEWER_PLUGINS.get(i);
@@ -377,7 +421,7 @@ public class WeasisWin {
                         continue;
                     }
                     if (p instanceof ImageViewerPlugin && p.getName().equals(factory.getUIName())
-                        && group.equals(p.getGroupID())) {
+                            && group.equals(p.getGroupID())) {
                         ImageViewerPlugin viewer = (ImageViewerPlugin) p;
                         if (setInSelection && seriesList.size() == 1) {
                             viewer.addSeries(seriesList.get(0));
@@ -426,7 +470,7 @@ public class WeasisWin {
                 }
             }
             if (group == null && model instanceof TreeModel && !seriesList.isEmpty()
-                && model.getTreeModelNodeForNewPlugin() != null) {
+                    && model.getTreeModelNodeForNewPlugin() != null) {
                 TreeModel treeModel = (TreeModel) model;
                 MediaSeries s = seriesList.get(0);
                 group = treeModel.getParent(s, model.getTreeModelNodeForNewPlugin());
@@ -492,7 +536,7 @@ public class WeasisWin {
                     b.width -= (inset.left + inset.right);
                     b.height -= (inset.top + inset.bottom);
                     dockable.setDefaultLocation(ExtendedMode.EXTERNALIZED,
-                        CLocation.external(b.x, b.y, b.width - 150, b.height - 150));
+                            CLocation.external(b.x, b.y, b.width - 150, b.height - 150));
 
                     // GuiExecutor.instance().execute(new Runnable() {
                     //
@@ -535,7 +579,7 @@ public class WeasisWin {
 
             if (oldWin == null) {
                 dock.setLocation(CLocation.external(screenBound.x, screenBound.y, screenBound.width - 150,
-                    screenBound.height - 150));
+                        screenBound.height - 150));
                 plugin.showDockable();
                 GuiExecutor.instance().execute(() -> {
                     if (dock.isVisible()) {
@@ -657,7 +701,7 @@ public class WeasisWin {
             frame.setVisible(true);
 
             frame.setExtendedState((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
-                ? Frame.NORMAL : Frame.MAXIMIZED_BOTH);
+                    ? Frame.NORMAL : Frame.MAXIMIZED_BOTH);
         }
         LOGGER.info("End of loading the GUI..."); //$NON-NLS-1$
     }
@@ -707,7 +751,7 @@ public class WeasisWin {
         });
         helpMenuItem.add(websiteMenuItem);
         final JMenuItem aboutMenuItem =
-            new JMenuItem(String.format(Messages.getString("WeasisAboutBox.about"), AppProperties.WEASIS_NAME)); //$NON-NLS-1$
+                new JMenuItem(String.format(Messages.getString("WeasisAboutBox.about"), AppProperties.WEASIS_NAME)); //$NON-NLS-1$
         aboutMenuItem.addActionListener(e -> {
             ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(rootPaneContainer);
             WeasisAboutBox about = new WeasisAboutBox(getFrame());
@@ -720,7 +764,7 @@ public class WeasisWin {
                 new JMenuItem("Test ably"); //$NON-NLS-1$
         ablyTestMenuItem.addActionListener(e -> {
             ColorLayerUI layer = ColorLayerUI.createTransparentLayerUI(rootPaneContainer);
-            WeasisAblyBox ably = new  WeasisAblyBox(getFrame());
+            WeasisAblyBox ably = new WeasisAblyBox(getFrame());
             ColorLayerUI.showCenterScreen(ably, layer);
         });
         helpMenuItem.add(ablyTestMenuItem);
@@ -737,7 +781,7 @@ public class WeasisWin {
                 item.addActionListener(e -> {
                     if (e.getSource() instanceof JCheckBoxMenuItem) {
                         toolbarContainer.displayToolbar(bar.getComponent(),
-                            ((JCheckBoxMenuItem) e.getSource()).isSelected());
+                                ((JCheckBoxMenuItem) e.getSource()).isSelected());
                     }
                 });
                 toolBarMenu.add(item);
@@ -946,14 +990,14 @@ public class WeasisWin {
             ColorLayerUI.showCenterScreen(dialog, layer);
         };
         DefaultAction preferencesAction =
-            new DefaultAction(org.weasis.core.ui.Messages.getString("OpenPreferencesAction.title"), //$NON-NLS-1$
-                prefAction);
+                new DefaultAction(org.weasis.core.ui.Messages.getString("OpenPreferencesAction.title"), //$NON-NLS-1$
+                        prefAction);
         preferencesAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
         menuFile.add(new JMenuItem(preferencesAction));
 
         menuFile.add(new JSeparator());
         DefaultAction exitAction = new DefaultAction(Messages.getString("ExitAction.title"), //$NON-NLS-1$
-            e -> closeWindow());
+                e -> closeWindow());
         menuFile.add(new JMenuItem(exitAction));
     }
 
@@ -974,8 +1018,8 @@ public class WeasisWin {
                 return false;
             }
             if (support.isDataFlavorSupported(Series.sequenceDataFlavor)
-                || support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
-                || support.isDataFlavorSupported(UriListFlavor.flavor)) {
+                    || support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
+                    || support.isDataFlavorSupported(UriListFlavor.flavor)) {
                 return true;
             }
             return false;
@@ -1029,10 +1073,10 @@ public class WeasisWin {
                                 list.add(seq);
                                 ViewerPluginBuilder builder = new ViewerPluginBuilder(factory, list, model, null);
                                 openSeriesInViewerPlugin(builder,
-                                    ((TreeModel) model).getParent(seq, model.getTreeModelNodeForNewPlugin()));
+                                        ((TreeModel) model).getParent(seq, model.getTreeModelNodeForNewPlugin()));
                             } else {
                                 ViewerPluginBuilder.openSequenceInDefaultPlugin(seq,
-                                    model == null ? ViewerPluginBuilder.DefaultDataModel : model, true, true);
+                                        model == null ? ViewerPluginBuilder.DefaultDataModel : model, true, true);
                             }
                             break;
                         }
@@ -1080,7 +1124,7 @@ public class WeasisWin {
                     importInExplorer(explorers, dirs, dropLocation);
                 }
 
-                for (Iterator<Entry<Codec, List<File>>> it = codecs.entrySet().iterator(); it.hasNext();) {
+                for (Iterator<Entry<Codec, List<File>>> it = codecs.entrySet().iterator(); it.hasNext(); ) {
                     Entry<Codec, List<File>> entry = it.next();
                     final List<File> vals = entry.getValue();
 
@@ -1125,7 +1169,7 @@ public class WeasisWin {
                 for (final DataExplorerView dataExplorerView : exps) {
                     JMenuItem item = new JMenuItem(dataExplorerView.getUIName(), dataExplorerView.getIcon());
                     item.addActionListener(
-                        e -> dataExplorerView.importFiles(vals.toArray(new File[vals.size()]), true));
+                            e -> dataExplorerView.importFiles(vals.toArray(new File[vals.size()]), true));
                     popup.add(item);
                 }
 
@@ -1156,10 +1200,10 @@ public class WeasisWin {
     }
 
     public void info(String[] argv) throws IOException {
-        final String[] usage = { "Show information about Weasis", "Usage: weasis:info (-v | -a)", //$NON-NLS-1$ //$NON-NLS-2$
-            "  -v --version    show version", //$NON-NLS-1$
-            "  -a --all        show weasis specifications", //$NON-NLS-1$
-            "  -? --help       show help" }; //$NON-NLS-1$
+        final String[] usage = {"Show information about Weasis", "Usage: weasis:info (-v | -a)", //$NON-NLS-1$ //$NON-NLS-2$
+                "  -v --version    show version", //$NON-NLS-1$
+                "  -a --all        show weasis specifications", //$NON-NLS-1$
+                "  -? --help       show help"}; //$NON-NLS-1$
 
         Option opt = Options.compile(usage).parse(argv);
 
@@ -1174,7 +1218,7 @@ public class WeasisWin {
             out.println("  User: " + AppProperties.WEASIS_USER); //$NON-NLS-1$
             out.println("  OSGI native specs: " + System.getProperty("native.library.spec")); //$NON-NLS-1$ //$NON-NLS-2$
             out.format("  Operating system: %s %s %s", System.getProperty("os.name"), System.getProperty("os.version"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                System.getProperty("os.arch")); //$NON-NLS-1$
+                    System.getProperty("os.arch")); //$NON-NLS-1$
             out.println();
             out.println("  Java vendor: " + System.getProperty("java.vendor")); //$NON-NLS-1$ //$NON-NLS-2$
             out.println("  Java version: " + System.getProperty("java.version")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1185,10 +1229,10 @@ public class WeasisWin {
     }
 
     public void ui(String[] argv) throws IOException {
-        final String[] usage = { "Manage user interface", "Usage: weasis:ui (-q | -v)", //$NON-NLS-1$ //$NON-NLS-2$
-            "  -q --quit        shutdown Weasis", //$NON-NLS-1$
-            "  -v --visible     set window on top", //$NON-NLS-1$
-            "  -? --help        show help" }; //$NON-NLS-1$
+        final String[] usage = {"Manage user interface", "Usage: weasis:ui (-q | -v)", //$NON-NLS-1$ //$NON-NLS-2$
+                "  -q --quit        shutdown Weasis", //$NON-NLS-1$
+                "  -v --visible     set window on top", //$NON-NLS-1$
+                "  -? --help        show help"}; //$NON-NLS-1$
 
         Option opt = Options.compile(usage).parse(argv);
         if (opt.isSet("quit")) { //$NON-NLS-1$

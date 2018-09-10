@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,6 +33,7 @@ import org.weasis.core.api.gui.util.AbstractItemDialogPage;
 import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.util.StringUtil;
 import org.weasis.dicom.explorer.internal.Activator;
+import org.weasis.dicom.explorer.utils.ImportUtils;
 
 public class LocalImport extends AbstractItemDialogPage implements ImportDicom {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalImport.class);
@@ -180,28 +182,10 @@ public class LocalImport extends AbstractItemDialogPage implements ImportDicom {
 
     @Override
     public void importDICOM(DicomModel dicomModel, JProgressBar info) {
-        if (files == null) {
-            String path = getImportPath();
-            if (path != null) {
-                File file = new File(path);
-                if (file.canRead()) {
-                    files = new File[] { file };
-                } else {
-                    try {
-                        file = new File(new URI(path));
-                        if (file.canRead()) {
-                            files = new File[] { file };
-                        }
-                    } catch (Exception e) {
-                        LOGGER.error("Cannot import DICOM from {}", path); //$NON-NLS-1$
-                    }
-                }
-            }
-        }
-        if (files != null) {
-            LoadLocalDicom dicom = new LoadLocalDicom(files, chckbxSearch.isSelected(), dicomModel);
-            DicomModel.LOADING_EXECUTOR.execute(dicom);
-            files = null;
+        try {
+            ImportUtils.importDICOMLocal(dicomModel,  getImportPath());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }

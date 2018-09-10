@@ -37,7 +37,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.weasis.dicom</groupId>
-			<artifactId>weasis-dicom-codec</artifactId>
+			<artifactId>weasis-dicom-explorer</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

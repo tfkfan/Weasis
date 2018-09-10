@@ -51,6 +51,7 @@ import org.weasis.core.ui.editor.image.ViewerPlugin;
 public class WeasisWinListener implements MainWindowListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeasisWinListener.class);
     private volatile WeasisWin mainWindow;
+    private DataExplorerViewFactory factory;
 
     @Override
     public void setMainWindow(WeasisWin mainWindow) {
@@ -192,6 +193,7 @@ public class WeasisWinListener implements MainWindowListener {
         // Register default model
         ViewerPluginBuilder.DefaultDataModel.addPropertyChangeListener(this);
         mainWindow = BundlePreferences.getService(context.getBundleContext(), WeasisWin.class);
+        mainWindow.setFactory(factory);
     }
 
     @Deactivate
@@ -203,7 +205,7 @@ public class WeasisWinListener implements MainWindowListener {
 
     @Reference(service = DataExplorerViewFactory.class, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, unbind = "removeDataExplorer")
     void addDataExplorer(DataExplorerViewFactory factory) {
-
+        this.factory = factory;
         String className1 = BundleTools.SYSTEM_PREFERENCES.getProperty(factory.getClass().getName());
         if (!StringUtil.hasText(className1) || Boolean.valueOf(className1)) {
             GuiExecutor.instance().execute(() -> registerDataExplorer(factory.createDataExplorerView(null)));
