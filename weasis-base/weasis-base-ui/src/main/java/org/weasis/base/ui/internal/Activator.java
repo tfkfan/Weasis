@@ -39,12 +39,6 @@ import org.weasis.core.ui.pref.GeneralSetting;
 
 public class Activator implements BundleActivator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
-    private final static String configs = "/config.properties";
-    private Properties properties = new Properties();
-    private String userName = null;
-    private AblyRealtime ablyRealtime;
-    private Channel channel;
-    private JsonParser jsonParser;
 
     @Override
     public void start(final BundleContext bundleContext) throws Exception {
@@ -76,11 +70,7 @@ public class Activator implements BundleActivator {
             try {
                 mainWindow.createMainPanel();
                 mainWindow.showWindow();
-                try {
-                    initFeatures();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
+                mainWindow.init();
             } catch (Exception ex) {
                 // It is better to exit than to let run a zombie process
                 LOGGER.error("Cannot start GUI", ex);//$NON-NLS-1$
@@ -89,28 +79,6 @@ public class Activator implements BundleActivator {
             MainWindowListener listener = BundlePreferences.getService(bundleContext, MainWindowListener.class);
             if (listener != null) {
                 listener.setMainWindow(mainWindow);
-            }
-        });
-    }
-
-    protected void initFeatures() throws AblyException, IOException {
-        properties.load(Activator.class.getResourceAsStream(configs));
-        jsonParser = new JsonParser();
-        ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
-        channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
-        channel.subscribe(message -> {
-            try {
-                final String msgData = message.data.toString();
-                final Object data = jsonParser.parse(msgData);
-                if (data instanceof JsonObject) {
-                    final JsonObject json = (JsonObject) data;
-                    final String path = json.get("path").getAsString().replace("\\", "\\\\");
-                    final String command = String.format("dicom:get -l %s", path);
-
-                }
-            } catch (Exception e1) {
-                //win.setTitle(e1.getMessage());
-               // JOptionPane.showMessageDialog(null, e1.getMessage());
             }
         });
     }

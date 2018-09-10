@@ -36,6 +36,10 @@ public class DicomExplorerFactory implements DataExplorerViewFactory {
         return explorer;
     }
 
+    public DicomModel getModel(){
+        return model;
+    }
+
     // ================================================================================
     // OSGI service implementation
     // ================================================================================
