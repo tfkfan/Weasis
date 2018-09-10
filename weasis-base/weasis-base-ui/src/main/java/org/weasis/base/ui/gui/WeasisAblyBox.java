@@ -52,7 +52,6 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private String userName = null;
     private AblyRealtime ablyRealtime;
     private Channel channel;
-    private CustomTelnetExecutor telnet;
     private JsonParser jsonParser;
 
     public WeasisAblyBox(Frame owner) {
@@ -140,7 +139,6 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
         channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
         channel.subscribe(this);
 
-        telnet = new CustomTelnetExecutor(properties.getProperty("telnet_host"), Integer.valueOf(properties.getProperty("telnet_port")));
         jsonParser = new JsonParser();
     }
 
@@ -154,9 +152,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
                 final String path = json.get("path").getAsString().replace("\\", "\\\\");
                 final String command = String.format("dicom:get -sl %", path);
                 jTextArea.append(String.format("\n %s : sending command from json: %s", message.name, command));
-                telnet.connect();
-                telnet.sendCommand(command);
-                telnet.disconnect();
+
             } else if (data instanceof JsonPrimitive) {
                 JsonPrimitive primitive = (JsonPrimitive) data;
                 jTextArea.append(String.format("\n %s : %s", message.name, primitive.getAsString()));

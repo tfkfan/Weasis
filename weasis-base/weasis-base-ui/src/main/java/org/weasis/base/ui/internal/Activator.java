@@ -29,7 +29,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.weasis.base.ui.gui.CustomTelnetExecutor;
 import org.weasis.base.ui.gui.WeasisWin;
 import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.service.BundlePreferences;
@@ -45,7 +44,6 @@ public class Activator implements BundleActivator {
     private String userName = null;
     private AblyRealtime ablyRealtime;
     private Channel channel;
-    private CustomTelnetExecutor telnet;
     private JsonParser jsonParser;
 
     @Override
@@ -97,7 +95,6 @@ public class Activator implements BundleActivator {
 
     protected void initFeatures() throws AblyException, IOException {
         properties.load(Activator.class.getResourceAsStream(configs));
-        telnet = new CustomTelnetExecutor(properties.getProperty("telnet_host"), Integer.valueOf(properties.getProperty("telnet_port")));
         jsonParser = new JsonParser();
         ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
         channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
@@ -110,9 +107,6 @@ public class Activator implements BundleActivator {
                     final String path = json.get("path").getAsString().replace("\\", "\\\\");
                     final String command = String.format("dicom:get -l %s", path);
 
-                    telnet.connect();
-                    telnet.sendCommand(command);
-                    telnet.disconnect();
                 }
             } catch (Exception e1) {
                 //win.setTitle(e1.getMessage());

@@ -36,6 +36,12 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>org.weasis.dicom</groupId>
+			<artifactId>weasis-dicom-codec</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.gogo.command</artifactId>
 		</dependency>
