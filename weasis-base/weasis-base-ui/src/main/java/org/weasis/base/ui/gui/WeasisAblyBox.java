@@ -13,11 +13,11 @@ package org.weasis.base.ui.gui;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
 import io.ably.lib.types.Message;
 import org.weasis.base.ui.Messages;
+import org.weasis.base.networking.AblyService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -50,8 +50,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
     private Properties properties = new Properties();
     private String userName = null;
-    private AblyRealtime ablyRealtime;
-    private Channel channel;
+    private AblyService ablyService;
     private JsonParser jsonParser;
 
     public WeasisAblyBox(Frame owner) {
@@ -135,9 +134,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     }
 
     protected void initFeatures() throws AblyException, IOException {
-        ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
-        channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
-        channel.subscribe(this);
+        ablyService = new AblyService(properties.getProperty("ably_api_key"), properties.getProperty("ably_channel"),this);
 
         jsonParser = new JsonParser();
     }
@@ -177,7 +174,7 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
 
     public void sendMessage() throws AblyException {
         if (userName != null) {
-            channel.publish(userName, jTextInput.getText());
+            ablyService.publish(userName, jTextInput.getText());
             jTextInput.setText("");
         }
     }

@@ -411,20 +411,24 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
             public void itemStateChanged(Object object) {
                 if (object instanceof GridBagLayoutModel && selectedView2dContainer != null) {
                     // change layout
-                    clearAllPropertyChangeListeners();
-                    ViewCanvas<E> view = selectedView2dContainer.getSelectedImagePane();
-                    selectedView2dContainer.setLayoutModel((GridBagLayoutModel) object);
-                    if (!selectedView2dContainer.isContainingView(view)) {
-                        view = selectedView2dContainer.getSelectedImagePane();
-                    }
-                    selectedView2dContainer.setSelectedImagePane(view);
-                    ActionState synch = getAction(ActionW.SYNCH);
-                    if (synch instanceof ComboItemListener) {
-                        selectedView2dContainer.setSynchView((SynchView) ((ComboItemListener) synch).getSelectedItem());
-                    }
+                   updateLayoutModel((GridBagLayoutModel) object);
                 }
             }
         };
+    }
+
+    public void updateLayoutModel(GridBagLayoutModel model){
+        clearAllPropertyChangeListeners();
+        ViewCanvas<E> view = selectedView2dContainer.getSelectedImagePane();
+        selectedView2dContainer.setLayoutModel(model);
+        if (!selectedView2dContainer.isContainingView(view)) {
+            view = selectedView2dContainer.getSelectedImagePane();
+        }
+        selectedView2dContainer.setSelectedImagePane(view);
+        ActionState synch = getAction(ActionW.SYNCH);
+        if (synch instanceof ComboItemListener) {
+            selectedView2dContainer.setSynchView((SynchView) ((ComboItemListener) synch).getSelectedItem());
+        }
     }
 
     protected ComboItemListener<SynchView> newSynchAction(SynchView[] synchViewList) {
