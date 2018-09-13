@@ -65,15 +65,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.WindowConstants;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import io.ably.lib.realtime.AblyRealtime;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
+import io.ably.lib.types.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.base.ui.Messages;
 import org.weasis.base.ui.internal.Activator;
+import org.weasis.base.viewer2d.EventManager;
 import org.weasis.core.api.command.Option;
 import org.weasis.core.api.command.Options;
 import org.weasis.core.api.explorer.DataExplorerView;
@@ -94,6 +95,8 @@ import org.weasis.core.api.media.data.MediaSeries;
 import org.weasis.core.api.media.data.MediaSeriesGroup;
 import org.weasis.core.api.media.data.Series;
 import org.weasis.core.api.media.data.TagW;
+import org.weasis.base.networking.AblyService;
+import org.weasis.base.networking.dto.MessageDTO;
 import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.api.util.LangUtil;
 import org.weasis.core.api.util.ResourceUtil;
@@ -143,7 +146,7 @@ import bibliothek.util.Colors;
 import org.weasis.dicom.explorer.DicomExplorerFactory;
 import org.weasis.dicom.explorer.utils.ImportUtils;
 
-public class WeasisWin {
+public class WeasisWin implements Channel.MessageListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeasisWin.class);
     private final static String configs = "/config.properties";
 
@@ -171,10 +174,9 @@ public class WeasisWin {
     private DataExplorerViewFactory factory;
 
     private Properties properties = new Properties();
-    private String userName = null;
-    private AblyRealtime ablyRealtime;
-    private Channel channel;
-    private JsonParser jsonParser;
+    private AblyService ablyService;
+    private Gson gson;
+    private EventManager managerInstance;
 
     private CFocusListener selectionListener = new CFocusListener() {
 
@@ -258,24 +260,32 @@ public class WeasisWin {
         this.factory = factory;
     }
 
+    @Override
+    public void onMessage(Message message) {
+        try {
+            final String msgData = message.data.toString();
+
+            MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
+            ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
+
+            switch (dto.getLayout()) {
+                case "2x2 Views":
+                    managerInstance.updateLayoutModel(ImageViewerPlugin.VIEWS_2x2);
+                    break;
+            }
+
+        } catch (Exception e1) {
+            LOGGER.error("", e1);
+        }
+    }
+
     protected void initFeatures() throws AblyException, IOException {
         properties.load(Activator.class.getResourceAsStream(configs));
-        jsonParser = new JsonParser();
-        ablyRealtime = new AblyRealtime(properties.getProperty("ably_api_key"));
-        channel = ablyRealtime.channels.get(properties.getProperty("ably_channel"));
-        channel.subscribe(message -> {
-            try {
-                final String msgData = message.data.toString();
-                final Object data = jsonParser.parse(msgData);
-                if (data instanceof JsonObject) {
-                    final JsonObject json = (JsonObject) data;
-                    final String path = json.get("path").getAsString();
-                    ImportUtils.importDICOMLocal(((DicomExplorerFactory)factory).getModel(), path);
-                }
-            } catch (Exception e1) {
-                LOGGER.error("", e1);
-            }
-        });
+        managerInstance = EventManager.getInstance();
+        ablyService = new AblyService(properties.getProperty("ably_api_key"), properties.getProperty("ably_channel"), this);
+        gson = new GsonBuilder()
+                .setLenient()
+                .create();
     }
 
     public Frame getFrame() {
