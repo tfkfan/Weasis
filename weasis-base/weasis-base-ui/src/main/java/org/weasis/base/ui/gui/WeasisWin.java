@@ -268,7 +268,7 @@ public class WeasisWin implements Channel.MessageListener {
     public void onMessage(Message message) {
         try {
             final String msgData = message.data.toString();
-            MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
+            final MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
 
             if (dto.getPath() == null)
                 throw new NullPointerException("[JSON] Path is null");
