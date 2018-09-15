@@ -51,7 +51,6 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     private Properties properties = new Properties();
     private String userName = null;
     private AblyService ablyService;
-    private JsonParser jsonParser;
 
     public WeasisAblyBox(Frame owner) {
         super(owner, Messages.getString("WeasisAblyBox.title"), true); //$NON-NLS-1$
@@ -134,28 +133,18 @@ public class WeasisAblyBox extends JDialog implements ActionListener, Channel.Me
     }
 
     protected void initFeatures() throws AblyException, IOException {
-        ablyService = new AblyService(properties.getProperty("ably_api_key"), properties.getProperty("ably_channel"),this);
-
-        jsonParser = new JsonParser();
+        ablyService = new AblyService(properties.getProperty("ably_api_key"), properties.getProperty("ably_channel"), this);
     }
 
     @Override
     public void onMessage(Message message) {
         try {
             final String msgData = message.data.toString();
-            final Object data = jsonParser.parse(msgData);
-            if (data instanceof JsonObject) {
-                final JsonObject json = (JsonObject) data;
-                final String path = json.get("path").getAsString().replace("\\", "\\\\");
-                final String command = String.format("dicom:get -sl %", path);
-                jTextArea.append(String.format("\n %s : sending command from json: %s", message.name, command));
 
-            } else if (data instanceof JsonPrimitive) {
-                JsonPrimitive primitive = (JsonPrimitive) data;
-                jTextArea.append(String.format("\n %s : %s", message.name, primitive.getAsString()));
-            }
+            jTextArea.append(String.format("\n %s : %s", message.name, msgData));
+
         } catch (Exception e1) {
-           // jTextArea.append(e1.getMessage());
+            // jTextArea.append(e1.getMessage());
         }
     }
 
