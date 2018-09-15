@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 import javax.management.InstanceNotFoundException;
@@ -74,7 +75,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.weasis.base.ui.Messages;
 import org.weasis.base.ui.internal.Activator;
-import org.weasis.base.viewer2d.EventManager;
 import org.weasis.core.api.command.Option;
 import org.weasis.core.api.command.Options;
 import org.weasis.core.api.explorer.DataExplorerView;
@@ -88,6 +88,7 @@ import org.weasis.core.api.gui.util.DynamicMenu;
 import org.weasis.core.api.gui.util.GuiExecutor;
 import org.weasis.core.api.gui.util.JMVUtils;
 import org.weasis.core.api.gui.util.WinUtil;
+import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.api.media.data.Codec;
 import org.weasis.core.api.media.data.MediaElement;
 import org.weasis.core.api.media.data.MediaReader;
@@ -145,6 +146,7 @@ import bibliothek.gui.dock.util.laf.LookAndFeelColors;
 import bibliothek.util.Colors;
 import org.weasis.dicom.explorer.DicomExplorerFactory;
 import org.weasis.dicom.explorer.utils.ImportUtils;
+import org.weasis.dicom.viewer2d.View2dContainer;
 
 public class WeasisWin implements Channel.MessageListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeasisWin.class);
@@ -176,7 +178,9 @@ public class WeasisWin implements Channel.MessageListener {
     private Properties properties = new Properties();
     private AblyService ablyService;
     private Gson gson;
-    private EventManager managerInstance;
+    private View2dContainer view2dContainer;
+    private final Hashtable<String, GridBagLayoutModel> models = new Hashtable<>();
+    private final ConcurrentLinkedQueue<GridBagLayoutModel> queue = new ConcurrentLinkedQueue<>();
 
     private CFocusListener selectionListener = new CFocusListener() {
 
@@ -264,16 +268,23 @@ public class WeasisWin implements Channel.MessageListener {
     public void onMessage(Message message) {
         try {
             final String msgData = message.data.toString();
-
             MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
+
+            if (dto.getPath() == null)
+                throw new NullPointerException("[JSON] Path is null");
+
             ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
 
-            switch (dto.getLayout()) {
-                case "2x2 Views":
-                    managerInstance.updateLayoutModel(ImageViewerPlugin.VIEWS_2x2);
-                    break;
-            }
+            if (dto.getLayout() == null)
+                throw new NullPointerException("[JSON] Layout is null");
 
+            final GridBagLayoutModel model = models.get(dto.getLayout());
+            if (model == null) throw new NullPointerException("GridBagLayoutModel is null");
+
+            if (view2dContainer == null)
+                queue.add(model);
+            else
+                view2dContainer.getEventManager().updateLayoutModel(model);
         } catch (Exception e1) {
             LOGGER.error("", e1);
         }
@@ -281,11 +292,12 @@ public class WeasisWin implements Channel.MessageListener {
 
     protected void initFeatures() throws AblyException, IOException {
         properties.load(Activator.class.getResourceAsStream(configs));
-        managerInstance = EventManager.getInstance();
         ablyService = new AblyService(properties.getProperty("ably_api_key"), properties.getProperty("ably_channel"), this);
         gson = new GsonBuilder()
                 .setLenient()
                 .create();
+
+        models.put("2x2 Views", ImageViewerPlugin.VIEWS_2x2);
     }
 
     public Frame getFrame() {
@@ -519,6 +531,11 @@ public class WeasisWin implements Channel.MessageListener {
                 viewer.close();
                 viewer.handleFocusAfterClosing();
             }
+        }
+
+        if (seriesViewer instanceof View2dContainer && !queue.isEmpty()) {
+            view2dContainer = (View2dContainer) seriesViewer;
+            view2dContainer.getEventManager().updateLayoutModel(queue.peek());
         }
     }
 

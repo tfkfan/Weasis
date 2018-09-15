@@ -69,15 +69,7 @@ import org.weasis.core.ui.docking.DockableTool;
 import org.weasis.core.ui.docking.PluginTool;
 import org.weasis.core.ui.docking.UIManager;
 import org.weasis.core.ui.editor.SeriesViewerListener;
-import org.weasis.core.ui.editor.image.DefaultView2d;
-import org.weasis.core.ui.editor.image.ImageViewerPlugin;
-import org.weasis.core.ui.editor.image.MeasureToolBar;
-import org.weasis.core.ui.editor.image.RotationToolBar;
-import org.weasis.core.ui.editor.image.SynchData;
-import org.weasis.core.ui.editor.image.SynchView;
-import org.weasis.core.ui.editor.image.ViewCanvas;
-import org.weasis.core.ui.editor.image.ViewerToolBar;
-import org.weasis.core.ui.editor.image.ZoomToolBar;
+import org.weasis.core.ui.editor.image.*;
 import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.editor.image.dockable.MiniTool;
 import org.weasis.core.ui.util.ColorLayerUI;
@@ -250,6 +242,10 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
                 InsertableUtil.applyPreferences(TOOLS, prefs, bundleName, componentName, Type.TOOL);
             }
         }
+    }
+
+    public ImageViewerEventManager<DicomImageElement> getEventManager(){
+        return eventManager;
     }
 
     @Override
