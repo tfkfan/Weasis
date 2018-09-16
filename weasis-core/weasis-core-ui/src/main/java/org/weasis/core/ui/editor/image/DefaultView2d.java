@@ -77,6 +77,7 @@ import org.weasis.core.api.gui.util.Filter;
 import org.weasis.core.api.gui.util.MathUtil;
 import org.weasis.core.api.gui.util.MouseActionAdapter;
 import org.weasis.core.api.gui.util.SliderChangeListener;
+import org.weasis.core.api.gui.util.ToggleButtonListener;
 import org.weasis.core.api.gui.util.WinUtil;
 import org.weasis.core.api.image.AffineTransformOp;
 import org.weasis.core.api.image.FilterOp;
@@ -739,8 +740,8 @@ public abstract class DefaultView2d<E extends ImageElement> extends GraphicsPane
         // Only apply when the panel size is not zero.
         if (getWidth() != 0 && getHeight() != 0) {
             getViewModel().setModelOffset(modelOffsetX, modelOffsetY);
-            Optional.ofNullable(panner).ifPresent(p -> p.updateImageSize());
-            Optional.ofNullable(lens).ifPresent(l -> l.updateZoom());
+            Optional.ofNullable(panner).ifPresent(Panner<E>::updateImageSize);
+            Optional.ofNullable(lens).ifPresent(ZoomWin<E>::updateZoom);
             updateAffineTransform();
         }
     }
@@ -874,9 +875,6 @@ public abstract class DefaultView2d<E extends ImageElement> extends GraphicsPane
     @Override
     public void drawLayers(Graphics2D g2d, AffineTransform transform, AffineTransform inverseTransform) {
         if ((Boolean) actionsInView.get(ActionW.DRAWINGS.cmd())) {
-            //TODO set clip bound
-//            double scale = viewModel.getViewScale();
-//            Rectangle2D b = new Rectangle2D.Double(viewModel.getModelOffsetX() * scale , viewModel.getModelOffsetY() * scale, getWidth(), getHeight());
             graphicManager.draw(g2d, transform, inverseTransform, null);
         }
     }
@@ -1279,6 +1277,20 @@ public abstract class DefaultView2d<E extends ImageElement> extends GraphicsPane
         } else if (e.getModifiers() == 0 && (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_I)) {
             eventManager.fireSeriesViewerListeners(
                 new SeriesViewerEvent(eventManager.getSelectedView2dContainer(), null, null, EVENT.TOOGLE_INFO));
+        } else if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_L) {
+            // Counterclockwise
+            eventManager.getAction(ActionW.ROTATION, SliderChangeListener.class)
+                .ifPresent(a -> a.setSliderValue((a.getSliderValue() + 270) % 360));
+        } else if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_R) {
+            // Clockwise
+            eventManager.getAction(ActionW.ROTATION, SliderChangeListener.class)
+                .ifPresent(a -> a.setSliderValue((a.getSliderValue() + 90) % 360));
+        } else if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_F) {
+            // Flip horizontal
+            ActionState flipAction = eventManager.getAction(ActionW.FLIP);
+            if (flipAction instanceof ToggleButtonListener) {
+                ((ToggleButtonListener) flipAction).setSelected(!((ToggleButtonListener) flipAction).isSelected());
+            }
         } else {
             Optional<ActionW> action = eventManager.getLeftMouseActionFromkeyEvent(e.getKeyCode(), e.getModifiers());
             if (action.isPresent()) {
@@ -1431,7 +1443,7 @@ public abstract class DefaultView2d<E extends ImageElement> extends GraphicsPane
         List<Action> list = new ArrayList<>();
 
         AbstractAction exportToClipboardAction =
-            new DefaultAction(Messages.getString("DefaultView2d.clipboard"), event -> { //$NON-NLS-1$
+            new DefaultAction(Messages.getString("DefaultView2d.clipboard"), new ImageIcon(DefaultView2d.class.getResource("/icon/16x16/camera.png")), event -> { //$NON-NLS-1$ //$NON-NLS-2$
                 final ViewTransferHandler imageTransferHandler = new ViewTransferHandler();
                 imageTransferHandler.exportToClipboard(DefaultView2d.this,
                     Toolkit.getDefaultToolkit().getSystemClipboard(), TransferHandler.COPY);
@@ -1450,9 +1462,6 @@ public abstract class DefaultView2d<E extends ImageElement> extends GraphicsPane
 
         return list;
     }
-
-    @Override
-    public abstract void enableMouseAndKeyListener(MouseActions mouseActions);
 
     public static final AffineTransform getAffineTransform(MouseEvent mouseevent) {
         if (mouseevent != null && mouseevent.getSource() instanceof Image2DViewer) {

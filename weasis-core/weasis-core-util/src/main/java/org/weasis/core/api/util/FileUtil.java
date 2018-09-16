@@ -138,12 +138,16 @@ public final class FileUtil {
     }
 
     public static void getAllFilesInDirectory(File directory, List<File> files) {
+        getAllFilesInDirectory(directory, files, true);
+    }
+    
+    public static void getAllFilesInDirectory(File directory, List<File> files, boolean recursive) {
         File[] fList = directory.listFiles();
         for (File f : fList) {
             if (f.isFile()) {
                 files.add(f);
-            } else if (f.isDirectory()) {
-                getAllFilesInDirectory(f, files);
+            } else if (recursive && f.isDirectory()) {
+                getAllFilesInDirectory(f, files, recursive);
             }
         }
     }
@@ -358,7 +362,7 @@ public final class FileUtil {
         } catch (InterruptedIOException e) {
             FileUtil.delete(outFile);
             // Specific for SeriesProgressMonitor
-            LOGGER.error("Interruption when writing image", e.getMessage()); //$NON-NLS-1$
+            LOGGER.error("Interruption when writing image {}", e.getMessage()); //$NON-NLS-1$
             return e.bytesTransferred;
         } catch (IOException e) {
             FileUtil.delete(outFile);

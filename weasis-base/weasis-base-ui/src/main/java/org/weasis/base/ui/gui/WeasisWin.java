@@ -319,6 +319,10 @@ public class WeasisWin implements Channel.MessageListener {
         return rootPaneContainer;
     }
 
+    public ToolBarContainer getToolbarContainer() {
+        return toolbarContainer;
+    }
+
     public boolean closeWindow() {
         if (busy) {
             // TODO add a message, Please wait or kill
@@ -656,7 +660,7 @@ public class WeasisWin implements Channel.MessageListener {
 
     public synchronized void setSelectedPlugin(ViewerPlugin plugin) {
         if (plugin == null) {
-            toolbarContainer.registerToolBar(null);
+            toolbarContainer.registerToolBar(UIManager.EXPLORER_PLUGIN_TOOLBARS);
             List<DockableTool> oldTool = selectedPlugin == null ? null : selectedPlugin.getToolPanel();
             if (oldTool != null) {
                 for (DockableTool p : oldTool) {
@@ -757,36 +761,18 @@ public class WeasisWin implements Channel.MessageListener {
         final String helpURL = System.getProperty("weasis.help.url"); //$NON-NLS-1$
         if (helpURL != null) {
             final JMenuItem helpContentMenuItem = new JMenuItem(Messages.getString("WeasisWin.guide")); //$NON-NLS-1$
-            helpContentMenuItem.addActionListener(e -> {
-                try {
-                    JMVUtils.openInDefaultBrowser(helpContentMenuItem, new URL(helpURL));
-                } catch (MalformedURLException e1) {
-                    LOGGER.error("Open URL in default browser", e); //$NON-NLS-1$
-                }
-            });
+            helpContentMenuItem.addActionListener(e -> openBrowser(helpContentMenuItem, helpURL));
             helpMenuItem.add(helpContentMenuItem);
         }
 
         final JMenuItem webMenuItem = new JMenuItem(Messages.getString("WeasisWin.shortcuts")); //$NON-NLS-1$
-        webMenuItem.addActionListener(e -> {
-            try {
-                URL url = new URL(BundleTools.SYSTEM_PREFERENCES.getProperty("weasis.help.shortcuts")); //$NON-NLS-1$
-                JMVUtils.openInDefaultBrowser(webMenuItem, url);
-            } catch (MalformedURLException e1) {
-                LOGGER.error("Open URL in default browser", e); //$NON-NLS-1$
-            }
-        });
+        webMenuItem.addActionListener(
+            e -> openBrowser(webMenuItem, BundleTools.SYSTEM_PREFERENCES.getProperty("weasis.help.shortcuts"))); //$NON-NLS-1$
         helpMenuItem.add(webMenuItem);
 
         final JMenuItem websiteMenuItem = new JMenuItem(Messages.getString("WeasisWin.online")); //$NON-NLS-1$
-        websiteMenuItem.addActionListener(e -> {
-            try {
-                URL url = new URL(BundleTools.SYSTEM_PREFERENCES.getProperty("weasis.help.online")); //$NON-NLS-1$
-                JMVUtils.openInDefaultBrowser(websiteMenuItem, url);
-            } catch (MalformedURLException e1) {
-                LOGGER.error("Open URL in default browser", e); //$NON-NLS-1$
-            }
-        });
+        websiteMenuItem.addActionListener(
+            e -> openBrowser(websiteMenuItem, BundleTools.SYSTEM_PREFERENCES.getProperty("weasis.help.online"))); //$NON-NLS-1$
         helpMenuItem.add(websiteMenuItem);
         final JMenuItem aboutMenuItem =
                 new JMenuItem(String.format(Messages.getString("WeasisAboutBox.about"), AppProperties.WEASIS_NAME)); //$NON-NLS-1$
@@ -809,6 +795,15 @@ public class WeasisWin implements Channel.MessageListener {
 
         menuBar.add(helpMenuItem);
         return menuBar;
+    }
+
+    private void openBrowser(Component c, String ref) {
+        try {
+            URL url = new URL(ref);
+            JMVUtils.openInDefaultBrowser(c, url);
+        } catch (MalformedURLException e) {
+            LOGGER.error("Open URL in default browser", e); //$NON-NLS-1$
+        }
     }
 
     private void buildToolBarSubMenu(final JMenu toolBarMenu) {
@@ -1028,9 +1023,10 @@ public class WeasisWin implements Channel.MessageListener {
             ColorLayerUI.showCenterScreen(dialog, layer);
         };
         DefaultAction preferencesAction =
-                new DefaultAction(org.weasis.core.ui.Messages.getString("OpenPreferencesAction.title"), //$NON-NLS-1$
-                        prefAction);
-        preferencesAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+            new DefaultAction(org.weasis.core.ui.Messages.getString("OpenPreferencesAction.title"), //$NON-NLS-1$
+                prefAction);
+        preferencesAction.putValue(Action.ACCELERATOR_KEY,
+            KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_DOWN_MASK));
         menuFile.add(new JMenuItem(preferencesAction));
 
         menuFile.add(new JSeparator());
