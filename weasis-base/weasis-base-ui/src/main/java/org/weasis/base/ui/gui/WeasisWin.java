@@ -110,6 +110,7 @@ import org.weasis.core.ui.editor.SeriesViewer;
 import org.weasis.core.ui.editor.SeriesViewerFactory;
 import org.weasis.core.ui.editor.ViewerPluginBuilder;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
+import org.weasis.core.ui.editor.image.SynchView;
 import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.pref.Monitor;
@@ -179,8 +180,10 @@ public class WeasisWin implements Channel.MessageListener {
     private AblyService ablyService;
     private Gson gson;
     private View2dContainer view2dContainer;
-    private final Hashtable<String, GridBagLayoutModel> models = new Hashtable<>();
-    private final ConcurrentLinkedQueue<GridBagLayoutModel> queue = new ConcurrentLinkedQueue<>();
+    private final Hashtable<String, GridBagLayoutModel> layoutModels = new Hashtable<>();
+    private final Hashtable<String, SynchView> synchViews = new Hashtable<>();
+    private final ConcurrentLinkedQueue<GridBagLayoutModel> layoutsQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<SynchView> synchViewsQueue = new ConcurrentLinkedQueue<>();
 
     private CFocusListener selectionListener = new CFocusListener() {
 
@@ -276,15 +279,26 @@ public class WeasisWin implements Channel.MessageListener {
             ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
 
             if (dto.getLayout() == null)
-                throw new NullPointerException("[JSON] Layout is null");
+                LOGGER.debug("[JSON] Layout is null");
 
-            final GridBagLayoutModel model = models.get(dto.getLayout());
-            if (model == null) throw new NullPointerException("GridBagLayoutModel is null");
+            final String layout = dto.getLayout();
+            final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
+            if (model != null) {
+                if (view2dContainer == null)
+                    layoutsQueue.add(model);
+                else
+                    view2dContainer.getEventManager().updateLayoutModel(model);
+            } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
 
-            if (view2dContainer == null)
-                queue.add(model);
-            else
-                view2dContainer.getEventManager().updateLayoutModel(model);
+
+            final String synchronise = dto.getSynchronise();
+            final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
+            if (synchView != null) {
+                if (view2dContainer == null)
+                    synchViewsQueue.add(synchView);
+                else
+                    view2dContainer.getEventManager().updateSynchView(synchView);
+            } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
         } catch (Exception e1) {
             LOGGER.error("", e1);
         }
@@ -297,18 +311,22 @@ public class WeasisWin implements Channel.MessageListener {
                 .setLenient()
                 .create();
 
-        models.put("1x1 Views", View2dContainer.VIEWS_1x1);
-        models.put("1x2 Views", View2dContainer.VIEWS_1x2);
-        models.put("2x1 Views", View2dContainer.VIEWS_2x1);
-        models.put("DICOM Information", View2dContainer.VIEWS_2x1_r1xc2_dump);
-        models.put("3 views (col 2,1)", View2dContainer.VIEWS_2x2_f2);
-        models.put("3 views (row 1,2)", View2dContainer.VIEWS_2_f1x2);
-        models.put("1x3 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 3, ImageViewerPlugin.view2dClass.getName()));
-        models.put("1x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 4, ImageViewerPlugin.view2dClass.getName()));
-        models.put("2x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 4, ImageViewerPlugin.view2dClass.getName()));
-        models.put("2x6 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 6, ImageViewerPlugin.view2dClass.getName()));
-        models.put("2x8 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 8, ImageViewerPlugin.view2dClass.getName()));
-        models.put("2x2 Views", View2dContainer.VIEWS_2x2);
+        layoutModels.put("1x1 Views", View2dContainer.VIEWS_1x1);
+        layoutModels.put("1x2 Views", View2dContainer.VIEWS_1x2);
+        layoutModels.put("2x1 Views", View2dContainer.VIEWS_2x1);
+        layoutModels.put("DICOM Information", View2dContainer.VIEWS_2x1_r1xc2_dump);
+        layoutModels.put("3 views (col 2,1)", View2dContainer.VIEWS_2x2_f2);
+        layoutModels.put("3 views (row 1,2)", View2dContainer.VIEWS_2_f1x2);
+        layoutModels.put("1x3 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 3, ImageViewerPlugin.view2dClass.getName()));
+        layoutModels.put("1x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 4, ImageViewerPlugin.view2dClass.getName()));
+        layoutModels.put("2x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 4, ImageViewerPlugin.view2dClass.getName()));
+        layoutModels.put("2x6 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 6, ImageViewerPlugin.view2dClass.getName()));
+        layoutModels.put("2x8 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 8, ImageViewerPlugin.view2dClass.getName()));
+        layoutModels.put("2x2 Views", View2dContainer.VIEWS_2x2);
+
+        synchViews.put("None", SynchView.NONE);
+        synchViews.put("Default Stack", SynchView.DEFAULT_STACK);
+        synchViews.put("Default Tile", SynchView.DEFAULT_TILE);
     }
 
     public Frame getFrame() {
@@ -548,9 +566,12 @@ public class WeasisWin implements Channel.MessageListener {
             }
         }
 
-        if (seriesViewer instanceof View2dContainer && !queue.isEmpty()) {
+        if (seriesViewer instanceof View2dContainer) {
             view2dContainer = (View2dContainer) seriesViewer;
-            view2dContainer.getEventManager().updateLayoutModel(queue.peek());
+            if (!layoutsQueue.isEmpty())
+                view2dContainer.getEventManager().updateLayoutModel(layoutsQueue.poll());
+            if (!synchViewsQueue.isEmpty())
+                view2dContainer.getEventManager().updateSynchView(synchViewsQueue.poll());
         }
     }
 
