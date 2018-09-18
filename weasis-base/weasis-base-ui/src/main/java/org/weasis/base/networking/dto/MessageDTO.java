@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class MessageDTO implements Serializable {
     private String path;
     private String layout;
+    private String synchronise;
 
     public MessageDTO(){
 
@@ -24,5 +25,13 @@ public class MessageDTO implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getSynchronise() {
+        return synchronise;
+    }
+
+    public void setSynchronise(String synchronise) {
+        this.synchronise = synchronise;
     }
 }
