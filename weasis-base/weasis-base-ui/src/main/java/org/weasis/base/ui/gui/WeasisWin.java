@@ -269,40 +269,36 @@ public class WeasisWin implements Channel.MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        try {
-            final String msgData = message.data.toString();
-            final MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
+        SwingUtilities.invokeLater(() -> {
+            try {
+                final String msgData = message.data.toString();
+                final MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
 
-            SwingUtilities.invokeLater(() -> {
-                try {
-                    if (dto.getPath() == null)
-                        throw new NullPointerException("[JSON] Path is null");
+                if (dto.getPath() == null)
+                    throw new NullPointerException("[JSON] Path is null");
 
-                    ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
+                ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
 
-                    if (dto.getLayout() == null)
-                        LOGGER.debug("[JSON] Layout is null");
+                if (dto.getLayout() == null)
+                    LOGGER.debug("[JSON] Layout is null");
 
-                    final String layout = dto.getLayout();
-                    final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
-                    if (model != null) {
-                        layoutsQueue.add(model);
-                    } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
+                final String layout = dto.getLayout();
+                final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
+                if (model != null) {
+                    layoutsQueue.add(model);
+                } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
 
 
-                    final String synchronise = dto.getSynchronise();
-                    final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
-                    if (synchView != null) {
-                        synchViewsQueue.add(synchView);
-                    } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
+                final String synchronise = dto.getSynchronise();
+                final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
+                if (synchView != null) {
+                    synchViewsQueue.add(synchView);
+                } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
 
-                } catch (Exception e) {
-                    LOGGER.error("", e);
-                }
-            });
-        } catch (Exception e1) {
-            LOGGER.error("", e1);
-        }
+            } catch (Exception e) {
+                LOGGER.error("", e);
+            }
+        });
     }
 
     protected void initFeatures() throws AblyException, IOException {
