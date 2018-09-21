@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
@@ -179,7 +180,6 @@ public class WeasisWin implements Channel.MessageListener {
     private Properties properties = new Properties();
     private AblyService ablyService;
     private Gson gson;
-    private View2dContainer view2dContainer;
     private final Hashtable<String, GridBagLayoutModel> layoutModels = new Hashtable<>();
     private final Hashtable<String, SynchView> synchViews = new Hashtable<>();
     private final ConcurrentLinkedQueue<GridBagLayoutModel> layoutsQueue = new ConcurrentLinkedQueue<>();
@@ -273,32 +273,33 @@ public class WeasisWin implements Channel.MessageListener {
             final String msgData = message.data.toString();
             final MessageDTO dto = gson.fromJson(msgData, MessageDTO.class);
 
-            if (dto.getPath() == null)
-                throw new NullPointerException("[JSON] Path is null");
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    if (dto.getPath() == null)
+                        throw new NullPointerException("[JSON] Path is null");
 
-            ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
+                    ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
 
-            if (dto.getLayout() == null)
-                LOGGER.debug("[JSON] Layout is null");
+                    if (dto.getLayout() == null)
+                        LOGGER.debug("[JSON] Layout is null");
 
-            final String layout = dto.getLayout();
-            final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
-            if (model != null) {
-                if (view2dContainer == null)
-                    layoutsQueue.add(model);
-                else
-                    view2dContainer.getEventManager().updateLayoutModel(model);
-            } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
+                    final String layout = dto.getLayout();
+                    final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
+                    if (model != null) {
+                        layoutsQueue.add(model);
+                    } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
 
 
-            final String synchronise = dto.getSynchronise();
-            final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
-            if (synchView != null) {
-                if (view2dContainer == null)
-                    synchViewsQueue.add(synchView);
-                else
-                    view2dContainer.getEventManager().updateSynchView(synchView);
-            } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
+                    final String synchronise = dto.getSynchronise();
+                    final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
+                    if (synchView != null) {
+                        synchViewsQueue.add(synchView);
+                    } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
+
+                } catch (Exception e) {
+                    LOGGER.error("", e);
+                }
+            });
         } catch (Exception e1) {
             LOGGER.error("", e1);
         }
@@ -567,7 +568,7 @@ public class WeasisWin implements Channel.MessageListener {
         }
 
         if (seriesViewer instanceof View2dContainer) {
-            view2dContainer = (View2dContainer) seriesViewer;
+            final View2dContainer view2dContainer = (View2dContainer) seriesViewer;
             if (!layoutsQueue.isEmpty())
                 view2dContainer.getEventManager().updateLayoutModel(layoutsQueue.poll());
             if (!synchViewsQueue.isEmpty())
