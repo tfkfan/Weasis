@@ -439,14 +439,20 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
             public void itemStateChanged(Object object) {
                 if (object instanceof SynchView && selectedView2dContainer != null) {
                     SynchView synchView = (SynchView) object;
-                    updateSynchView(synchView);
+                    updateSynchView(synchView, false);
                 }
             }
         };
     }
 
-    public void updateSynchView(SynchView synchView){
+    private void updateSynchView(SynchView synchView, boolean selectView){
         selectedView2dContainer.setSynchView(synchView);
+        if(selectView)
+            ((ComboItemListener) getAction(ActionW.SYNCH)).setSelectedItem(synchView);
+    }
+
+    public void updateSynchView(SynchView synchView){
+        updateSynchView(synchView, true);
     }
 
     protected ToggleButtonListener newInverseStackAction() {
