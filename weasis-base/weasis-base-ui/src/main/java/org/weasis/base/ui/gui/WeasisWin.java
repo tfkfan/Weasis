@@ -184,6 +184,8 @@ public class WeasisWin implements Channel.MessageListener {
     private final Hashtable<String, SynchView> synchViews = new Hashtable<>();
     private final ConcurrentLinkedQueue<GridBagLayoutModel> layoutsQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<SynchView> synchViewsQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<String> toolQueue = new ConcurrentLinkedQueue<>();
+    private View2dContainer view2dContainer;
 
     private CFocusListener selectionListener = new CFocusListener() {
 
@@ -285,16 +287,31 @@ public class WeasisWin implements Channel.MessageListener {
                 final String layout = dto.getLayout();
                 final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
                 if (model != null) {
-                    layoutsQueue.add(model);
+                    if (view2dContainer == null)
+                        layoutsQueue.add(model);
+                    else
+                        view2dContainer.getEventManager().updateLayoutModel(model);
                 } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
-
 
                 final String synchronise = dto.getSynchronise();
                 final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
                 if (synchView != null) {
-                    synchViewsQueue.add(synchView);
+                    if (view2dContainer == null)
+                        synchViewsQueue.add(synchView);
+                    else
+                        view2dContainer.getEventManager().updateSynchView(synchView);
                 } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
 
+                final String scroll = dto.getScroll();
+                if (scroll != null) {
+                    String val = "0";
+                    if (!scroll.equals("multiple"))
+                        val = "1";
+                  /*  if (view2dContainer == null)
+                        toolQueue.add(val);
+                    else
+                        view2dContainer.getMiniTool().changeAction(val);*/
+                } else LOGGER.debug("Tool not found for: " + dto.getScroll());
             } catch (Exception e) {
                 LOGGER.error("", e);
             }
@@ -564,7 +581,9 @@ public class WeasisWin implements Channel.MessageListener {
         }
 
         if (seriesViewer instanceof View2dContainer) {
-            final View2dContainer view2dContainer = (View2dContainer) seriesViewer;
+            view2dContainer = (View2dContainer) seriesViewer;
+           // if (!toolQueue.isEmpty())
+            //    view2dContainer.getMiniTool().changeAction(toolQueue.poll());
             if (!layoutsQueue.isEmpty())
                 view2dContainer.getEventManager().updateLayoutModel(layoutsQueue.poll());
             if (!synchViewsQueue.isEmpty())
