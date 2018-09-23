@@ -6,6 +6,7 @@ public class MessageDTO implements Serializable {
     private String path;
     private String layout;
     private String synchronise;
+    private String scroll;
 
     public MessageDTO(){
 
@@ -33,5 +34,13 @@ public class MessageDTO implements Serializable {
 
     public void setSynchronise(String synchronise) {
         this.synchronise = synchronise;
+    }
+
+    public String getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(String scroll) {
+        this.scroll = scroll;
     }
 }
