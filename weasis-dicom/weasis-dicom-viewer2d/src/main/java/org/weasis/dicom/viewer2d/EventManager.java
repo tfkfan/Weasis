@@ -491,8 +491,8 @@ public class EventManager extends ImageViewerEventManager<DicomImageElement> imp
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (isActionEnabled()) {
                     int wheelRotation = e.getWheelRotation();
-                    if(EventManager.this.getSelectedView2dContainer().getSynchView().equals(SynchView.MULTIPLE_SLIDE_TILE))
-                        wheelRotation = MULTIPLE_SLIDE_TILE_OFFSET *wheelRotation;
+                    if(EventManager.this.getSelectedView2dContainer().getSynchView().equals(SynchView.DEFAULT_TILE_MULTIPLE))
+                        wheelRotation = DEFAULT_TILE_MULTIPLE_OFFSET *wheelRotation;
                     setSliderValue(getSliderValue() + wheelRotation);
                 }
             }
@@ -1201,7 +1201,7 @@ public class EventManager extends ImageViewerEventManager<DicomImageElement> imp
                         // Force to draw crosslines without changing the slice position
                         cineAction.ifPresent(a -> a.stateChanged(a.getSliderModel()));
 
-                    } else if (Mode.TILE.equals(synch.getMode()) || Mode.MULTIPLE_SLIDE_TILE.equals(synch.getMode())) {
+                    } else if (Mode.TILE.equals(synch.getMode()) || Mode.DEFAULT_TILE_MULTIPLE.equals(synch.getMode())) {
                         // Limit the scroll
                         final int maxShift = series
                             .size((Filter<DicomImageElement>) viewPane.getActionValue(ActionW.FILTERED_SERIES.cmd()))

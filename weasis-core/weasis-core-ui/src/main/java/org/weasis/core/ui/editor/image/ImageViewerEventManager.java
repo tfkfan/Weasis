@@ -62,7 +62,7 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
     public static final int LEVEL_SMALLEST = 0;
     public static final int LEVEL_LARGEST = 4096;
     public static final int LEVEL_DEFAULT = 300;
-    public static final int MULTIPLE_SLIDE_TILE_OFFSET = 4;
+    public static final int DEFAULT_TILE_MULTIPLE_OFFSET = 4;
 
     protected final ArrayList<SeriesViewerListener> seriesViewerListeners = new ArrayList<>();
     protected final MouseActions mouseActions = new MouseActions(null);
