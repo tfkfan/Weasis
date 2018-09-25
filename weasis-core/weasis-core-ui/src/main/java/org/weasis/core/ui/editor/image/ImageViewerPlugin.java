@@ -607,7 +607,7 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
 
     @SuppressWarnings("unchecked")
     public void updateTileOffset() {
-        if ((SynchData.Mode.MULTIPLE_SLIDE_TILE.equals(synchView.getSynchData().getMode()) || SynchData.Mode.TILE.equals(synchView.getSynchData().getMode()) )&& selectedImagePane != null) {
+        if ((SynchData.Mode.DEFAULT_TILE_MULTIPLE.equals(synchView.getSynchData().getMode()) || SynchData.Mode.TILE.equals(synchView.getSynchData().getMode()) )&& selectedImagePane != null) {
             MediaSeries<E> series = null;
             ViewCanvas<E> selectedView = selectedImagePane;
             if (selectedImagePane.getSeries() != null) {

@@ -26,7 +26,7 @@ public class SynchView implements GUIEntry {
         new ImageIcon(SynchView.class.getResource("/icon/22x22/none.png")), new HashMap<String, Boolean>()); //$NON-NLS-1$
     public static final SynchView DEFAULT_TILE;
     public static final SynchView DEFAULT_STACK;
-    public static final SynchView MULTIPLE_SLIDE_TILE;
+    public static final SynchView DEFAULT_TILE_MULTIPLE;
 
     static {
         HashMap<String, Boolean> actions = new HashMap<>();
@@ -75,8 +75,8 @@ public class SynchView implements GUIEntry {
         actions.put(ActionW.INVERSESTACK.cmd(), true);
         actions.put(ActionW.SORTSTACK.cmd(), true);
         actions.put(ActionW.SPATIAL_UNIT.cmd(), true);
-        MULTIPLE_SLIDE_TILE =
-                new SynchView(Messages.getString("SynchView.def_mst"), "Multiple Slide Tile", Mode.MULTIPLE_SLIDE_TILE, //$NON-NLS-1$ //$NON-NLS-2$
+        DEFAULT_TILE_MULTIPLE =
+                new SynchView(Messages.getString("SynchView.def_dtm"), "Default Tile Multiple", Mode.DEFAULT_TILE_MULTIPLE, //$NON-NLS-1$ //$NON-NLS-2$
                         new ImageIcon(SynchView.class.getResource("/icon/22x22/tile.png")), actions);
     }
 

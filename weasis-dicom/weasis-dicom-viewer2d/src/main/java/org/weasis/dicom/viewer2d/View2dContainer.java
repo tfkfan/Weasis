@@ -96,7 +96,7 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
 
     // Unmodifiable list of the default synchronization elements
     public static final List<SynchView> DEFAULT_SYNCH_LIST =
-        Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.MULTIPLE_SLIDE_TILE);
+        Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.DEFAULT_TILE_MULTIPLE);
 
     public static final GridBagLayoutModel VIEWS_2x1_r1xc2_dump =
         new GridBagLayoutModel(View2dContainer.class.getResourceAsStream("/config/layoutModel.xml"), "layout_dump", //$NON-NLS-1$ //$NON-NLS-2$
