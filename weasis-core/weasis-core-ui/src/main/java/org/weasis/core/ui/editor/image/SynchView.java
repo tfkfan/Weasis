@@ -26,6 +26,7 @@ public class SynchView implements GUIEntry {
         new ImageIcon(SynchView.class.getResource("/icon/22x22/none.png")), new HashMap<String, Boolean>()); //$NON-NLS-1$
     public static final SynchView DEFAULT_TILE;
     public static final SynchView DEFAULT_STACK;
+    public static final SynchView MULTIPLE_SLIDE_TILE;
 
     static {
         HashMap<String, Boolean> actions = new HashMap<>();
@@ -57,6 +58,26 @@ public class SynchView implements GUIEntry {
         DEFAULT_STACK =
             new SynchView(Messages.getString("SynchView.def_s"), "Stack", Mode.STACK, new ImageIcon(SynchView.class //$NON-NLS-1$ //$NON-NLS-2$
                 .getResource("/icon/22x22/sequence.png")), actions); //$NON-NLS-1$
+
+        actions = new HashMap<>();
+        actions.put(ActionW.SCROLL_SERIES.cmd(), true);
+        actions.put(ActionW.PAN.cmd(), true);
+        actions.put(ActionW.ZOOM.cmd(), true);
+        actions.put(ActionW.ROTATION.cmd(), true);
+        actions.put(ActionW.FLIP.cmd(), true);
+        actions.put(ActionW.WINDOW.cmd(), true);
+        actions.put(ActionW.LEVEL.cmd(), true);
+        actions.put(ActionW.PRESET.cmd(), true);
+        actions.put(ActionW.LUT_SHAPE.cmd(), true);
+        actions.put(ActionW.LUT.cmd(), true);
+        actions.put(ActionW.INVERT_LUT.cmd(), true);
+        actions.put(ActionW.FILTER.cmd(), true);
+        actions.put(ActionW.INVERSESTACK.cmd(), true);
+        actions.put(ActionW.SORTSTACK.cmd(), true);
+        actions.put(ActionW.SPATIAL_UNIT.cmd(), true);
+        MULTIPLE_SLIDE_TILE =
+                new SynchView(Messages.getString("SynchView.def_mst"), "Multiple Slide Tile", Mode.MULTIPLE_SLIDE_TILE, //$NON-NLS-1$ //$NON-NLS-2$
+                        new ImageIcon(SynchView.class.getResource("/icon/22x22/tile.png")), actions);
     }
 
     private final String name;

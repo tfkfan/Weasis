@@ -20,7 +20,7 @@ import org.weasis.core.api.util.LangUtil;
 public class SynchData implements Copyable<SynchData> {
 
     public enum Mode {
-        NONE, STACK, TILE
+        NONE, STACK, TILE, MULTIPLE_SLIDE_TILE
     }
 
     protected final Map<String, Boolean> actions;
