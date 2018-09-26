@@ -184,7 +184,7 @@ public class WeasisWin implements Channel.MessageListener {
     private final Hashtable<String, SynchView> synchViews = new Hashtable<>();
     private final ConcurrentLinkedQueue<GridBagLayoutModel> layoutsQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<SynchView> synchViewsQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<String> toolQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Integer> scrollItemsQueue = new ConcurrentLinkedQueue<>();
     private View2dContainer view2dContainer;
 
     private CFocusListener selectionListener = new CFocusListener() {
@@ -302,15 +302,12 @@ public class WeasisWin implements Channel.MessageListener {
                         view2dContainer.getEventManager().updateSynchView(synchView);
                 } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
 
-                final String scroll = dto.getScroll();
-                if (scroll != null) {
-                    String val = "0";
-                    if (!scroll.equals("multiple"))
-                        val = "1";
-                  /*  if (view2dContainer == null)
-                        toolQueue.add(val);
+                final Integer scrollItems = dto.getScroll();
+                if (scrollItems != null) {
+                    if (view2dContainer == null)
+                        scrollItemsQueue.add(scrollItems);
                     else
-                        view2dContainer.getMiniTool().changeAction(val);*/
+                        view2dContainer.setScrollItems(scrollItems);
                 } else LOGGER.debug("Tool not found for: " + dto.getScroll());
             } catch (Exception e) {
                 LOGGER.error("", e);
@@ -583,8 +580,8 @@ public class WeasisWin implements Channel.MessageListener {
 
         if (seriesViewer instanceof View2dContainer) {
             view2dContainer = (View2dContainer) seriesViewer;
-           // if (!toolQueue.isEmpty())
-            //    view2dContainer.getMiniTool().changeAction(toolQueue.poll());
+            if(!scrollItemsQueue.isEmpty())
+                view2dContainer.setScrollItems(scrollItemsQueue.poll());
             if (!layoutsQueue.isEmpty())
                 view2dContainer.getEventManager().updateLayoutModel(layoutsQueue.poll());
             if (!synchViewsQueue.isEmpty())

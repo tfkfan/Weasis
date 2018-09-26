@@ -491,8 +491,9 @@ public class EventManager extends ImageViewerEventManager<DicomImageElement> imp
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (isActionEnabled()) {
                     int wheelRotation = e.getWheelRotation();
-                    if(EventManager.this.getSelectedView2dContainer().getSynchView().equals(SynchView.DEFAULT_TILE_MULTIPLE))
-                        wheelRotation = DEFAULT_TILE_MULTIPLE_OFFSET *wheelRotation;
+                    final ImageViewerPlugin<DicomImageElement> container = EventManager.this.getSelectedView2dContainer();
+                    if(container.getSynchView().equals(SynchView.DEFAULT_TILE_MULTIPLE))
+                        wheelRotation = container.getScrollItems() *wheelRotation;
                     setSliderValue(getSliderValue() + wheelRotation);
                 }
             }
