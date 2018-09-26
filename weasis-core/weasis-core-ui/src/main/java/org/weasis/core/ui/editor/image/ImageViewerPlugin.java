@@ -63,6 +63,8 @@ import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.pref.Monitor;
 import org.weasis.core.ui.util.MouseEventDouble;
 
+import static org.weasis.core.ui.editor.image.ImageViewerEventManager.DEFAULT_TILE_MULTIPLE_OFFSET;
+
 public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPlugin<E> {
     private static final long serialVersionUID = -5804430771962614157L;
 
@@ -105,6 +107,8 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
 
     private final MouseHandler mouseHandler;
 
+    private Integer scrollItems;
+
     public ImageViewerPlugin(ImageViewerEventManager<E> eventManager, String pluginName) {
         this(eventManager, VIEWS_1x1, pluginName, null, null, null);
     }
@@ -115,6 +119,7 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
         if (eventManager == null) {
             throw new IllegalArgumentException("EventManager cannot be null"); //$NON-NLS-1$
         }
+        setScrollItems(DEFAULT_TILE_MULTIPLE_OFFSET);
         this.eventManager = eventManager;
         view2ds = new ArrayList<>();
         components = new ArrayList<>();
@@ -736,6 +741,14 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
             }
             repaint();
         }
+    }
+
+    public Integer getScrollItems() {
+        return scrollItems;
+    }
+
+    public void setScrollItems(Integer scrollItems) {
+        this.scrollItems = scrollItems;
     }
 
     class MouseHandler extends MouseAdapter {
