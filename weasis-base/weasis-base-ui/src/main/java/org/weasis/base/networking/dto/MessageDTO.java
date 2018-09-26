@@ -7,6 +7,7 @@ public class MessageDTO implements Serializable {
     private String layout;
     private String synchronise;
     private Integer scroll;
+    private Boolean close;
 
     public MessageDTO(){
 
@@ -42,5 +43,15 @@ public class MessageDTO implements Serializable {
 
     public void setScroll(Integer scroll) {
         this.scroll = scroll;
+    }
+
+    public Boolean getClose() {
+        if(close == null)
+            setClose(false);
+        return close;
+    }
+
+    public void setClose(Boolean close) {
+        this.close = close;
     }
 }

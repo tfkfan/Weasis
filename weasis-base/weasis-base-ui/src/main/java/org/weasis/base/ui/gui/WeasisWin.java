@@ -147,6 +147,7 @@ import bibliothek.gui.dock.util.color.ColorManager;
 import bibliothek.gui.dock.util.laf.LookAndFeelColors;
 import bibliothek.util.Colors;
 import org.weasis.dicom.explorer.DicomExplorerFactory;
+import org.weasis.dicom.explorer.DicomModel;
 import org.weasis.dicom.explorer.utils.ImportUtils;
 import org.weasis.dicom.viewer2d.View2dContainer;
 
@@ -279,34 +280,36 @@ public class WeasisWin implements Channel.MessageListener {
                 if (dto.getPath() == null)
                     throw new NullPointerException("[JSON] Path is null");
 
-                ImportUtils.importDICOMLocal(((DicomExplorerFactory) factory).getModel(), dto.getPath());
+                final DicomModel dicomModel = ((DicomExplorerFactory) factory).getModel();
+                if(dto.getClose()){
+                    dicomModel.closeAll();
+                }
+
+                ImportUtils.importDICOMLocal(dicomModel, dto.getPath());
 
                 if (dto.getLayout() == null)
                     LOGGER.debug("[JSON] Layout is null");
 
                 final String layout = dto.getLayout();
-                final GridBagLayoutModel model = layout != null ? layoutModels.get(dto.getLayout()) : null;
-                if (model != null) {
-                    if (view2dContainer == null)
-                        layoutsQueue.add(model);
-                    else
-                        view2dContainer.getEventManager().updateLayoutModel(model);
+                final GridBagLayoutModel gridBagLayoutModel = layout != null ? layoutModels.get(dto.getLayout()) : null;
+                if (gridBagLayoutModel != null) {
+                    layoutsQueue.add(gridBagLayoutModel);
+                    if (view2dContainer != null)
+                        view2dContainer.getEventManager().updateLayoutModel(gridBagLayoutModel);
                 } else LOGGER.debug("GridBagLayoutModel not found for: " + dto.getLayout());
 
                 final String synchronise = dto.getSynchronise();
                 final SynchView synchView = synchronise != null ? synchViews.get(dto.getSynchronise()) : null;
                 if (synchView != null) {
-                    if (view2dContainer == null)
-                        synchViewsQueue.add(synchView);
-                    else
+                    synchViewsQueue.add(synchView);
+                    if (view2dContainer != null)
                         view2dContainer.getEventManager().updateSynchView(synchView);
                 } else LOGGER.debug("SynchView not found for: " + dto.getSynchronise());
 
                 final Integer scrollItems = dto.getScroll();
                 if (scrollItems != null) {
-                    if (view2dContainer == null)
-                        scrollItemsQueue.add(scrollItems);
-                    else
+                    scrollItemsQueue.add(scrollItems);
+                    if (view2dContainer != null)
                         view2dContainer.setScrollItems(scrollItems);
                 } else LOGGER.debug("Tool not found for: " + dto.getScroll());
             } catch (Exception e) {
