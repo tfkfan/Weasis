@@ -419,6 +419,10 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
     }
 
     public void updateLayoutModel(GridBagLayoutModel model){
+        updateLayoutModel(model, true);
+    }
+
+    public void updateLayoutModel(GridBagLayoutModel model, boolean selectLayout ){
         clearAllPropertyChangeListeners();
         ViewCanvas<E> view = selectedView2dContainer.getSelectedImagePane();
         selectedView2dContainer.setLayoutModel(model);
@@ -430,6 +434,8 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
         if (synch instanceof ComboItemListener) {
             selectedView2dContainer.setSynchView((SynchView) ((ComboItemListener) synch).getSelectedItem());
         }
+        if(selectLayout)
+            ((ComboItemListener) getAction(ActionW.LAYOUT)).setSelectedItem(model);
     }
 
     protected ComboItemListener<SynchView> newSynchAction(SynchView[] synchViewList) {
