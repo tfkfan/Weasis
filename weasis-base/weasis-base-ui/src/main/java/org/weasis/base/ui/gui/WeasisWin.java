@@ -341,6 +341,7 @@ public class WeasisWin implements Channel.MessageListener {
         synchViews.put("None", SynchView.NONE);
         synchViews.put("Default Stack", SynchView.DEFAULT_STACK);
         synchViews.put("Default Tile", SynchView.DEFAULT_TILE);
+        synchViews.put("Default Tile Multiple", SynchView.DEFAULT_TILE_MULTIPLE);
     }
 
     public Frame getFrame() {
