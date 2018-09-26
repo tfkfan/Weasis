@@ -1071,6 +1071,12 @@ public class DicomModel implements TreeModel, DataExplorerModel {
         });
     }
 
+    public void closeAll(){
+        for (MediaSeriesGroup patientGroup : model.getSuccessors(MediaSeriesGroupNode.rootNode)) {
+            removePatient(patientGroup);
+        }
+    }
+
     private void closeCommand(Option opt, List<String> yargs, List<String> sargs) {
         if (opt.isSet("all")) { //$NON-NLS-1$
             for (MediaSeriesGroup patientGroup : model.getSuccessors(MediaSeriesGroupNode.rootNode)) {
