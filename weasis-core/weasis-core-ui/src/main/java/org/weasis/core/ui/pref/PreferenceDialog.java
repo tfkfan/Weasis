@@ -62,6 +62,7 @@ public class PreferenceDialog extends AbstractWizardDialog {
         list.add(new GeneralSetting());
         list.add(new LabelsPrefView());
         list.add(new ScreenPrefView());
+        list.add(new ModalitySetting());
 
         BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
         try {
