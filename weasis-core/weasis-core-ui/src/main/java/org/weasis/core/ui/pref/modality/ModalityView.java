@@ -11,9 +11,12 @@
 package org.weasis.core.ui.pref.modality;
 
 import org.weasis.core.api.gui.util.*;
+import org.weasis.core.api.image.GridBagLayoutModel;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.ImageViewerEventManager;
+import org.weasis.core.ui.editor.image.ImageViewerPlugin;
 import org.weasis.core.ui.editor.image.SynchView;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -22,6 +25,8 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.weasis.core.ui.editor.image.ViewerToolBar.buildLayoutButton;
+import static org.weasis.core.ui.editor.image.ViewerToolBar.buildSynchButton;
 import static org.weasis.core.ui.editor.image.ViewerToolBar.buildSynchIcon;
 
 @SuppressWarnings("serial")
@@ -30,9 +35,15 @@ public class ModalityView extends AbstractItemDialogPage {
     protected final Modality modality;
 
     private final DropDownButton synchButton;
+    private final DropDownButton layoutButton;
 
     public static final List<SynchView> DEFAULT_SYNCH_LIST =
             Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.DEFAULT_TILE_MULTIPLE);
+
+    public static final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST =
+            Arrays.asList(ImageViewerPlugin.VIEWS_1x1, ImageViewerPlugin.VIEWS_1x2, ImageViewerPlugin.VIEWS_2x1,
+                    ImageViewerPlugin.VIEWS_2x2_f2, ImageViewerPlugin.VIEWS_2_f1x2, ImageViewerPlugin.VIEWS_2x1_r1xc2_dump,
+                    ImageViewerPlugin.VIEWS_2x2);
 
     public ModalityView(Modality modality) {
         super(modality.getTitle()); //$NON-NLS-1$
@@ -40,7 +51,9 @@ public class ModalityView extends AbstractItemDialogPage {
         setComponentPosition(10);
         setBorder(new EmptyBorder(15, 10, 10, 10));
 
-        this.synchButton = buildSynchButton();
+        this.layoutButton = buildLayoutButton(createLayoutAction());
+        this.synchButton = buildSynchButton(createSynchAction(), new SynchGroupMenu());
+
         init();
     }
 
@@ -49,10 +62,22 @@ public class ModalityView extends AbstractItemDialogPage {
 
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(null, getTitle(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        add(panel, BorderLayout.CENTER);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        add(panel, BorderLayout.NORTH);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        panel.add(synchButton);
+        JPanel layoutPanel = new JPanel();
+        layoutPanel.setBorder(new TitledBorder(null, "Layout", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        layoutPanel.setLayout(new BoxLayout(layoutPanel, BoxLayout.X_AXIS));
+        layoutPanel.add(layoutButton);
+
+        panel.add(layoutPanel);
+
+        JPanel synchPanel = new JPanel();
+        synchPanel.setBorder(new TitledBorder(null, "Synch", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        synchPanel.setLayout(new BoxLayout(synchPanel, BoxLayout.X_AXIS));
+        synchPanel.add(synchButton);
+
+        panel.add(synchPanel);
 
         JPanel panel2 = new JPanel();
         FlowLayout flowLayout1 = (FlowLayout) panel2.getLayout();
@@ -66,39 +91,22 @@ public class ModalityView extends AbstractItemDialogPage {
         btnNewButton.addActionListener(e -> resetoDefaultValues());
     }
 
-    private DropDownButton buildSynchButton() {
-        GroupPopup menu = null;
-        ComboItemListener synch = createSynchAction();
-        SynchView synchView = SynchView.DEFAULT_STACK;
+    private ComboItemListener<?> createSynchAction() {
+        ComboItemListener<?> res = ImageViewerEventManager.newSynchAction(DEFAULT_SYNCH_LIST.toArray(
+                new SynchView[DEFAULT_SYNCH_LIST.size()]), object -> {
 
-        Object sel = synch.getSelectedItem();
-        if (sel instanceof SynchView)
-            synchView = (SynchView) sel;
-
-        menu = new SynchGroupMenu();
-        synch.registerActionState(menu);
-
-        final DropDownButton button = new DropDownButton(ActionW.SYNCH.cmd(), buildSynchIcon(synchView), menu) {
-            @Override
-            protected JPopupMenu getPopupMenu() {
-                JPopupMenu menu = (getMenuModel() == null) ? new JPopupMenu() : getMenuModel().createJPopupMenu();
-                menu.setInvoker(this);
-                return menu;
-            }
-
-        };
-        button.setToolTipText(Messages.getString("ViewerToolBar.synch")); //$NON-NLS-1$
-        if (synch != null) {
-            synch.enableAction(true);
-            synch.registerActionState(button);
-        }
-        return button;
+        });
+        res.enableAction(true);
+        return res;
     }
 
-    private ComboItemListener<?> createSynchAction() {
-        return ImageViewerEventManager.newSynchAction(DEFAULT_SYNCH_LIST.toArray(
-                new SynchView[DEFAULT_SYNCH_LIST.size()]),
-                object ->{});
+    private ComboItemListener<?> createLayoutAction() {
+        ComboItemListener<?> res = ImageViewerEventManager.newLayoutAction(DEFAULT_LAYOUT_LIST
+                .toArray(new GridBagLayoutModel[DEFAULT_LAYOUT_LIST.size()]), object -> {
+
+        });
+        res.enableAction(true);
+        return res;
     }
 
     @Override

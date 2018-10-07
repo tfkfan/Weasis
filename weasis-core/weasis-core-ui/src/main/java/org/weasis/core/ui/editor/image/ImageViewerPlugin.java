@@ -86,6 +86,9 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
             "layout_c1x2", Messages.getString("ImageViewerPlugin.layout_c1x2")); //$NON-NLS-1$ //$NON-NLS-2$
     public static final GridBagLayoutModel VIEWS_2x2 = new GridBagLayoutModel("2x2", //$NON-NLS-1$
         String.format(F_VIEWS, "2x2"), 2, 2, view2dClass.getName()); //$NON-NLS-1$
+    public static final GridBagLayoutModel VIEWS_2x1_r1xc2_dump =
+            new GridBagLayoutModel(ImageViewerPlugin.class.getResourceAsStream("/config/layoutModel2x1_r1xc2.xml"), "layout_dump", //$NON-NLS-1$ //$NON-NLS-2$
+                    Messages.getString("View2dContainer.layout_dump"));
 
     /**
      * The current focused <code>ImagePane</code>. The default is 0.

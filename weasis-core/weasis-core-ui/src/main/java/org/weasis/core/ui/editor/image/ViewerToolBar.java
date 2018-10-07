@@ -39,7 +39,6 @@ import org.weasis.core.api.gui.util.ActionW;
 import org.weasis.core.api.gui.util.ComboItemListener;
 import org.weasis.core.api.gui.util.DropButtonIcon;
 import org.weasis.core.api.gui.util.DropDownButton;
-import org.weasis.core.api.gui.util.GroupPopup;
 import org.weasis.core.api.gui.util.GroupRadioMenu;
 import org.weasis.core.api.media.data.ImageElement;
 import org.weasis.core.api.service.WProperties;
@@ -69,6 +68,7 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
     private final DropDownButton mouseRight;
     private final DropDownButton mouseWheel;
     private final DropDownButton synchButton;
+    private final DropDownButton layoutButton;
 
     public ViewerToolBar(final ImageViewerEventManager<E> eventManager, int activeMouse, WProperties props, int index) {
         super(Messages.getString("ViewerToolBar.title"), index); //$NON-NLS-1$
@@ -122,23 +122,15 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
         }
 
         if (props.getBooleanProperty("weasis.toolbar.layoutbouton", true)) { //$NON-NLS-1$
-            final DropDownButton layout =
-                new DropDownButton("layout", new DropButtonIcon(new ImageIcon(MouseActions.class //$NON-NLS-1$
-                    .getResource("/icon/32x32/layout.png")))) { //$NON-NLS-1$
-
-                    @Override
-                    protected JPopupMenu getPopupMenu() {
-                        return getLayoutPopupMenuButton(this);
-                    }
-                };
-            layout.setToolTipText(Messages.getString("ViewerToolBar.layout")); //$NON-NLS-1$
-            add(layout);
-        }
+            layoutButton = buildLayoutButton(eventManager.getAction(ActionW.LAYOUT));
+            add(layoutButton);
+        }else
+            layoutButton = null;
 
         if (props.getBooleanProperty("weasis.toolbar.synchbouton", true)) { //$NON-NLS-1$
             add(Box.createRigidArea(new Dimension(5, 0)));
 
-            synchButton = buildSynchButton();
+            synchButton = buildSynchButton(eventManager.getAction(ActionW.SYNCH), new SynchGroupMenu());
             add(synchButton);
         } else {
             synchButton = null;
@@ -175,8 +167,7 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
         return mouseLeft;
     }
 
-    private JPopupMenu getLayoutPopupMenuButton(DropDownButton dropDownButton) {
-        ActionState layout = eventManager.getAction(ActionW.LAYOUT);
+    public static JPopupMenu getLayoutPopupMenuButton(DropDownButton dropDownButton, ActionState layout) {
         JPopupMenu popupMouseButtons = new JPopupMenu();
         if (layout instanceof ComboItemListener) {
             JMenu menu = ((ComboItemListener) layout).createUnregisteredRadioMenu("layout"); //$NON-NLS-1$
@@ -334,9 +325,7 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
         });
     }
 
-    private DropDownButton buildSynchButton() {
-        GroupPopup menu = null;
-        ActionState synch = eventManager.getAction(ActionW.SYNCH);
+    public static DropDownButton buildSynchButton(ActionState synch, GroupRadioMenu<SynchView> menu) {
         SynchView synchView = SynchView.DEFAULT_STACK;
         if (synch instanceof ComboItemListener) {
             ComboItemListener m = (ComboItemListener) synch;
@@ -344,7 +333,7 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
             if (sel instanceof SynchView) {
                 synchView = (SynchView) sel;
             }
-            menu = new SynchGroupMenu();
+
             m.registerActionState(menu);
         }
         final DropDownButton button = new DropDownButton(ActionW.SYNCH.cmd(), buildSynchIcon(synchView), menu) {
@@ -360,6 +349,19 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
         if (synch != null) {
             synch.registerActionState(button);
         }
+        return button;
+    }
+
+    public static DropDownButton buildLayoutButton(ActionState layoutAction){
+        final DropDownButton button = new DropDownButton("layout", new DropButtonIcon(new ImageIcon(MouseActions.class //$NON-NLS-1$
+                .getResource("/icon/32x32/layout.png")))) { //$NON-NLS-1$
+
+            @Override
+            protected JPopupMenu getPopupMenu() {
+                return getLayoutPopupMenuButton(this, layoutAction);
+            }
+        };
+        button.setToolTipText(Messages.getString("ViewerToolBar.layout")); //$NON-NLS-1$
         return button;
     }
 

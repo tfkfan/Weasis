@@ -114,7 +114,12 @@ public class EventManager extends ImageViewerEventManager<ImageElement> implemen
         setAction(newLutAction());
         setAction(newFilterAction());
         setAction(newLayoutAction(View2dContainer.DEFAULT_LAYOUT_LIST
-            .toArray(new GridBagLayoutModel[View2dContainer.DEFAULT_LAYOUT_LIST.size()])));
+            .toArray(new GridBagLayoutModel[View2dContainer.DEFAULT_LAYOUT_LIST.size()]), object->{
+            if (object instanceof GridBagLayoutModel && selectedView2dContainer != null) {
+                // change layout
+                updateLayoutModel((GridBagLayoutModel) object);
+            }
+        }));
         setAction(newSynchAction(
             View2dContainer.DEFAULT_SYNCH_LIST.toArray(new SynchView[View2dContainer.DEFAULT_SYNCH_LIST.size()]),  object ->{
                     if (object instanceof SynchView && selectedView2dContainer != null) {

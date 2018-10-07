@@ -405,16 +405,13 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
         };
     }
 
-    protected ComboItemListener<GridBagLayoutModel> newLayoutAction(GridBagLayoutModel[] layouts) {
+    public static ComboItemListener<GridBagLayoutModel> newLayoutAction(GridBagLayoutModel[] layouts, Consumer<Object> consumer) {
         return new ComboItemListener<GridBagLayoutModel>(ActionW.LAYOUT,
             Optional.ofNullable(layouts).orElseGet(() -> new GridBagLayoutModel[0])) {
 
             @Override
             public void itemStateChanged(Object object) {
-                if (object instanceof GridBagLayoutModel && selectedView2dContainer != null) {
-                    // change layout
-                   updateLayoutModel((GridBagLayoutModel) object);
-                }
+                consumer.accept(object);
             }
         };
     }
