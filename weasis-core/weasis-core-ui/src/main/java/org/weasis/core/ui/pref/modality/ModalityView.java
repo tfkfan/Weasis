@@ -43,7 +43,12 @@ public class ModalityView extends AbstractItemDialogPage {
     public static final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST =
             Arrays.asList(ImageViewerPlugin.VIEWS_1x1, ImageViewerPlugin.VIEWS_1x2, ImageViewerPlugin.VIEWS_2x1,
                     ImageViewerPlugin.VIEWS_2x2_f2, ImageViewerPlugin.VIEWS_2_f1x2, ImageViewerPlugin.VIEWS_2x1_r1xc2_dump,
-                    ImageViewerPlugin.VIEWS_2x2);
+                    ImageViewerPlugin.VIEWS_2x2,
+                    ImageViewerPlugin.buildGridBagLayoutModel(1, 3, ImageViewerPlugin.view2dClass.getName()),
+                    ImageViewerPlugin.buildGridBagLayoutModel(1, 4, ImageViewerPlugin.view2dClass.getName()),
+                    ImageViewerPlugin.buildGridBagLayoutModel(2, 4, ImageViewerPlugin.view2dClass.getName()),
+                    ImageViewerPlugin.buildGridBagLayoutModel(2, 6, ImageViewerPlugin.view2dClass.getName()),
+                    ImageViewerPlugin.buildGridBagLayoutModel(2, 8, ImageViewerPlugin.view2dClass.getName()));
 
     public ModalityView(Modality modality) {
         super(modality.getTitle()); //$NON-NLS-1$
@@ -66,14 +71,16 @@ public class ModalityView extends AbstractItemDialogPage {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JPanel layoutPanel = new JPanel();
-        layoutPanel.setBorder(new TitledBorder(null, "Layout", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        layoutPanel.setBorder(new TitledBorder(null, Messages.getString("ModalitySettings.layout"),
+                TitledBorder.LEADING, TitledBorder.TOP, null, null));
         layoutPanel.setLayout(new BoxLayout(layoutPanel, BoxLayout.X_AXIS));
         layoutPanel.add(layoutButton);
 
         panel.add(layoutPanel);
 
         JPanel synchPanel = new JPanel();
-        synchPanel.setBorder(new TitledBorder(null, "Synch", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        synchPanel.setBorder(new TitledBorder(null, Messages.getString("ModalitySettings.synch"),
+                TitledBorder.LEADING, TitledBorder.TOP, null, null));
         synchPanel.setLayout(new BoxLayout(synchPanel, BoxLayout.X_AXIS));
         synchPanel.add(synchButton);
 
