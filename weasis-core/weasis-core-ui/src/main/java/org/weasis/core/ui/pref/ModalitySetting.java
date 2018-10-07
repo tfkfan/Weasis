@@ -20,10 +20,8 @@ import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.utils.bean.Measurement;
-import org.weasis.core.ui.pref.modality.CRView;
-import org.weasis.core.ui.pref.modality.CTView;
-import org.weasis.core.ui.pref.modality.DXView;
-import org.weasis.core.ui.pref.modality.USView;
+import org.weasis.core.ui.pref.modality.Modality;
+import org.weasis.core.ui.pref.modality.ModalityView;
 
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -41,10 +39,11 @@ public class ModalitySetting extends AbstractItemDialogPage {
         BorderLayout borderLayout = new BorderLayout();
         setLayout(borderLayout);
 
-        addSubPage(new CTView());
-        addSubPage(new USView());
-        addSubPage(new DXView());
-        addSubPage(new CRView());
+        addSubPage(new ModalityView(Modality.DEFAULT));
+        addSubPage(new ModalityView(Modality.CT));
+        addSubPage(new ModalityView(Modality.US));
+        addSubPage(new ModalityView(Modality.DX));
+        addSubPage(new ModalityView(Modality.CR));
     }
 
     @Override
