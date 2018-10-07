@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.swing.BoundedRangeModel;
@@ -438,21 +439,18 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
             ((ComboItemListener) getAction(ActionW.LAYOUT)).setSelectedItem(model);
     }
 
-    protected ComboItemListener<SynchView> newSynchAction(SynchView[] synchViewList) {
+    public static ComboItemListener<SynchView> newSynchAction(SynchView[] synchViewList, Consumer<Object> consumer) {
         return new ComboItemListener<SynchView>(ActionW.SYNCH,
             Optional.ofNullable(synchViewList).orElseGet(() -> new SynchView[0])) {
 
             @Override
             public void itemStateChanged(Object object) {
-                if (object instanceof SynchView && selectedView2dContainer != null) {
-                    SynchView synchView = (SynchView) object;
-                    updateSynchView(synchView, false);
-                }
+                consumer.accept(object);
             }
         };
     }
 
-    private void updateSynchView(SynchView synchView, boolean selectView){
+    public void updateSynchView(SynchView synchView, boolean selectView){
         selectedView2dContainer.setSynchView(synchView);
         if(selectView)
             ((ComboItemListener) getAction(ActionW.SYNCH)).setSelectedItem(synchView);

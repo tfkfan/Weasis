@@ -173,8 +173,13 @@ public class EventManager extends ImageViewerEventManager<DicomImageElement> imp
         setAction(newSortStackAction());
         setAction(newLayoutAction(View2dContainer.DEFAULT_LAYOUT_LIST
             .toArray(new GridBagLayoutModel[View2dContainer.DEFAULT_LAYOUT_LIST.size()])));
-        setAction(newSynchAction(
-            View2dContainer.DEFAULT_SYNCH_LIST.toArray(new SynchView[View2dContainer.DEFAULT_SYNCH_LIST.size()])));
+        setAction(newSynchAction(View2dContainer.DEFAULT_SYNCH_LIST.toArray(new SynchView[View2dContainer.DEFAULT_SYNCH_LIST.size()]),
+                object ->{
+                    if (object instanceof SynchView && selectedView2dContainer != null) {
+                        SynchView synchView = (SynchView) object;
+                        updateSynchView(synchView, false);
+                    }
+        }));
         getAction(ActionW.SYNCH, ComboItemListener.class)
             .ifPresent(a -> a.setSelectedItemWithoutTriggerAction(SynchView.DEFAULT_STACK));
         setAction(newMeasurementAction(
