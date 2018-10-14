@@ -12,17 +12,21 @@ package org.weasis.core.ui.pref.modality;
 
 import org.weasis.core.api.gui.util.*;
 import org.weasis.core.api.image.GridBagLayoutModel;
+import org.weasis.core.api.service.BundleTools;
 import org.weasis.core.ui.Messages;
 import org.weasis.core.ui.editor.image.ImageViewerEventManager;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
 import org.weasis.core.ui.editor.image.SynchView;
+import org.weasis.core.ui.util.ModelsUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListDataEvent;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 import static org.weasis.core.ui.editor.image.ViewerToolBar.buildLayoutButton;
@@ -36,19 +40,13 @@ public class ModalityView extends AbstractItemDialogPage {
 
     private final DropDownButton synchButton;
     private final DropDownButton layoutButton;
+    private final JButton jButtonApply;
 
-    public static final List<SynchView> DEFAULT_SYNCH_LIST =
-            Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.DEFAULT_TILE_MULTIPLE);
+    public final List<SynchView> DEFAULT_SYNCH_LIST;
+    public final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST;
 
-    public static final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST =
-            Arrays.asList(ImageViewerPlugin.VIEWS_1x1, ImageViewerPlugin.VIEWS_1x2, ImageViewerPlugin.VIEWS_2x1,
-                    ImageViewerPlugin.VIEWS_2x2_f2, ImageViewerPlugin.VIEWS_2_f1x2, ImageViewerPlugin.VIEWS_2x1_r1xc2_dump,
-                    ImageViewerPlugin.VIEWS_2x2,
-                    ImageViewerPlugin.buildGridBagLayoutModel(1, 3, ImageViewerPlugin.view2dClass.getName()),
-                    ImageViewerPlugin.buildGridBagLayoutModel(1, 4, ImageViewerPlugin.view2dClass.getName()),
-                    ImageViewerPlugin.buildGridBagLayoutModel(2, 4, ImageViewerPlugin.view2dClass.getName()),
-                    ImageViewerPlugin.buildGridBagLayoutModel(2, 6, ImageViewerPlugin.view2dClass.getName()),
-                    ImageViewerPlugin.buildGridBagLayoutModel(2, 8, ImageViewerPlugin.view2dClass.getName()));
+    private final Hashtable<String, GridBagLayoutModel> layoutModels = ModelsUtils.createDefaultLayoutModels();
+    private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
 
     public ModalityView(Modality modality) {
         super(modality.getTitle()); //$NON-NLS-1$
@@ -58,6 +56,10 @@ public class ModalityView extends AbstractItemDialogPage {
 
         this.layoutButton = buildLayoutButton(createLayoutAction());
         this.synchButton = buildSynchButton(createSynchAction(), new SynchGroupMenu());
+        this.jButtonApply = new JButton();
+
+        DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
+        DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
 
         init();
     }
@@ -93,9 +95,14 @@ public class ModalityView extends AbstractItemDialogPage {
         flowLayout1.setVgap(7);
         add(panel2, BorderLayout.SOUTH);
 
-        JButton btnNewButton = new JButton(Messages.getString("restore.values")); //$NON-NLS-1$
-        panel2.add(btnNewButton);
-        btnNewButton.addActionListener(e -> resetoDefaultValues());
+        jButtonApply.setText(Messages.getString("LabelPrefView.apply")); //$NON-NLS-1$
+        jButtonApply.addActionListener(e -> apply());
+
+        panel2.add(jButtonApply);
+    }
+
+    private void apply(){
+        //BundleTools.SYSTEM_PREFERENCES.putBooleanProperty("weasis.confirm.closing", chckbxConfirmClosing.isSelected()); //$NON-NLS-1$
     }
 
     private ComboItemListener<?> createSynchAction() {

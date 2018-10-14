@@ -116,11 +116,7 @@ import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.pref.Monitor;
 import org.weasis.core.ui.pref.PreferenceDialog;
-import org.weasis.core.ui.util.ColorLayerUI;
-import org.weasis.core.ui.util.DefaultAction;
-import org.weasis.core.ui.util.ToolBarContainer;
-import org.weasis.core.ui.util.Toolbar;
-import org.weasis.core.ui.util.UriListFlavor;
+import org.weasis.core.ui.util.*;
 
 import bibliothek.extension.gui.dock.theme.EclipseTheme;
 import bibliothek.extension.gui.dock.theme.eclipse.EclipseTabDockActionLocation;
@@ -181,8 +177,8 @@ public class WeasisWin implements Channel.MessageListener {
     private Properties properties = new Properties();
     private AblyService ablyService;
     private Gson gson;
-    private final Hashtable<String, GridBagLayoutModel> layoutModels = new Hashtable<>();
-    private final Hashtable<String, SynchView> synchViews = new Hashtable<>();
+    private final Hashtable<String, GridBagLayoutModel> layoutModels = ModelsUtils.createDefaultLayoutModels();
+    private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
     private final ConcurrentLinkedQueue<GridBagLayoutModel> layoutsQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<SynchView> synchViewsQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<Integer> scrollItemsQueue = new ConcurrentLinkedQueue<>();
@@ -324,24 +320,6 @@ public class WeasisWin implements Channel.MessageListener {
         gson = new GsonBuilder()
                 .setLenient()
                 .create();
-
-        layoutModels.put("1x1 Views", View2dContainer.VIEWS_1x1);
-        layoutModels.put("1x2 Views", View2dContainer.VIEWS_1x2);
-        layoutModels.put("2x1 Views", View2dContainer.VIEWS_2x1);
-        layoutModels.put("DICOM Information", View2dContainer.VIEWS_2x1_r1xc2_dump);
-        layoutModels.put("3 views (col 2,1)", View2dContainer.VIEWS_2x2_f2);
-        layoutModels.put("3 views (row 1,2)", View2dContainer.VIEWS_2_f1x2);
-        layoutModels.put("1x3 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 3, ImageViewerPlugin.view2dClass.getName()));
-        layoutModels.put("1x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(1, 4, ImageViewerPlugin.view2dClass.getName()));
-        layoutModels.put("2x4 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 4, ImageViewerPlugin.view2dClass.getName()));
-        layoutModels.put("2x6 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 6, ImageViewerPlugin.view2dClass.getName()));
-        layoutModels.put("2x8 Views", ImageViewerPlugin.buildGridBagLayoutModel(2, 8, ImageViewerPlugin.view2dClass.getName()));
-        layoutModels.put("2x2 Views", View2dContainer.VIEWS_2x2);
-
-        synchViews.put("None", SynchView.NONE);
-        synchViews.put("Default Stack", SynchView.DEFAULT_STACK);
-        synchViews.put("Default Tile", SynchView.DEFAULT_TILE);
-        synchViews.put("Default Tile Multiple", SynchView.DEFAULT_TILE_MULTIPLE);
     }
 
     public Frame getFrame() {
