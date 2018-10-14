@@ -43,11 +43,18 @@ public class ModalityView extends AbstractItemDialogPage {
     private final DropDownButton layoutButton;
     private final JButton jButtonApply;
 
+    private ComboItemListener<?> synchListener;
+    private ComboItemListener<?> layoutListener;
+
     public final List<SynchView> DEFAULT_SYNCH_LIST;
     public final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST;
 
     private final Hashtable<String, GridBagLayoutModel> layoutModels = ModelsUtils.createDefaultLayoutModels();
     private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
+
+    private static final String systemPref = "weasis.modality.%s";
+    private static final String systemSynchPref = systemPref.concat(".synch");
+    private static final String systemLayoutPref = systemPref.concat(".layout");
 
     public ModalityView(Modality modality) {
         super(modality.getDescription()); //$NON-NLS-1$
@@ -63,6 +70,7 @@ public class ModalityView extends AbstractItemDialogPage {
         this.jButtonApply = new JButton();
 
         init();
+        initButtonsFromPrefs();
     }
 
     private void init() {
@@ -102,6 +110,24 @@ public class ModalityView extends AbstractItemDialogPage {
         panel2.add(jButtonApply);
     }
 
+    public void initButtonsFromPrefs(){
+        final String synchPref = String.format(systemSynchPref, modality.getDescription());
+        final String layoutPref = String.format(systemLayoutPref, modality.getDescription());
+
+        final String synchPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(synchPref);
+        final String layoutPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(layoutPref);
+
+        if(synchPrefValue != null) {
+            SynchView synchView = synchViews.get(synchPrefValue);
+            synchListener.setSelectedItem(synchView);
+        }
+
+        if(layoutPrefValue != null){
+            GridBagLayoutModel model = layoutModels.get(layoutPrefValue);
+            layoutListener.setSelectedItem(model);
+        }
+    }
+
     private void apply(){
         //BundleTools.SYSTEM_PREFERENCES.putBooleanProperty("weasis.confirm.closing", chckbxConfirmClosing.isSelected()); //$NON-NLS-1$
     }
@@ -112,6 +138,7 @@ public class ModalityView extends AbstractItemDialogPage {
 
         });
         res.enableAction(true);
+        synchListener = res;
         return res;
     }
 
@@ -121,6 +148,7 @@ public class ModalityView extends AbstractItemDialogPage {
 
         });
         res.enableAction(true);
+        layoutListener = res;
         return res;
     }
 

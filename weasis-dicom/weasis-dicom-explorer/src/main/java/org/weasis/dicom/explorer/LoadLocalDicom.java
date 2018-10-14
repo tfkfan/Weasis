@@ -131,7 +131,7 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
     }
 
     private SeriesThumbnail buildDicomStructure(DicomMediaIO dicomReader, boolean open) {
-        Modality modality =  Modality.valueOf((String) dicomReader.getTagValue(TagD.get("Modality")));
+        final Modality modality =  Modality.valueOf((String) dicomReader.getTagValue(TagD.get("Modality")));
 
         SeriesThumbnail thumb = null;
         String studyUID = (String) dicomReader.getTagValue(TagD.getUID(Level.STUDY));
