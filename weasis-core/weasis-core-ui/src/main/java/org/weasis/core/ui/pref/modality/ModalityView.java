@@ -18,6 +18,7 @@ import org.weasis.core.ui.editor.image.ImageViewerEventManager;
 import org.weasis.core.ui.editor.image.ImageViewerPlugin;
 import org.weasis.core.ui.editor.image.SynchView;
 import org.weasis.core.ui.util.ModelsUtils;
+import org.weasis.dicom.codec.display.Modality;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -49,17 +50,17 @@ public class ModalityView extends AbstractItemDialogPage {
     private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
 
     public ModalityView(Modality modality) {
-        super(modality.getTitle()); //$NON-NLS-1$
+        super(modality.getDescription()); //$NON-NLS-1$
         this.modality = modality;
         setComponentPosition(10);
         setBorder(new EmptyBorder(15, 10, 10, 10));
 
+        DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
+        DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
+
         this.layoutButton = buildLayoutButton(createLayoutAction());
         this.synchButton = buildSynchButton(createSynchAction(), new SynchGroupMenu());
         this.jButtonApply = new JButton();
-
-        DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
-        DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
 
         init();
     }

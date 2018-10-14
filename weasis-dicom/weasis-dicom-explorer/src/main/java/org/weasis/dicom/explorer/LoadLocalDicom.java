@@ -42,6 +42,7 @@ import org.weasis.dicom.codec.DicomMediaIO;
 import org.weasis.dicom.codec.DicomSpecialElement;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
+import org.weasis.dicom.codec.display.Modality;
 
 public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
 
@@ -130,6 +131,8 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
     }
 
     private SeriesThumbnail buildDicomStructure(DicomMediaIO dicomReader, boolean open) {
+        Modality modality =  Modality.valueOf((String) dicomReader.getTagValue(TagD.get("Modality")));
+
         SeriesThumbnail thumb = null;
         String studyUID = (String) dicomReader.getTagValue(TagD.getUID(Level.STUDY));
         String patientPseudoUID = (String) dicomReader.getTagValue(TagD.getUID(Level.PATIENT));

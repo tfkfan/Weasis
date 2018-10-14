@@ -20,8 +20,8 @@ import org.weasis.core.ui.editor.image.ViewCanvas;
 import org.weasis.core.ui.editor.image.ViewerPlugin;
 import org.weasis.core.ui.model.GraphicModel;
 import org.weasis.core.ui.model.utils.bean.Measurement;
-import org.weasis.core.ui.pref.modality.Modality;
 import org.weasis.core.ui.pref.modality.ModalityView;
+import org.weasis.dicom.codec.display.Modality;
 
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
