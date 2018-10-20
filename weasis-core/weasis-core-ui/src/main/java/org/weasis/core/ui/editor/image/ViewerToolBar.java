@@ -163,6 +163,24 @@ public class ViewerToolBar<E extends ImageElement> extends WtoolBar implements A
         return button;
     }
 
+    public static DropDownButton buildScrollSetButton(ActionState scrollSetAction, GroupRadioMenu<Integer> menu) {
+        if (scrollSetAction instanceof ComboItemListener) {
+            ComboItemListener m = (ComboItemListener) scrollSetAction;
+            m.registerActionState(menu);
+        }
+        final DropDownButton button = new DropDownButton(ActionW.SCROLL_SET.cmd(), new DropButtonIcon(new ImageIcon(MouseActions.class //$NON-NLS-1$
+                .getResource("/icon/32x32/layout.png"))), menu) {
+            @Override
+            protected JPopupMenu getPopupMenu() {
+                JPopupMenu menu = (getMenuModel() == null) ? new JPopupMenu() : getMenuModel().createJPopupMenu();
+                menu.setInvoker(this);
+                return menu;
+            }
+
+        };
+        return button;
+    }
+
     public DropDownButton getMouseLeft() {
         return mouseLeft;
     }
