@@ -33,6 +33,8 @@ public class ActionW implements KeyActionValue {
         new ActionW(Messages.getString("ActionW.view_mode"), "viewMode", 0, 0, null); //$NON-NLS-1$ //$NON-NLS-2$
     public static final ActionW ZOOM = new ActionW(Messages.getString("ActionW.zoom"), "zoom", KeyEvent.VK_Z, 0, //$NON-NLS-1$ //$NON-NLS-2$
         getCustomCursor("zoom.png", Messages.getString("ActionW.zoom"), 16, 16)); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final ActionW SCROLL_SET = new ActionW(Messages.getString("ActionW.scroll"), "scrollset", //$NON-NLS-1$ //$NON-NLS-2$
+            KeyEvent.VK_S, 0, getCustomCursor("sequence.png", Messages.getString("ActionW.scroll"), 16, 16)); //
     public static final ActionW SCROLL_SERIES = new ActionW(Messages.getString("ActionW.scroll"), "sequence", //$NON-NLS-1$ //$NON-NLS-2$
         KeyEvent.VK_S, 0, getCustomCursor("sequence.png", Messages.getString("ActionW.scroll"), 16, 16)); //$NON-NLS-1$ //$NON-NLS-2$
     public static final ActionW ROTATION = new ActionW(Messages.getString("ActionW.rotate"), "rotation", KeyEvent.VK_R, //$NON-NLS-1$ //$NON-NLS-2$

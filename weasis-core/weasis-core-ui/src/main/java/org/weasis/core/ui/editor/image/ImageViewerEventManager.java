@@ -416,6 +416,17 @@ public abstract class ImageViewerEventManager<E extends ImageElement> implements
         };
     }
 
+    public static ComboItemListener<Integer> newScrollSetAction(Integer[] layouts, Consumer<Object> consumer) {
+        return new ComboItemListener<Integer>(ActionW.SCROLL_SET,
+                Optional.ofNullable(layouts).orElseGet(() -> new Integer[0])) {
+
+            @Override
+            public void itemStateChanged(Object object) {
+                consumer.accept(object);
+            }
+        };
+    }
+
     public void updateLayoutModel(GridBagLayoutModel model){
         updateLayoutModel(model, true);
     }
