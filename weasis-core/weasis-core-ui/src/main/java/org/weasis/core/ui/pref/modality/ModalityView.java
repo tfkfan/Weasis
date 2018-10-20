@@ -52,12 +52,12 @@ public class ModalityView extends AbstractItemDialogPage {
     private final Hashtable<String, GridBagLayoutModel> layoutModels = ModelsUtils.createDefaultLayoutModels();
     private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
 
-    private static final String systemPref = "weasis.modality.%s";
-    private static final String systemSynchPref = systemPref.concat(".synch");
-    private static final String systemLayoutPref = systemPref.concat(".layout");
+    public static final String systemPref = "weasis.modality.%s";
+    public static final String systemSynchPref = systemPref.concat(".synch");
+    public static final String systemLayoutPref = systemPref.concat(".layout");
 
     public ModalityView(Modality modality) {
-        super(modality.getDescription()); //$NON-NLS-1$
+        super(modality.name()); //$NON-NLS-1$
         this.modality = modality;
         setComponentPosition(10);
         setBorder(new EmptyBorder(15, 10, 10, 10));
@@ -111,8 +111,8 @@ public class ModalityView extends AbstractItemDialogPage {
     }
 
     public void initButtonsFromPrefs(){
-        final String synchPref = String.format(systemSynchPref, modality.getDescription());
-        final String layoutPref = String.format(systemLayoutPref, modality.getDescription());
+        final String synchPref = String.format(systemSynchPref, modality.name());
+        final String layoutPref = String.format(systemLayoutPref, modality.name());
 
         final String synchPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(synchPref);
         final String layoutPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(layoutPref);
@@ -129,14 +129,16 @@ public class ModalityView extends AbstractItemDialogPage {
     }
 
     private void apply(){
-        //BundleTools.SYSTEM_PREFERENCES.putBooleanProperty("weasis.confirm.closing", chckbxConfirmClosing.isSelected()); //$NON-NLS-1$
+        final String synchPref = String.format(systemSynchPref, modality.name());
+        final String layoutPref = String.format(systemLayoutPref, modality.name());
+        
+        BundleTools.SYSTEM_PREFERENCES.put(synchPref, ((SynchView)synchListener.getSelectedItem()).getName()); //$NON-NLS-1$
+        BundleTools.SYSTEM_PREFERENCES.put(layoutPref, ((GridBagLayoutModel)layoutListener.getSelectedItem()).getUIName()); //$NON-NLS-1$
     }
 
     private ComboItemListener<?> createSynchAction() {
         ComboItemListener<?> res = ImageViewerEventManager.newSynchAction(DEFAULT_SYNCH_LIST.toArray(
-                new SynchView[DEFAULT_SYNCH_LIST.size()]), object -> {
-
-        });
+                new SynchView[DEFAULT_SYNCH_LIST.size()]), object ->  onSynchChange((SynchView) object));
         res.enableAction(true);
         synchListener = res;
         return res;
@@ -144,12 +146,16 @@ public class ModalityView extends AbstractItemDialogPage {
 
     private ComboItemListener<?> createLayoutAction() {
         ComboItemListener<?> res = ImageViewerEventManager.newLayoutAction(DEFAULT_LAYOUT_LIST
-                .toArray(new GridBagLayoutModel[DEFAULT_LAYOUT_LIST.size()]), object -> {
-
-        });
+                .toArray(new GridBagLayoutModel[DEFAULT_LAYOUT_LIST.size()]), object -> onLayoutChange((GridBagLayoutModel) object));
         res.enableAction(true);
         layoutListener = res;
         return res;
+    }
+
+    private void onSynchChange(SynchView selectedItem){
+    }
+
+    private void onLayoutChange(GridBagLayoutModel selectedItem){
     }
 
     @Override
