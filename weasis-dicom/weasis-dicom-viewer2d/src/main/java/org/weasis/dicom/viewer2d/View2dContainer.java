@@ -72,6 +72,7 @@ import org.weasis.core.ui.editor.SeriesViewerListener;
 import org.weasis.core.ui.editor.image.*;
 import org.weasis.core.ui.editor.image.dockable.MeasureTool;
 import org.weasis.core.ui.editor.image.dockable.MiniTool;
+import org.weasis.core.ui.pref.modality.ModalityView;
 import org.weasis.core.ui.util.ColorLayerUI;
 import org.weasis.core.ui.util.DefaultAction;
 import org.weasis.core.ui.util.PrintDialog;
@@ -84,8 +85,8 @@ import org.weasis.dicom.codec.PRSpecialElement;
 import org.weasis.dicom.codec.PresentationStateReader;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
-import org.weasis.dicom.explorer.DicomExplorer;
-import org.weasis.dicom.explorer.DicomModel;
+import org.weasis.dicom.codec.display.Modality;
+import org.weasis.dicom.explorer.*;
 import org.weasis.dicom.explorer.print.DicomPrintDialog;
 import org.weasis.dicom.viewer2d.dockable.DisplayTool;
 import org.weasis.dicom.viewer2d.dockable.ImageTool;
@@ -96,11 +97,11 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
 
     // Unmodifiable list of the default synchronization elements
     public static final List<SynchView> DEFAULT_SYNCH_LIST =
-        Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.DEFAULT_TILE_MULTIPLE);
+            Arrays.asList(SynchView.NONE, SynchView.DEFAULT_STACK, SynchView.DEFAULT_TILE, SynchView.DEFAULT_TILE_MULTIPLE);
     //$NON-NLS-1$
     // Unmodifiable list of the default layout elements
     public static final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST =
-        Arrays.asList(VIEWS_1x1, VIEWS_1x2, VIEWS_2x1, VIEWS_2x2_f2, VIEWS_2_f1x2, VIEWS_2x1_r1xc2_dump, VIEWS_2x2);
+            Arrays.asList(VIEWS_1x1, VIEWS_1x2, VIEWS_2x1, VIEWS_2x2_f2, VIEWS_2_f1x2, VIEWS_2x1_r1xc2_dump, VIEWS_2x2);
 
     // Static tools shared by all the View2dContainer instances, tools are registered when a container is selected
     // Do not initialize tools in a static block (order initialization issue with eventManager), use instead a lazy
@@ -121,10 +122,10 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
             @Override
             public void componentResized(ComponentEvent e) {
                 ImageViewerPlugin<DicomImageElement> container =
-                    EventManager.getInstance().getSelectedView2dContainer();
+                        EventManager.getInstance().getSelectedView2dContainer();
                 if (container == View2dContainer.this) {
                     Optional<ComboItemListener> layoutAction =
-                        EventManager.getInstance().getAction(ActionW.LAYOUT, ComboItemListener.class);
+                            EventManager.getInstance().getAction(ActionW.LAYOUT, ComboItemListener.class);
                     layoutAction.ifPresent(a -> a.setDataListWithoutTriggerAction(getLayoutList().toArray()));
                 }
             }
@@ -241,7 +242,7 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
         }
     }
 
-    public ImageViewerEventManager<DicomImageElement> getEventManager(){
+    public ImageViewerEventManager<DicomImageElement> getEventManager() {
         return eventManager;
     }
 
@@ -513,7 +514,36 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
                         setKOSpecialElement((KOSpecialElement) newVal, true, true, false);
                     }
                 }
+            } else if (ObservableEvent.BasicAction.LOADING_STOP.equals(action)) {
+                if (newVal instanceof LoadLocalDicom) {
+                    LoadLocalDicom loadLocalDicom = (LoadLocalDicom) newVal;
+                    initDicomFromPreferences(loadLocalDicom.getModality());
+                }
             }
+        }
+    }
+
+    private void initDicomFromPreferences(Modality modality) {
+        final String synchPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemSynchPref, modality.name()));
+        final String layoutPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemLayoutPref, modality.name()));
+        final String scrollPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemScrollSetPref, modality.name()));
+
+        if (synchPrefValue != null) {
+            SynchView synchView = ModalityView.synchViews.get(synchPrefValue);
+            if (synchView != null)
+                getEventManager().updateSynchView(synchView);
+        }
+
+        if (layoutPrefValue != null) {
+            GridBagLayoutModel model = ModalityView.layoutModels.get(layoutPrefValue);
+            if (model != null)
+                getEventManager().updateLayoutModel(model);
+        }
+
+        if (scrollPrefValue != null) {
+            Integer scrollSet = Integer.valueOf(scrollPrefValue);
+            if (scrollSet != null)
+                setScrollItems(scrollSet);
         }
     }
 

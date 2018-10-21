@@ -25,6 +25,7 @@ public class ImportUtils {
             }
         }
         if (files != null) {
+
             LoadLocalDicom dicom = new LoadLocalDicom(files, true, dicomModel);
             DicomModel.LOADING_EXECUTOR.execute(dicom);
             files = null;
