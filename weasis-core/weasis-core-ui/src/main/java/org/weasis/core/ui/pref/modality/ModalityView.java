@@ -42,31 +42,36 @@ public class ModalityView extends AbstractItemDialogPage {
 
     private final JButton jButtonApply;
 
-    private ComboItemListener<?> synchListener;
-    private ComboItemListener<?> layoutListener;
-    private ComboItemListener<?> scrollSetListener;
+    private ComboItemListener<SynchView> synchListener;
+    private ComboItemListener<GridBagLayoutModel> layoutListener;
+    private ComboItemListener<Integer> scrollSetListener;
 
-    public final List<SynchView> DEFAULT_SYNCH_LIST;
-    public final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST;
-    public final List<Integer> DEFAULT_SCROLLSET_LIST;
+    public static final List<SynchView> DEFAULT_SYNCH_LIST;
+    public static final List<GridBagLayoutModel> DEFAULT_LAYOUT_LIST;
+    public static final List<Integer> DEFAULT_SCROLLSET_LIST;
 
-    private final Hashtable<String, GridBagLayoutModel> layoutModels = ModelsUtils.createDefaultLayoutModels();
-    private final Hashtable<String, SynchView> synchViews = ModelsUtils.createDefaultSynchViews();
+    public static final Hashtable<String, GridBagLayoutModel> layoutModels;
+    public static final Hashtable<String, SynchView> synchViews;
 
     public static final String systemPref = "weasis.modality.%s";
     public static final String systemSynchPref = systemPref.concat(".synch");
     public static final String systemLayoutPref = systemPref.concat(".layout");
     public static final String systemScrollSetPref = systemPref.concat(".scrollset");
 
+    static{
+        layoutModels = ModelsUtils.createDefaultLayoutModels();
+        synchViews = ModelsUtils.createDefaultSynchViews();
+
+        DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
+        DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
+        DEFAULT_SCROLLSET_LIST = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+    }
+
     public ModalityView(Modality modality) {
         super(modality.name()); //$NON-NLS-1$
         this.modality = modality;
         setComponentPosition(10);
         setBorder(new EmptyBorder(15, 10, 10, 10));
-
-        DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
-        DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
-        DEFAULT_SCROLLSET_LIST = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
         this.layoutButton = buildLayoutButton(createLayoutAction());
         this.synchButton = buildSynchButton(createSynchAction(), new SynchGroupMenu());
@@ -156,25 +161,24 @@ public class ModalityView extends AbstractItemDialogPage {
         BundleTools.SYSTEM_PREFERENCES.put(scrollSetPref, ((Integer) scrollSetListener.getSelectedItem()).toString());
     }
 
-    private ComboItemListener<?> createSynchAction() {
-        ComboItemListener<?> res = ImageViewerEventManager.newSynchAction(DEFAULT_SYNCH_LIST.toArray(
+    private ComboItemListener<SynchView> createSynchAction() {
+        ComboItemListener<SynchView> res = ImageViewerEventManager.newSynchAction(DEFAULT_SYNCH_LIST.toArray(
                 new SynchView[DEFAULT_SYNCH_LIST.size()]), object -> onSynchChange((SynchView) object));
         res.enableAction(true);
         synchListener = res;
         return res;
     }
 
-    private ComboItemListener<?> createLayoutAction() {
-        ComboItemListener<?> res = ImageViewerEventManager.newLayoutAction(DEFAULT_LAYOUT_LIST
+    private ComboItemListener<GridBagLayoutModel> createLayoutAction() {
+        ComboItemListener<GridBagLayoutModel> res = ImageViewerEventManager.newLayoutAction(DEFAULT_LAYOUT_LIST
                 .toArray(new GridBagLayoutModel[DEFAULT_LAYOUT_LIST.size()]), object -> onLayoutChange((GridBagLayoutModel) object));
         res.enableAction(true);
         layoutListener = res;
         return res;
     }
 
-    private ComboItemListener<?> createScrollSetAction() {
-        ComboItemListener<?> res = ImageViewerEventManager.newScrollSetAction(new Integer[]{1, 2, 3, 4, 5, 6}, object -> {
-        });
+    private ComboItemListener<Integer> createScrollSetAction() {
+        ComboItemListener<Integer> res = ImageViewerEventManager.newScrollSetAction(new Integer[]{1, 2, 3, 4, 5, 6}, object -> onScrollSetChange((Integer) object));
         res.enableAction(true);
         scrollSetListener = res;
         return res;
@@ -184,6 +188,10 @@ public class ModalityView extends AbstractItemDialogPage {
     }
 
     private void onLayoutChange(GridBagLayoutModel selectedItem) {
+    }
+
+    private void onScrollSetChange(Integer scrollSet){
+
     }
 
     @Override
