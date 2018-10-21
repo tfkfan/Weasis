@@ -58,7 +58,7 @@ public class ModalityView extends AbstractItemDialogPage {
     public static final String systemLayoutPref = systemPref.concat(".layout");
     public static final String systemScrollSetPref = systemPref.concat(".scrollset");
 
-    static{
+    static {
         layoutModels = ModelsUtils.createDefaultLayoutModels();
         synchViews = ModelsUtils.createDefaultSynchViews();
 
@@ -107,7 +107,7 @@ public class ModalityView extends AbstractItemDialogPage {
         panel.add(synchPanel);
 
         JPanel scrollPanel = new JPanel();
-        scrollPanel.setBorder(new TitledBorder(null, Messages.getString("ModalitySettings.synch"),
+        scrollPanel.setBorder(new TitledBorder(null, Messages.getString("ModalitySettings.scrollset"),
                 TitledBorder.LEADING, TitledBorder.TOP, null, null));
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.X_AXIS));
         scrollPanel.add(scrollButton);
@@ -190,7 +190,7 @@ public class ModalityView extends AbstractItemDialogPage {
     private void onLayoutChange(GridBagLayoutModel selectedItem) {
     }
 
-    private void onScrollSetChange(Integer scrollSet){
+    private void onScrollSetChange(Integer scrollSet) {
 
     }
 

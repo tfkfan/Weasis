@@ -537,6 +537,9 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
     }
 
     private void initDicomFromPreferences(Modality modality) {
+        if (modality == null)
+            return;
+
         final String synchPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemSynchPref, modality.name()));
         final String layoutPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemLayoutPref, modality.name()));
         final String scrollPrefValue = BundleTools.SYSTEM_PREFERENCES.getProperty(String.format(ModalityView.systemScrollSetPref, modality.name()));
