@@ -178,7 +178,7 @@ public class ModalityView extends AbstractItemDialogPage {
     }
 
     private ComboItemListener<Integer> createScrollSetAction() {
-        ComboItemListener<Integer> res = ImageViewerEventManager.newScrollSetAction(new Integer[]{1, 2, 3, 4, 5, 6}, object -> onScrollSetChange((Integer) object));
+        ComboItemListener<Integer> res = ImageViewerEventManager.newScrollSetAction((Integer[])DEFAULT_SCROLLSET_LIST.toArray(), object -> onScrollSetChange((Integer) object));
         res.enableAction(true);
         scrollSetListener = res;
         return res;
