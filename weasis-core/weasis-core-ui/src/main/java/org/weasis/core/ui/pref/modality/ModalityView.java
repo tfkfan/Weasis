@@ -64,7 +64,7 @@ public class ModalityView extends AbstractItemDialogPage {
 
         DEFAULT_LAYOUT_LIST = new ArrayList<>(layoutModels.values());
         DEFAULT_SYNCH_LIST = new ArrayList<>(synchViews.values());
-        DEFAULT_SCROLLSET_LIST = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        DEFAULT_SCROLLSET_LIST = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14,15,16);
     }
 
     public ModalityView(Modality modality) {
