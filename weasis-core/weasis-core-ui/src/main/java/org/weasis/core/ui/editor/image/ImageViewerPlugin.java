@@ -212,7 +212,8 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
     @Override
     public void addSeries(MediaSeries<E> sequence) {
         if (sequence != null && selectedImagePane != null) {
-            if (SynchData.Mode.TILE.equals(synchView.getSynchData().getMode())) {
+            final SynchData.Mode mode = synchView.getSynchData().getMode();
+            if (SynchData.Mode.TILE.equals(mode) || SynchData.Mode.DEFAULT_TILE_MULTIPLE.equals(mode)) {
                 selectedImagePane.setSeries(sequence, null);
                 updateTileOffset();
                 return;
