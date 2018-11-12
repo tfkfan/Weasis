@@ -52,8 +52,6 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
     private final boolean recursive;
     private boolean openPlugin;
 
-    private Modality modality;
-
     public LoadLocalDicom(File[] files, boolean recursive, DataExplorerModel explorerModel) {
         super(Messages.getString("DicomExplorer.loading"), false); //$NON-NLS-1$
         if (files == null || !(explorerModel instanceof DicomModel)) {
@@ -133,7 +131,7 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
     }
 
     private SeriesThumbnail buildDicomStructure(DicomMediaIO dicomReader, boolean open) {
-        setModality(Modality.valueOf((String) dicomReader.getTagValue(TagD.get("Modality"))));
+        //setModality(Modality.valueOf((String) dicomReader.getTagValue(TagD.get("Modality"))));
 
         SeriesThumbnail thumb = null;
         String studyUID = (String) dicomReader.getTagValue(TagD.getUID(Level.STUDY));
@@ -180,6 +178,7 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
 
                 // Load image and create thumbnail in this Thread
                 SeriesThumbnail t = (SeriesThumbnail) dicomSeries.getTagValue(TagW.Thumbnail);
+                dicomSeries.setModality((String) dicomReader.getTagValue(TagD.get("Modality")));
                 if (t == null) {
                     t = DicomExplorer.createThumbnail(dicomSeries, dicomModel, Thumbnail.DEFAULT_SIZE);
                     dicomSeries.setTag(TagW.Thumbnail, t);
@@ -284,13 +283,5 @@ public class LoadLocalDicom extends ExplorerTask<Boolean, String> {
             }
         }
         return false;
-    }
-
-    public Modality getModality() {
-        return modality;
-    }
-
-    public void setModality(Modality modality) {
-        this.modality = modality;
     }
 }

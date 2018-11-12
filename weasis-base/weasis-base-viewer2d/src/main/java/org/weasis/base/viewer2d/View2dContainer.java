@@ -244,6 +244,11 @@ public class View2dContainer extends ImageViewerPlugin<ImageElement> implements 
         super.close();
     }
 
+    @Override
+    protected void initDicomFromPreferences(org.weasis.dicom.codec.display.Modality modality) {
+
+    }
+
     private boolean closeIfNoContent() {
         if (getOpenSeries().isEmpty()) {
             close();

@@ -63,6 +63,7 @@ import org.weasis.dicom.codec.DicomImageElement;
 import org.weasis.dicom.codec.DicomSpecialElement;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
+import org.weasis.dicom.codec.display.Modality;
 import org.weasis.dicom.explorer.DicomExplorer;
 import org.weasis.dicom.explorer.DicomFieldsView;
 import org.weasis.dicom.explorer.DicomModel;
@@ -154,6 +155,11 @@ public class SRContainer extends ImageViewerPlugin<DicomImageElement> implements
     @Override
     public void setSelectedImagePaneFromFocus(ViewCanvas<DicomImageElement> defaultView2d) {
         setSelectedImagePane(defaultView2d);
+    }
+
+    @Override
+    protected void initDicomFromPreferences(Modality modality) {
+
     }
 
     @Override

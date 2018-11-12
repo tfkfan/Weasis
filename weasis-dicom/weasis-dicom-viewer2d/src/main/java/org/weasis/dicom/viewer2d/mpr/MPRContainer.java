@@ -75,6 +75,7 @@ import org.weasis.core.ui.util.Toolbar;
 import org.weasis.dicom.codec.DicomImageElement;
 import org.weasis.dicom.codec.TagD;
 import org.weasis.dicom.codec.TagD.Level;
+import org.weasis.dicom.codec.display.Modality;
 import org.weasis.dicom.codec.geometry.ImageOrientation;
 import org.weasis.dicom.codec.geometry.ImageOrientation.Label;
 import org.weasis.dicom.explorer.DicomExplorer;
@@ -182,6 +183,11 @@ public class MPRContainer extends ImageViewerPlugin<DicomImageElement> implement
     @Override
     public void setSelectedImagePaneFromFocus(ViewCanvas<DicomImageElement> defaultView2d) {
         setSelectedImagePane(defaultView2d);
+    }
+
+    @Override
+    protected void initDicomFromPreferences(Modality modality) {
+
     }
 
     @Override

@@ -54,6 +54,8 @@ public abstract class Series<E extends MediaElement> extends MediaSeriesGroupNod
     protected SeriesImporter seriesLoader;
     private double fileSize;
 
+    private String modality;
+
     public Series(TagW tagID, Object identifier, TagView displayTag) {
         this(tagID, identifier, displayTag, null);
     }
@@ -439,5 +441,15 @@ public abstract class Series<E extends MediaElement> extends MediaSeriesGroupNod
     public String getSeriesNumber() {
         Integer val = (Integer) getTagValue(TagW.get("SeriesNumber")); //$NON-NLS-1$
         return Optional.ofNullable(val).map(String::valueOf).orElseGet(() -> ""); //$NON-NLS-1$
+    }
+
+    @Override
+    public String getModality() {
+        return modality;
+    }
+
+    @Override
+    public void setModality(String modality) {
+        this.modality = modality;
     }
 }
