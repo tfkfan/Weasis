@@ -528,15 +528,13 @@ public class View2dContainer extends ImageViewerPlugin<DicomImageElement> implem
                     }
                 }
             } else if (ObservableEvent.BasicAction.LOADING_STOP.equals(action)) {
-                if (newVal instanceof LoadLocalDicom) {
-                    LoadLocalDicom loadLocalDicom = (LoadLocalDicom) newVal;
-                    initDicomFromPreferences(loadLocalDicom.getModality());
-                }
+               //
             }
         }
     }
 
-    private void initDicomFromPreferences(Modality modality) {
+    @Override
+    protected void initDicomFromPreferences(Modality modality) {
         if (modality == null)
             return;
 

@@ -62,6 +62,7 @@ import org.weasis.core.ui.model.graphic.DragGraphic;
 import org.weasis.core.ui.model.graphic.Graphic;
 import org.weasis.core.ui.pref.Monitor;
 import org.weasis.core.ui.util.MouseEventDouble;
+import org.weasis.dicom.codec.display.Modality;
 
 import static org.weasis.core.ui.editor.image.ImageViewerEventManager.DEFAULT_TILE_MULTIPLE_OFFSET;
 
@@ -209,10 +210,13 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
             cols, type);
     }
 
+
+
     @Override
     public void addSeries(MediaSeries<E> sequence) {
         if (sequence != null && selectedImagePane != null) {
             final SynchData.Mode mode = synchView.getSynchData().getMode();
+            initDicomFromPreferences(Modality.valueOf(sequence.getModality()));
             if (SynchData.Mode.TILE.equals(mode) || SynchData.Mode.DEFAULT_TILE_MULTIPLE.equals(mode)) {
                 selectedImagePane.setSeries(sequence, null);
                 updateTileOffset();
@@ -593,6 +597,8 @@ public abstract class ImageViewerPlugin<E extends ImageElement> extends ViewerPl
         }
         return selectedImagePane;
     }
+
+    protected abstract void initDicomFromPreferences(Modality modality);
 
     public abstract List<SynchView> getSynchList();
 
