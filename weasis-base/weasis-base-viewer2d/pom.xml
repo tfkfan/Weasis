@@ -41,9 +41,7 @@
 			<version>${project.parent.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	</dependencies>
 
-	<dependencies>
 		<dependency>
 			<groupId>org.weasis.dicom</groupId>
 			<artifactId>weasis-dicom-codec</artifactId>
