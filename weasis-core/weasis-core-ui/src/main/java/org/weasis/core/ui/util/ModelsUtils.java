@@ -14,7 +14,7 @@ public final class ModelsUtils {
     public static Hashtable<String, GridBagLayoutModel> createDefaultLayoutModels(){
         Hashtable<String, GridBagLayoutModel> layoutModels = new Hashtable<>();
 
-        layoutModels.put("1x1 Views", ImageViewerPlugin.VIEWS_1x1);
+        layoutModels.put("1x1 View", ImageViewerPlugin.VIEWS_1x1);
         layoutModels.put("1x2 Views", ImageViewerPlugin.VIEWS_1x2);
         layoutModels.put("2x1 Views", ImageViewerPlugin.VIEWS_2x1);
         layoutModels.put("DICOM Information", ImageViewerPlugin.VIEWS_2x1_r1xc2_dump);
